@@ -1,0 +1,772 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>مِران — لوحات التصميم | MIRAN UI Mockups</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans+Arabic:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#080f11;--panel:#0e191c;--panel2:#142428;--line:#1e3438;
+  --teal:#2dd4bf;--teal-d:#12706a;--gold:#e0b429;--gold-d:#8a6d13;
+  --danger:#e05252;--warn:#e0a02a;--ok:#35b37e;--violet:#8b7ae0;
+  --text:#e4efee;--muted:#7d9a98;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{font-size:15px}
+body{
+  font-family:'IBM Plex Sans Arabic',sans-serif;
+  background:var(--bg);color:var(--text);line-height:1.75;
+  min-height:100vh;padding:32px 20px 80px;
+  background-image:
+    radial-gradient(ellipse 60% 40% at 90% 5%, rgba(45,212,191,.07), transparent 55%),
+    radial-gradient(ellipse 50% 45% at 8% 95%, rgba(224,180,41,.06), transparent 50%);
+  background-attachment:fixed;
+}
+.mono{font-family:'IBM Plex Mono',monospace}
+.tag{direction:ltr;unicode-bidi:isolate;font-family:'IBM Plex Mono',monospace}
+
+/* Page chrome */
+.page-head{max-width:1280px;margin:0 auto 40px;border-bottom:1px solid var(--line);padding-bottom:24px}
+.page-head .eyebrow{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.12em;color:var(--muted);margin-bottom:8px}
+.page-head h1{font-size:1.75rem;color:var(--gold);font-weight:600}
+.page-head p{color:var(--muted);max-width:62ch;margin-top:8px}
+.toc{max-width:1280px;margin:0 auto 48px;display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:8px}
+.toc a{display:block;padding:8px 12px;background:var(--panel);border:1px solid var(--line);border-radius:2px;color:var(--teal);text-decoration:none;font-size:12px;font-family:'IBM Plex Mono',monospace}
+.toc a:hover{border-color:var(--teal-d)}
+
+/* Screen frames */
+.gallery{max-width:1280px;margin:0 auto;display:flex;flex-direction:column;gap:56px}
+.frame{
+  border:1px solid var(--line);border-radius:2px;background:var(--panel);
+  overflow:hidden;
+}
+.frame.hero{border-color:var(--gold-d);box-shadow:0 0 0 1px rgba(224,180,41,.15),0 24px 60px rgba(0,0,0,.45)}
+.frame-meta{
+  display:flex;flex-wrap:wrap;gap:12px 24px;align-items:baseline;
+  padding:12px 16px;background:var(--panel2);border-bottom:1px solid var(--line);
+  font-family:'IBM Plex Mono',monospace;font-size:11px;
+}
+.frame-meta .name{color:var(--gold);font-weight:600;font-size:12px}
+.frame-meta .state{color:var(--teal)}
+.frame-meta .caption{color:var(--muted);flex:1 1 100%;font-family:'IBM Plex Sans Arabic',sans-serif;font-size:13px;line-height:1.6}
+.frame-body{padding:20px;position:relative}
+.frame-body.desktop{min-height:420px}
+.frame-body.mobile{max-width:380px;margin:0 auto;min-height:640px;border:1px solid var(--line)}
+.frame-body.closeup{display:flex;justify-content:center;padding:32px}
+.badge-static{
+  position:absolute;top:12px;left:12px;font-family:'IBM Plex Mono',monospace;
+  font-size:10px;padding:2px 8px;background:var(--panel2);border:1px solid var(--line);color:var(--muted);
+}
+
+/* Mini UI primitives used in mockups */
+.m-header{display:flex;gap:14px;align-items:center;margin-bottom:16px;padding-bottom:12px;border-bottom:1px solid var(--line)}
+.monogram{width:44px;height:44px;border:1.5px solid var(--gold);display:flex;align-items:center;justify-content:center;color:var(--gold);font-weight:700;font-size:14px;flex-shrink:0}
+.m-header h2{font-size:1rem;color:var(--text);font-weight:600}
+.m-header .sub{font-size:12px;color:var(--muted)}
+.m-header .eyebrow{font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--muted);letter-spacing:.08em}
+.tabs{display:flex;flex-wrap:wrap;gap:4px;margin-bottom:16px}
+.tab{font-family:'IBM Plex Mono',monospace;font-size:11px;padding:6px 10px;background:var(--panel2);border:1px solid var(--line);color:var(--muted);border-radius:2px}
+.tab.active{color:var(--bg);background:var(--teal);border-color:var(--teal);font-weight:600}
+.panel{background:var(--panel2);border:1px solid var(--line);border-radius:2px;padding:14px}
+.h-gold{color:var(--gold);font-size:1.05rem;font-weight:600;margin-bottom:8px}
+.h-teal{color:var(--teal);font-size:.95rem;font-weight:600;margin-bottom:6px}
+.muted{color:var(--muted)}
+.callout{padding:10px 12px;background:var(--panel);border:1px solid var(--line);border-right:3px solid var(--gold);margin:10px 0;font-size:13px}
+.callout.crit{border-right-color:var(--danger)}
+.callout.tip{border-right-color:var(--teal)}
+.btn{display:inline-flex;align-items:center;gap:6px;padding:7px 12px;background:var(--panel);border:1px solid var(--line);color:var(--text);font-family:'IBM Plex Sans Arabic',sans-serif;font-size:13px;border-radius:2px}
+.btn.primary{background:var(--teal-d);border-color:var(--teal);color:var(--text)}
+.btn.gold{border-color:var(--gold-d);color:var(--gold)}
+.btn.danger{border-color:var(--danger);color:var(--danger)}
+.btn.disabled{opacity:.4}
+.chip{display:inline-block;font-family:'IBM Plex Mono',monospace;font-size:10px;padding:1px 6px;border:1px solid var(--line);border-radius:2px;color:var(--muted)}
+.chip.open{color:var(--ok);border-color:var(--ok)}
+.chip.closed{color:var(--danger);border-color:var(--danger)}
+.chip.ok{color:var(--ok);border-color:var(--ok)}
+.chip.err{color:var(--danger);border-color:var(--danger)}
+.grid2{display:grid;grid-template-columns:1.2fr 1fr;gap:14px}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.stat{background:var(--panel);border:1px solid var(--line);padding:12px;border-radius:2px}
+.stat .n{font-family:'IBM Plex Mono',monospace;font-size:1.4rem;color:var(--teal);font-weight:600}
+.stat .l{font-size:12px;color:var(--muted)}
+.table{width:100%;border-collapse:collapse;font-size:12px}
+.table th,.table td{border:1px solid var(--line);padding:6px 8px;text-align:right}
+.table th{background:var(--panel);color:var(--gold);font-weight:600}
+.log{font-family:'IBM Plex Mono',monospace;font-size:11px;max-height:120px;overflow:hidden;background:var(--bg);border:1px solid var(--line);padding:8px}
+.log .ok{color:var(--ok)}.log .err{color:var(--danger)}.log .info{color:var(--muted)}
+.result{padding:12px;border:1px solid var(--ok);background:rgba(53,179,126,.08);border-radius:2px;margin-top:10px}
+.result.fail{border-color:var(--danger);background:rgba(224,82,82,.08)}
+.timer-bar{height:6px;background:var(--line);border-radius:1px;overflow:hidden;margin:8px 0}
+.timer-bar>i{display:block;height:100%;background:var(--teal);width:68%}
+.timer-bar.warn>i{background:var(--danger);width:26%}
+.slots{display:grid;gap:6px}
+.slot{display:flex;gap:8px;align-items:center;padding:8px;border:1px dashed var(--line);background:var(--panel);min-height:40px;border-radius:2px}
+.slot.filled{border-style:solid;border-color:var(--teal-d)}
+.slot .num{font-family:'IBM Plex Mono',monospace;color:var(--gold);font-size:12px;width:20px}
+.pool{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
+.pool .chip-big{padding:8px 10px;background:var(--panel2);border:1px solid var(--line);border-radius:2px;font-size:12px;cursor:default}
+.readback-line{padding:10px 12px;border:1px solid var(--line);margin-bottom:6px;background:var(--panel);border-radius:2px;display:flex;justify-content:space-between;gap:10px}
+.readback-line.error-highlight{border-color:var(--danger);background:rgba(224,82,82,.12);box-shadow:0 0 0 1px rgba(224,82,82,.3)}
+.readback-line .lab{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--teal)}
+.gas-grid{display:grid;grid-template-columns:repeat(9,28px);gap:2px}
+.gas-grid .c{width:28px;height:28px;background:var(--panel2);border:1px solid var(--line);border-radius:1px}
+.gas-grid .plume{background:rgba(224,82,82,.35);border-color:var(--danger)}
+.gas-grid .edge{background:rgba(224,160,42,.3);border-color:var(--warn)}
+.gas-grid .src{background:var(--danger);border-color:#fff}
+.gas-grid .player{background:var(--teal);border-color:var(--teal)}
+.gas-grid .muster{background:var(--ok);border-color:var(--ok);box-shadow:inset 0 0 0 2px var(--bg)}
+.swatches{display:flex;flex-wrap:wrap;gap:10px}
+.swatch{width:88px}
+.swatch .box{height:48px;border:1px solid var(--line);border-radius:2px;margin-bottom:4px}
+.swatch code{font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--muted)}
+.type-scale div{margin:4px 0}
+.valve-set{display:flex;gap:20px;flex-wrap:wrap;align-items:flex-end}
+.annot{position:absolute;font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--gold);background:rgba(8,15,17,.85);padding:2px 6px;border:1px solid var(--gold-d);pointer-events:none}
+@media (max-width:700px){.grid2{grid-template-columns:1fr}}
+@media print{
+  body{background:#fff;color:#000;padding:0}
+  .toc,.page-head{break-after:avoid}
+  .frame{break-inside:avoid;margin-bottom:16px;border-color:#ccc}
+}
+</style>
+</head>
+<body>
+
+<header class="page-head">
+  <div class="eyebrow">JABAL / FIELD READINESS SYSTEM — DESIGN REVIEW</div>
+  <h1>مِران — لوحات التصميم الثابتة</h1>
+  <p>عرض غير تفاعلي لشاشات النظام قبل البناء. كل إطار يحمل الاسم، الحالة، ونية التصميم. العلامة: تركواز + ذهب على خلفية غرفة تحكم صناعية.</p>
+</header>
+
+<nav class="toc" aria-label="فهرس الشاشات">
+  <a href="#s01">01 · المفهوم · سطح المكتب</a>
+  <a href="#s02">02 · تشريح الوسم</a>
+  <a href="#s03">03 · أوضاع الفشل</a>
+  <a href="#s04">04 · PZV والطبقات</a>
+  <a href="#s05">05 · عزل · ابتدائي</a>
+  <a href="#s06">06 · عزل · منتصف</a>
+  <a href="#s07">07 · عزل · خطأ</a>
+  <a href="#s08">08 · عزل · مكتمل</a>
+  <a href="#s09">09 · هروب غاز · جديد</a>
+  <a href="#s10">10 · هروب غاز · فشل</a>
+  <a href="#s11">11 · هروب غاز · نجاح</a>
+  <a href="#s12">12 · راديو · مرحلة 1</a>
+  <a href="#s13">13 · راديو · قراءة عكسية ★</a>
+  <a href="#s14">14 · راديو · نجاح</a>
+  <a href="#s15">15 · محطة التحويل</a>
+  <a href="#s16">16 · سجل الأداء</a>
+  <a href="#s17">17 · جوال 380px</a>
+  <a href="#s18">18 · ورقة المكوّنات</a>
+</nav>
+
+<div class="gallery">
+
+<!-- 1 Concept -->
+<section class="frame" id="s01">
+  <div class="frame-meta">
+    <span class="name">01 · 00 المفهوم</span>
+    <span class="state">STATE: idle / first visit</span>
+    <span class="caption">نية التصميم: فتح بثقة تقنية دون مظهر «تدريب شركة». جدول المعايير يعرض عموداً فارغاً عمداً ليُملأ برقم وثيقة المنشأة — المنتج يكمّل ولا يستبدل.</span>
+  </div>
+  <div class="frame-body desktop">
+    <div class="m-header">
+      <div class="monogram">مِران</div>
+      <div>
+        <div class="eyebrow">JABAL / FIELD READINESS SYSTEM</div>
+        <h2>مِران — نظام التأهيب الميداني للمشغل المبتدئ</h2>
+        <div class="sub">ست وحدات تحاكي اللحظة الأولى في المعمل، لا الفصل الدراسي</div>
+      </div>
+    </div>
+    <div class="tabs">
+      <span class="tab active">00 المفهوم</span>
+      <span class="tab">01 الوسوم</span>
+      <span class="tab">02 PZV</span>
+      <span class="tab">03 التجاوز</span>
+      <span class="tab">04 الهروب</span>
+      <span class="tab">05 بلاغ</span>
+      <span class="tab">06 التحويل</span>
+      <span class="tab">07 اختبار</span>
+      <span class="tab">08 السجل</span>
+    </div>
+    <div class="h-gold">لماذا يفشل المشغل المبتدئ؟</div>
+    <p class="muted" style="margin-bottom:12px;font-size:13px">ليس من نقص المعرفة النظرية، بل من حواجز سلوكية: التردد قبل الضغط على زر اللاسلكي، عدم فهم ترتيب العزل، والصمت أمام خطأ يكرره الأعلى رتبة.</p>
+    <table class="table">
+      <thead><tr><th>الموضوع</th><th>المرجع المنشور</th><th>رقم وثيقة المنشأة</th></tr></thead>
+      <tbody>
+        <tr><td>رموز الحلقات</td><td class="mono">ISA 5.1</td><td style="color:var(--muted)">— يُملأ محلياً —</td></tr>
+        <tr><td>SIS / طبقات الحماية</td><td class="mono">IEC 61511</td><td style="color:var(--muted)">— يُملأ محلياً —</td></tr>
+        <tr><td>LOTO</td><td>مبدأ الإغلاق والتعليق</td><td style="color:var(--muted)">— يُملأ محلياً —</td></tr>
+        <tr><td>السلامة الكهربائية</td><td class="mono">NFPA 70E</td><td style="color:var(--muted)">— يُملأ محلياً —</td></tr>
+      </tbody>
+    </table>
+    <div class="callout crit">تنويه: أداة تهيئة سلوكية تسبق التدريب المعتمد وتكمّله. لا تستبدل إجراءات المنشأة ولا الشهادات الرسمية.</div>
+  </div>
+</section>
+
+<!-- 2 Tag anatomy -->
+<section class="frame" id="s02">
+  <div class="frame-meta">
+    <span class="name">02 · تشريح وسم الحلقة</span>
+    <span class="state">STATE: figure close-up</span>
+    <span class="caption">نية التصميم: تفكيك <span class="tag">FCV-101</span> بحروف منفصلة وخطوط قيادة — القراءة تصبح تفسيراً لا حفظاً.</span>
+  </div>
+  <div class="frame-body closeup">
+    <svg viewBox="0 0 520 220" width="100%" style="max-width:520px" aria-label="تشريح FCV-101">
+      <rect x="1" y="1" width="518" height="218" fill="#0e191c" stroke="#1e3438"/>
+      <text x="260" y="48" text-anchor="middle" fill="#e0b429" font-family="IBM Plex Mono" font-size="42" font-weight="600" direction="ltr">FCV-101</text>
+      <!-- leader lines -->
+      <line x1="175" y1="58" x2="100" y2="110" stroke="#2dd4bf" stroke-width="1"/>
+      <line x1="215" y1="58" x2="200" y2="130" stroke="#2dd4bf" stroke-width="1"/>
+      <line x1="255" y1="58" x2="300" y2="130" stroke="#2dd4bf" stroke-width="1"/>
+      <line x1="310" y1="58" x2="400" y2="110" stroke="#e0b429" stroke-width="1"/>
+      <text x="100" y="128" text-anchor="middle" fill="#2dd4bf" font-family="IBM Plex Sans Arabic" font-size="13">F · تدفق</text>
+      <text x="100" y="146" text-anchor="middle" fill="#7d9a98" font-family="IBM Plex Sans Arabic" font-size="11">المتغير المقاس</text>
+      <text x="200" y="148" text-anchor="middle" fill="#2dd4bf" font-family="IBM Plex Sans Arabic" font-size="13">C · تحكم</text>
+      <text x="200" y="166" text-anchor="middle" fill="#7d9a98" font-family="IBM Plex Sans Arabic" font-size="11">وظيفة الحلقة</text>
+      <text x="300" y="148" text-anchor="middle" fill="#2dd4bf" font-family="IBM Plex Sans Arabic" font-size="13">V · صمام</text>
+      <text x="300" y="166" text-anchor="middle" fill="#7d9a98" font-family="IBM Plex Sans Arabic" font-size="11">الجهاز النهائي</text>
+      <text x="400" y="128" text-anchor="middle" fill="#e0b429" font-family="IBM Plex Mono" font-size="13">101</text>
+      <text x="400" y="146" text-anchor="middle" fill="#7d9a98" font-family="IBM Plex Sans Arabic" font-size="11">رقم الحلقة</text>
+    </svg>
+  </div>
+</section>
+
+<!-- 3 Fail actions -->
+<section class="frame" id="s03">
+  <div class="frame-meta">
+    <span class="name">03 · مقارنة أوضاع الفشل</span>
+    <span class="state">STATE: figure close-up FC / FO / FL</span>
+    <span class="caption">نية التصميم: ثلاثة صمامات بأوانٍ حمراء/خضراء/بنفسجية تُرسّخ أن «فشل مغلق» قرار تصميم وليس وصفاً للحالة اللحظية.</span>
+  </div>
+  <div class="frame-body closeup">
+    <svg viewBox="0 0 540 200" width="100%" style="max-width:540px" aria-label="مقارنة FC FO FL">
+      <rect width="540" height="200" fill="#0e191c" stroke="#1e3438"/>
+      <!-- FC -->
+      <g transform="translate(70,40)">
+        <rect x="28" y="0" width="24" height="28" fill="#142428" stroke="#7d9a98"/>
+        <path d="M20 28 L60 28 L40 70 Z" fill="#e05252" stroke="#e4efee"/>
+        <path d="M20 112 L60 112 L40 70 Z" fill="#e05252" stroke="#e4efee"/>
+        <text x="40" y="140" text-anchor="middle" fill="#e05252" font-family="IBM Plex Mono" font-size="14">FC</text>
+        <text x="40" y="158" text-anchor="middle" fill="#7d9a98" font-family="IBM Plex Sans Arabic" font-size="11">يغلق عند فقدان الطاقة</text>
+      </g>
+      <!-- FO -->
+      <g transform="translate(220,40)">
+        <rect x="28" y="0" width="24" height="28" fill="#142428" stroke="#7d9a98"/>
+        <path d="M20 28 L60 28 L40 70 Z" fill="#35b37e" stroke="#e4efee"/>
+        <path d="M20 112 L60 112 L40 70 Z" fill="#35b37e" stroke="#e4efee"/>
+        <text x="40" y="140" text-anchor="middle" fill="#35b37e" font-family="IBM Plex Mono" font-size="14">FO</text>
+        <text x="40" y="158" text-anchor="middle" fill="#7d9a98" font-family="IBM Plex Sans Arabic" font-size="11">يفتح عند فقدان الطاقة</text>
+      </g>
+      <!-- FL -->
+      <g transform="translate(370,40)">
+        <rect x="28" y="0" width="24" height="28" fill="#142428" stroke="#7d9a98"/>
+        <path d="M20 28 L60 28 L40 70 Z" fill="#8b7ae0" stroke="#e4efee"/>
+        <path d="M20 112 L60 112 L40 70 Z" fill="#8b7ae0" stroke="#e4efee"/>
+        <text x="40" y="140" text-anchor="middle" fill="#8b7ae0" font-family="IBM Plex Mono" font-size="14">FL</text>
+        <text x="40" y="158" text-anchor="middle" fill="#7d9a98" font-family="IBM Plex Sans Arabic" font-size="11">يثبت في آخر موضع</text>
+      </g>
+    </svg>
+  </div>
+</section>
+
+<!-- 4 PZV -->
+<section class="frame" id="s04">
+  <div class="frame-meta">
+    <span class="name">04 · حلقة PZV وطبقات الحماية</span>
+    <span class="state">STATE: static education</span>
+    <span class="caption">نية التصميم: مسار الإشارة من المرسل إلى المنطق إلى الملف إلى الصمام؛ ثم طبقات الحماية بصف SIS مُبرز — يعيد ترتيب «أين يقف المشغّل».</span>
+  </div>
+  <div class="frame-body desktop">
+    <div class="grid2">
+      <div>
+        <div class="h-teal">حلقة الأمان</div>
+        <svg viewBox="0 0 360 100" width="100%" aria-label="حلقة PZV">
+          <rect width="360" height="100" fill="#080f11" stroke="#1e3438"/>
+          <rect x="10" y="30" width="50" height="36" fill="#142428" stroke="#2dd4bf"/><text x="35" y="52" text-anchor="middle" fill="#2dd4bf" font-size="10" font-family="IBM Plex Mono">PZT</text>
+          <line x1="60" y1="48" x2="90" y2="48" stroke="#e0b429"/>
+          <rect x="90" y="22" width="80" height="52" fill="#142428" stroke="#e0b429"/><text x="130" y="48" text-anchor="middle" fill="#e0b429" font-size="9" font-family="IBM Plex Mono">LOGIC</text><text x="130" y="62" text-anchor="middle" fill="#7d9a98" font-size="8" font-family="IBM Plex Mono">PZHH</text>
+          <line x1="170" y1="48" x2="200" y2="48" stroke="#e0b429"/>
+          <rect x="200" y="34" width="40" height="28" fill="#142428" stroke="#e05252"/><text x="220" y="52" text-anchor="middle" fill="#e05252" font-size="9" font-family="IBM Plex Mono">SOV</text>
+          <line x1="240" y1="48" x2="270" y2="48" stroke="#e0b429"/>
+          <path d="M275 30 L310 48 L275 66 Z" fill="#e05252" stroke="#e4efee"/><path d="M345 30 L310 48 L345 66 Z" fill="#e05252" stroke="#e4efee"/>
+          <text x="310" y="88" text-anchor="middle" fill="#e05252" font-size="10" font-family="IBM Plex Mono">PZV</text>
+        </svg>
+      </div>
+      <div>
+        <div class="h-teal">طبقات الحماية</div>
+        <div style="font-size:11px;font-family:'IBM Plex Mono',monospace">
+          <div style="padding:3px 8px;border:1px solid var(--line);margin:2px 0;color:var(--muted)">1 Inherent design</div>
+          <div style="padding:3px 8px;border:1px solid var(--line);margin:2px 0;color:var(--muted)">2 BPCS</div>
+          <div style="padding:3px 8px;border:1px solid var(--line);margin:2px 0;color:var(--muted)">3 Alarm + operator</div>
+          <div style="padding:5px 8px;border:1px solid var(--gold);margin:2px 0;color:var(--gold);background:rgba(224,180,41,.08);font-weight:600">4 SIS ← مُبرز</div>
+          <div style="padding:3px 8px;border:1px solid var(--line);margin:2px 0;color:var(--muted)">5 Mechanical relief</div>
+          <div style="padding:3px 8px;border:1px solid var(--line);margin:2px 0;color:var(--muted)">6 Containment</div>
+          <div style="padding:3px 8px;border:1px solid var(--line);margin:2px 0;color:var(--muted)">7 Emergency response</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 5 Isolation initial -->
+<section class="frame" id="s05">
+  <div class="frame-meta">
+    <span class="name">05 · محاكي العزل</span>
+    <span class="state">STATE: initial — all in service</span>
+    <span class="caption">نية التصميم: P&amp;ID حيّ يسار، تحكم يمين. كل صمام بلون حالته. القائمة المرجعية الثمانية خطوات ظاهرة قبل أي فعل.</span>
+  </div>
+  <div class="frame-body desktop">
+    <div class="grid2">
+      <div>
+        <svg viewBox="0 0 400 160" width="100%" aria-label="P&ID ابتدائي">
+          <rect width="400" height="160" fill="#080f11" stroke="#1e3438"/>
+          <line x1="20" y1="70" x2="380" y2="70" stroke="#7d9a98" stroke-width="3"/>
+          <text x="30" y="58" fill="#7d9a98" font-size="9" font-family="IBM Plex Mono">FEED</text>
+          <text x="340" y="58" fill="#7d9a98" font-size="9" font-family="IBM Plex Mono">TO UNIT</text>
+          <!-- bypass -->
+          <path d="M80 70 L80 30 L280 30 L280 70" fill="none" stroke="#7d9a98" stroke-width="2"/>
+          <!-- V-1 open green -->
+          <path d="M100 55 L120 70 L100 85 Z" fill="#35b37e"/><path d="M140 55 L120 70 L140 85 Z" fill="#35b37e"/>
+          <text x="120" y="100" text-anchor="middle" fill="#7d9a98" font-size="8" font-family="IBM Plex Mono">V-1</text>
+          <!-- FCV -->
+          <path d="M175 55 L195 70 L175 85 Z" fill="#35b37e"/><path d="M215 55 L195 70 L215 85 Z" fill="#35b37e"/>
+          <rect x="185" y="38" width="20" height="16" fill="#142428" stroke="#2dd4bf"/>
+          <text x="195" y="100" text-anchor="middle" fill="#2dd4bf" font-size="8" font-family="IBM Plex Mono">FCV-101</text>
+          <!-- V-2 -->
+          <path d="M250 55 L270 70 L250 85 Z" fill="#35b37e"/><path d="M290 55 L270 70 L290 85 Z" fill="#35b37e"/>
+          <text x="270" y="100" text-anchor="middle" fill="#7d9a98" font-size="8" font-family="IBM Plex Mono">V-2</text>
+          <!-- V-3 bypass -->
+          <path d="M170 15 L190 30 L170 45 Z" fill="#35b37e"/><path d="M210 15 L190 30 L210 45 Z" fill="#35b37e"/>
+          <text x="190" y="12" text-anchor="middle" fill="#7d9a98" font-size="8" font-family="IBM Plex Mono">V-3</text>
+          <!-- drain closed red? open would be green - initially closed -->
+          <line x1="195" y1="70" x2="195" y2="120" stroke="#7d9a98" stroke-width="2"/>
+          <path d="M180 110 L195 120 L180 130 Z" fill="#e05252"/><path d="M210 110 L195 120 L210 130 Z" fill="#e05252"/>
+          <text x="195" y="148" text-anchor="middle" fill="#7d9a98" font-size="8" font-family="IBM Plex Mono">V-4 DRAIN</text>
+          <!-- PI -->
+          <circle cx="320" cy="110" r="18" fill="#142428" stroke="#e05252" stroke-width="2"/>
+          <text x="320" y="114" text-anchor="middle" fill="#e4efee" font-size="9" font-family="IBM Plex Mono">12.4</text>
+        </svg>
+        <div class="log" style="margin-top:8px"><div class="info">[00:00] جاهز — النظام في الخدمة. اطلب التصريح أولاً.</div></div>
+      </div>
+      <div class="panel">
+        <div class="h-teal">لوحة التحكم</div>
+        <div style="display:flex;flex-direction:column;gap:6px;font-size:12px">
+          <div class="btn gold">طلب تصريح غرفة التحكم <span class="chip">NO</span></div>
+          <div class="btn">المتحكم <span class="chip">AUTO</span></div>
+          <div class="btn">V-1 مدخل <span class="chip open">OPEN</span></div>
+          <div class="btn">V-2 مخرج <span class="chip open">OPEN</span></div>
+          <div class="btn">V-3 تجاوز <span class="chip closed">CLOSED</span></div>
+          <div class="btn">V-4 تصريف <span class="chip closed">CLOSED</span></div>
+          <div class="btn">تطبيق LOTO <span class="chip">OFF</span></div>
+        </div>
+        <div style="margin-top:12px;font-size:11px;font-family:'IBM Plex Mono',monospace;color:var(--muted)">
+          ☐ 1 تصريح · ☐ 2 MANUAL · ☐ 3 فتح V-3 · ☐ 4 غلق V-1<br>
+          ☐ 5 غلق V-2 · ☐ 6 فتح V-4 · ☐ 7 ضغط صفر · ☐ 8 LOTO
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 6 Isolation mid -->
+<section class="frame" id="s06">
+  <div class="frame-meta">
+    <span class="name">06 · محاكي العزل</span>
+    <span class="state">STATE: mid-sequence — bypass open, inlet shut</span>
+    <span class="caption">نية التصميم: التدفق يمر عبر التجاوز؛ V-1 أحمر. القائمة تُظهر الخطوات المكتملة — يعزز إحساس «الإجراء لا يزال حياً».</span>
+  </div>
+  <div class="frame-body desktop">
+    <div class="grid2">
+      <div>
+        <svg viewBox="0 0 400 140" width="100%" aria-label="P&ID منتصف">
+          <rect width="400" height="140" fill="#080f11" stroke="#1e3438"/>
+          <line x1="20" y1="70" x2="380" y2="70" stroke="#7d9a98" stroke-width="3"/>
+          <path d="M80 70 L80 30 L280 30 L280 70" fill="none" stroke="#2dd4bf" stroke-width="3"/>
+          <path d="M100 55 L120 70 L100 85 Z" fill="#e05252"/><path d="M140 55 L120 70 L140 85 Z" fill="#e05252"/>
+          <path d="M175 55 L195 70 L175 85 Z" fill="#7d9a98"/><path d="M215 55 L195 70 L215 85 Z" fill="#7d9a98"/>
+          <path d="M250 55 L270 70 L250 85 Z" fill="#35b37e"/><path d="M290 55 L270 70 L290 85 Z" fill="#35b37e"/>
+          <path d="M170 15 L190 30 L170 45 Z" fill="#35b37e"/><path d="M210 15 L190 30 L210 45 Z" fill="#35b37e"/>
+          <circle cx="320" cy="100" r="16" fill="#142428" stroke="#e05252"/><text x="320" y="104" text-anchor="middle" fill="#e4efee" font-size="9" font-family="IBM Plex Mono">12.4</text>
+        </svg>
+        <div class="log"><div class="ok">[00:12] V-3 مفتوح — المسار البديل جاهز</div><div class="ok">[00:18] V-1 مغلق — المدخل معزول</div></div>
+      </div>
+      <div class="panel" style="font-size:12px;font-family:'IBM Plex Mono',monospace">
+        <div style="color:var(--ok)">☑ 1 تصريح · ☑ 2 MANUAL · ☑ 3 V-3 · ☑ 4 V-1</div>
+        <div style="color:var(--muted)">☐ 5 V-2 · ☐ 6 V-4 · ☐ 7 PI=0 · ☐ 8 LOTO</div>
+        <div style="margin-top:10px">Flow: <span style="color:var(--teal)">~92%</span> via bypass</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 7 Isolation error -->
+<section class="frame" id="s07">
+  <div class="frame-meta">
+    <span class="name">07 · محاكي العزل</span>
+    <span class="state">STATE: error — V-1 closed before bypass</span>
+    <span class="caption">نية التصميم: السجل بالأحمر يذكر عاقبة تشغيلية محددة (انقطاع التدفق / رحلة وحدة) لا رسالة «خطأ» عامة.</span>
+  </div>
+  <div class="frame-body desktop">
+    <div class="log" style="max-height:none">
+      <div class="info">[00:05] تصريح ممنوح</div>
+      <div class="info">[00:08] المتحكم MANUAL</div>
+      <div class="err">[00:11] خطأ: أُغلق V-1 قبل فتح التجاوز — فُقد التدفق إلى الوحدة. احتمال رحلة عملية واضطراب ضغط. افتح V-3 أولاً.</div>
+    </div>
+    <div class="result fail" style="margin-top:12px">أخطاء متراكمة: 1 — أعد التفكير في الترتيب قبل المتابعة</div>
+  </div>
+</section>
+
+<!-- 8 Isolation complete -->
+<section class="frame" id="s08">
+  <div class="frame-meta">
+    <span class="name">08 · محاكي العزل</span>
+    <span class="state">STATE: completed — controls disabled</span>
+    <span class="caption">نية التصميم: كل الأزرار معطّلة ما عدا إعادة التعيين؛ بطاقة نتيجة خضراء؛ شارة LOTO ظاهرة على الرسم.</span>
+  </div>
+  <div class="frame-body desktop">
+    <div class="grid2">
+      <div>
+        <svg viewBox="0 0 400 140" width="100%">
+          <rect width="400" height="140" fill="#080f11" stroke="#1e3438"/>
+          <line x1="20" y1="70" x2="380" y2="70" stroke="#7d9a98" stroke-width="2"/>
+          <path d="M100 55 L120 70 L100 85 Z" fill="#e05252"/><path d="M140 55 L120 70 L140 85 Z" fill="#e05252"/>
+          <path d="M175 55 L195 70 L175 85 Z" fill="#555"/><path d="M215 55 L195 70 L215 85 Z" fill="#555"/>
+          <path d="M250 55 L270 70 L250 85 Z" fill="#e05252"/><path d="M290 55 L270 70 L290 85 Z" fill="#e05252"/>
+          <path d="M170 15 L190 30 L170 45 Z" fill="#35b37e"/><path d="M210 15 L190 30 L210 45 Z" fill="#35b37e"/>
+          <path d="M180 100 L195 110 L180 120 Z" fill="#35b37e"/><path d="M210 100 L195 110 L210 120 Z" fill="#35b37e"/>
+          <circle cx="320" cy="100" r="16" fill="#142428" stroke="#35b37e" stroke-width="2"/><text x="320" y="104" text-anchor="middle" fill="#35b37e" font-size="10" font-family="IBM Plex Mono">0.0</text>
+          <rect x="150" y="48" width="90" height="22" fill="#e0b429" stroke="#8a6d13"/><text x="195" y="63" text-anchor="middle" fill="#080f11" font-size="11" font-family="IBM Plex Mono" font-weight="600">LOTO</text>
+        </svg>
+        <div class="result">مكتمل — صفر أخطاء · العزل مثبت · التدفق عبر التجاوز · الجسم مُهوَّى</div>
+      </div>
+      <div class="panel">
+        <div class="btn disabled">طلب تصريح</div>
+        <div class="btn disabled" style="margin-top:4px">V-1 …</div>
+        <div class="btn primary" style="margin-top:12px">إعادة التعيين</div>
+        <div style="margin-top:10px"><span class="chip ok">STATUS: مكتمل</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 9 Gas fresh -->
+<section class="frame" id="s09">
+  <div class="frame-meta">
+    <span class="name">09 · محاكي الهروب من الغاز</span>
+    <span class="state">STATE: fresh scenario</span>
+    <span class="caption">نية التصميم: الشبكة 9×9، رياح بكمّ SVG، اللاعب أسفل الريح خارج السحابة، نقطة التجمع أعلى الريح. لا يبدأ أبداً داخل الريشة.</span>
+  </div>
+  <div class="frame-body desktop">
+    <div class="grid2">
+      <div class="gas-grid" aria-hidden="true">
+        <!-- simplified visual 9x9 -->
+        <div class="c"></div><div class="c"></div><div class="c"></div><div class="c"></div><div class="c"></div><div class="c"></div><div class="c"></div><div class="c"></div><div class="c"></div>
+        <div class="c"></div><div class="c muster"></div><div class="c"></div><div class="c"></div><div class="c"></div><div class="c"></div><div class="c"></div><div class="c"></div><div class="c"></div>
+        <div class="c"></div><div class="c"></div><div class="c"></div><div class="c edge"></div><div class="c edge"></div><div class="c edge"></div><div class="c"></div><div class="c"></div><div class="c"></div>
+        <div class="c"></div><div class="c"></div><div class="c edge"></div><div class="c plume"></div><div class="c plume"></div><div class="c plume"></div><div class="c edge"></div><div class="c"></div><div class="c"></div>
+        <div class="c"></div><div class="c"></div><div class="c edge"></div><div class="c plume"></div><div class="c src"></div><div class="c plume"></div><div class="c edge"></div><div class="c"></div><div class="c"></div>
+        <div class="c"></div><div class="c"></div><div class="c"></div><div class="c edge"></div><div class="c plume"></div><div class="c edge"></div><div class="c"></div><div class="c"></div><div class="c"></div>
+        <div class="c"></div><div class="c"></div><div class="c"></div><div class="c"></div><div class="c player"></div><div class="c"></div><div class="c"></div><div class="c"></div><div class="c"></div>
+        <div class="c"></div><div class="c"></div><div class="c"></div><div class="c"></div><div class="c"></div><div class="c"></div><div class="c"></div><div class="c"></div><div class="c"></div>
+        <div class="c"></div><div class="c"></div><div class="c"></div><div class="c"></div><div class="c"></div><div class="c"></div><div class="c"></div><div class="c"></div><div class="c"></div>
+      </div>
+      <div class="panel">
+        <svg viewBox="0 0 120 120" width="100" height="100" aria-label="كمّ الريح">
+          <circle cx="60" cy="60" r="50" fill="none" stroke="#1e3438"/>
+          <text x="60" y="14" text-anchor="middle" fill="#7d9a98" font-size="10" font-family="IBM Plex Mono">N</text>
+          <text x="110" y="64" text-anchor="middle" fill="#7d9a98" font-size="10" font-family="IBM Plex Mono">E</text>
+          <text x="60" y="116" text-anchor="middle" fill="#7d9a98" font-size="10" font-family="IBM Plex Mono">S</text>
+          <text x="10" y="64" text-anchor="middle" fill="#7d9a98" font-size="10" font-family="IBM Plex Mono">W</text>
+          <g transform="rotate(45 60 60)">
+            <polygon points="60,30 70,70 60,60 50,70" fill="#e0b429"/>
+          </g>
+        </svg>
+        <div class="mono" style="font-size:12px;margin-top:8px">
+          ريح من: NE · خطوات: 0/16<br>
+          <span class="chip">STATUS: نشط</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 10 Gas fail -->
+<section class="frame" id="s10">
+  <div class="frame-meta">
+    <span class="name">10 · محاكي الهروب من الغاز</span>
+    <span class="state">STATE: fail — entered plume</span>
+    <span class="caption">نية التصميم: فشل فوري برسالة تركيز عالٍ — لا «لعبة حياة». الحافة أيضاً فاشلة لأن التركيز يتذبذب مع الهبات.</span>
+  </div>
+  <div class="frame-body desktop">
+    <div class="result fail">
+      <strong>فشل — دخول السحابة</strong><br>
+      عند التركيز العالي تفقد الوعي خلال ثوانٍ. الحركة مع اتجاه انتقال السحابة تُبقيك داخلها بسرعة انتقالها. اهرب عكس اتجاه مصدر الريح (أعلى الريح).
+    </div>
+  </div>
+</section>
+
+<!-- 11 Gas success -->
+<section class="frame" id="s11">
+  <div class="frame-meta">
+    <span class="name">11 · محاكي الهروب من الغاز</span>
+    <span class="state">STATE: success — muster reached</span>
+    <span class="caption">نية التصميم: نجاح مع تقييم المسار — إن لم يمشِ مع travelVec يُمدح المسار النظيف؛ وإلا يُحسب عدد الخطوات أسفل الريح.</span>
+  </div>
+  <div class="frame-body desktop">
+    <div class="result">
+      <strong>وصلت إلى نقطة التجمع</strong><br>
+      مسار نظيف: لم تتحرك مع اتجاه انتقال السحابة. هذا هو السلوك المطلوب في الميدان — أعلى الريح، ثم إلى نقطة التجمع المحددة.
+    </div>
+  </div>
+</section>
+
+<!-- 12 Radio stage 1 -->
+<section class="frame" id="s12">
+  <div class="frame-meta">
+    <span class="name">12 · بلاغ الطوارئ — مرحلة 1</span>
+    <span class="state">STATE: ordering · timer 31s</span>
+    <span class="caption">نية التصميم: ضغط زمني + رقاقات مشوشة. الترتيب يخدم بقاء البلاغ مفيداً لو انقطع الإرسال بعد السطرين الأولين.</span>
+  </div>
+  <div class="frame-body desktop">
+    <div class="panel" style="margin-bottom:12px">
+      <div class="mono" style="font-size:12px;color:var(--gold)">الوقت المتبقي: 31s</div>
+      <div class="timer-bar"><i></i></div>
+      <div style="font-size:13px;margin-top:8px">
+        <strong>سيناريو:</strong> تسرب غاز حامض عند مضخة وحدة التقطير · <span class="tag">P-210A</span> · ريح من الشمال · إصابة واحدة · أنت: خالد / شارة 4471
+      </div>
+    </div>
+    <div class="slots">
+      <div class="slot filled"><span class="num">1</span> نداء طوارئ مكرر</div>
+      <div class="slot filled"><span class="num">2</span> الموقع الدقيق ووسم المعدة</div>
+      <div class="slot filled"><span class="num">3</span> نوع الطارئ</div>
+      <div class="slot filled"><span class="num">4</span> المادة والحجم</div>
+      <div class="slot"><span class="num">5</span></div>
+      <div class="slot"><span class="num">6</span></div>
+      <div class="slot"><span class="num">7</span></div>
+      <div class="slot"><span class="num">8</span></div>
+    </div>
+    <div class="pool">
+      <span class="chip-big">اتجاه الريح</span>
+      <span class="chip-big">الإصابات</span>
+      <span class="chip-big">الاسم ورقم الشارة</span>
+      <span class="chip-big">انتظر القراءة العكسية</span>
+    </div>
+  </div>
+</section>
+
+<!-- 13 HERO Radio stage 2 -->
+<section class="frame hero" id="s13">
+  <div class="frame-meta">
+    <span class="name">13 · بلاغ الطوارئ — مرحلة 2 ★ HERO</span>
+    <span class="state">STATE: readback WITH injected error</span>
+    <span class="caption">نية التصميم: هذه لحظة المنتج. غرفة التحكم تعيد البلاغ بخطأ واحد (هنا رقم المعدة منقول). المتدرب يضغط السطر الخاطئ. تدريب على تصحيح الأعلى رتبة — الحاجز السلوكي الحقيقي.</span>
+  </div>
+  <div class="frame-body desktop" style="padding:28px 24px 36px">
+    <div style="max-width:640px;margin:0 auto">
+      <div class="mono" style="font-size:11px;color:var(--muted);margin-bottom:6px">CONTROL ROOM READBACK · CHANNEL 1</div>
+      <div class="h-gold" style="margin-bottom:14px">القراءة العكسية — صحّح إن وُجد خطأ، أو أكّد إن كانت سليمة</div>
+      <div class="readback-line">
+        <span><span class="lab">الموقع</span><br>وحدة التقطير · مضخة <span class="tag" style="color:var(--danger)">P-201A</span> <span style="color:var(--danger);font-size:12px">← خطأ محقون</span></span>
+        <span class="chip err">اضغط إن خطأ</span>
+      </div>
+      <div class="readback-line">
+        <span><span class="lab">الحالة</span><br>تسرب غاز حامض · حجم متوسط</span>
+      </div>
+      <div class="readback-line">
+        <span><span class="lab">الريح</span><br>من الشمال</span>
+      </div>
+      <div class="readback-line">
+        <span><span class="lab">الإصابات</span><br>إصابة واحدة</span>
+      </div>
+      <div class="readback-line">
+        <span><span class="lab">المُبلِّغ</span><br>خالد · شارة 4471</span>
+      </div>
+      <div style="display:flex;gap:10px;margin-top:16px">
+        <div class="btn primary">تأكيد القراءة العكسية — لا أخطاء</div>
+        <div class="mono" style="align-self:center;color:var(--warn);font-size:12px">TIMER ≥ 28s into stage 2</div>
+      </div>
+      <div class="callout tip" style="margin-top:16px">الهدف التشغيلي: فريق الاستجابة يذهب للمعدة الصحيحة. خطأ في الرقم يُرسل الطوارئ إلى مكان فارغ بينما التسرب مستمر.</div>
+    </div>
+  </div>
+</section>
+
+<!-- 14 Radio pass -->
+<section class="frame" id="s14">
+  <div class="frame-meta">
+    <span class="name">14 · بلاغ الطوارئ — نجاح</span>
+    <span class="state">STATE: pass — caught readback error</span>
+    <span class="caption">نية التصميم: رسالة تُسمّي اللحظة التي يتجنبها المبتدئ من باب الاحترام — وتُثبت أنها اللحظة التي تُنقذ الاستجابة.</span>
+  </div>
+  <div class="frame-body desktop">
+    <div class="result">
+      <strong>نجاح — صحّحت خطأ القراءة العكسية</strong><br>
+      غرفة التحكم أعادت عنصر الموقع خطأً، وصحّحته. هذه بالضبط اللحظة التي يتجنبها المشغّل المبتدئ خجلاً أو احتراماً للرتبة — وهي اللحظة التي تُوجِّه فريق الاستجابة إلى المكان الصحيح.
+    </div>
+  </div>
+</section>
+
+<!-- 15 Substation -->
+<section class="frame" id="s15">
+  <div class="frame-meta">
+    <span class="name">15 · محطة التحويل</span>
+    <span class="state">STATE: education figures</span>
+    <span class="caption">نية التصميم: رسم أحادي الخط + حدود الاقتراب الثلاث — يؤكد أن المشغّل غير الكهربائي لا يعزل ولا يفتح لوحات.</span>
+  </div>
+  <div class="frame-body desktop">
+    <div class="callout crit">قاعدة حاكمة: المشغّل غير الكهربائي لا يُشغِّل ولا يعزل ولا يفتح أي لوحة. صلاحيته: دخول مصرّح، ملاحظة، وإبلاغ.</div>
+    <div class="grid2" style="margin-top:12px">
+      <svg viewBox="0 0 280 160" width="100%" aria-label="رسم أحادي الخط">
+        <rect width="280" height="160" fill="#080f11" stroke="#1e3438"/>
+        <line x1="20" y1="30" x2="80" y2="30" stroke="#e0b429" stroke-width="2"/>
+        <text x="20" y="22" fill="#7d9a98" font-size="8" font-family="IBM Plex Mono">INFEED</text>
+        <rect x="80" y="20" width="24" height="20" fill="#142428" stroke="#2dd4bf"/>
+        <line x1="104" y1="30" x2="140" y2="30" stroke="#e0b429" stroke-width="2"/>
+        <polygon points="140,18 160,30 140,42" fill="none" stroke="#e0b429"/>
+        <line x1="160" y1="30" x2="160" y2="80" stroke="#2dd4bf" stroke-width="2"/>
+        <line x1="100" y1="80" x2="220" y2="80" stroke="#2dd4bf" stroke-width="2"/>
+        <text x="160" y="74" text-anchor="middle" fill="#7d9a98" font-size="8" font-family="IBM Plex Mono">MV BUS</text>
+        <line x1="120" y1="80" x2="120" y2="120" stroke="#7d9a98"/><text x="120" y="135" text-anchor="middle" fill="#7d9a98" font-size="7" font-family="IBM Plex Mono">MOTOR</text>
+        <line x1="160" y1="80" x2="160" y2="120" stroke="#7d9a98"/><text x="160" y="135" text-anchor="middle" fill="#7d9a98" font-size="7" font-family="IBM Plex Mono">MCC</text>
+        <line x1="200" y1="80" x2="200" y2="120" stroke="#7d9a98"/><text x="200" y="135" text-anchor="middle" fill="#7d9a98" font-size="7" font-family="IBM Plex Mono">DC</text>
+      </svg>
+      <svg viewBox="0 0 200 160" width="100%" aria-label="حدود الاقتراب">
+        <rect width="200" height="160" fill="#080f11" stroke="#1e3438"/>
+        <circle cx="100" cy="80" r="55" fill="none" stroke="#e0a02a" stroke-dasharray="4 2"/>
+        <circle cx="100" cy="80" r="38" fill="none" stroke="#e05252"/>
+        <circle cx="100" cy="80" r="22" fill="none" stroke="#e0b429"/>
+        <rect x="92" y="72" width="16" height="16" fill="#e05252"/>
+        <text x="100" y="150" text-anchor="middle" fill="#7d9a98" font-size="8" font-family="IBM Plex Sans Arabic">مقيد · محدود · قوس كهربائي</text>
+      </svg>
+    </div>
+  </div>
+</section>
+
+<!-- 16 Report -->
+<section class="frame" id="s16">
+  <div class="frame-meta">
+    <span class="name">16 · 08 سجل الأداء</span>
+    <span class="state">STATE: session with history</span>
+    <span class="caption">نية التصميم: ست بطاقات إحصاء + سجل زمني ملوّن + طباعة وتصدير نصي. إن تعذّر التخزين تظهر ملاحظة ذاكرة فقط.</span>
+  </div>
+  <div class="frame-body desktop">
+    <div class="stats">
+      <div class="stat"><div class="n">11/14</div><div class="l">اختبار شامل</div></div>
+      <div class="stat"><div class="n">2</div><div class="l">محاولات عزل</div></div>
+      <div class="stat"><div class="n">1</div><div class="l">أخطاء عزل</div></div>
+      <div class="stat"><div class="n">3/5</div><div class="l">هروب غاز</div></div>
+      <div class="stat"><div class="n">2</div><div class="l">بلاغات ناجحة</div></div>
+      <div class="stat"><div class="n">1</div><div class="l">تصحيحات قراءة</div></div>
+    </div>
+    <div class="log" style="margin-top:14px;max-height:100px">
+      <div class="ok">[14:22] راديو: نجاح — صُحِّح خطأ في الموقع</div>
+      <div class="err">[14:18] غاز: فشل — دخول الحافة</div>
+      <div class="ok">[14:10] عزل: مكتمل · 0 أخطاء</div>
+      <div class="info">[14:01] جلسة بدأت</div>
+    </div>
+    <div style="margin-top:12px;display:flex;gap:8px">
+      <div class="btn">طباعة</div>
+      <div class="btn">تصدير نصي</div>
+      <div class="btn danger">تصفير الجلسة</div>
+    </div>
+  </div>
+</section>
+
+<!-- 17 Mobile -->
+<section class="frame" id="s17">
+  <div class="frame-meta">
+    <span class="name">17 · جوال 380px</span>
+    <span class="state">STATE: responsive stack</span>
+    <span class="caption">نية التصميم: شريط التبويبات يلتف، المحاكيات عمود واحد، شبكة الغاز بعرض كامل. لا تمرير أفقي.</span>
+  </div>
+  <div class="frame-body mobile">
+    <div class="m-header" style="padding:8px">
+      <div class="monogram" style="width:36px;height:36px;font-size:11px">مِران</div>
+      <div>
+        <h2 style="font-size:13px">مِران — التأهيب الميداني</h2>
+        <div class="sub" style="font-size:10px">JABAL / FIELD READINESS</div>
+      </div>
+    </div>
+    <div class="tabs" style="padding:0 8px">
+      <span class="tab">00</span><span class="tab">01</span><span class="tab">02</span>
+      <span class="tab active">03</span><span class="tab">04</span><span class="tab">05</span>
+      <span class="tab">06</span><span class="tab">07</span><span class="tab">08</span>
+    </div>
+    <div style="padding:8px">
+      <svg viewBox="0 0 300 100" width="100%"><rect width="300" height="100" fill="#080f11" stroke="#1e3438"/><line x1="10" y1="50" x2="290" y2="50" stroke="#7d9a98" stroke-width="2"/><path d="M70 40 L90 50 L70 60 Z" fill="#35b37e"/><path d="M110 40 L90 50 L110 60 Z" fill="#35b37e"/></svg>
+      <div class="btn" style="width:100%;margin-top:8px;justify-content:center">طلب تصريح</div>
+      <div class="btn" style="width:100%;margin-top:4px;justify-content:center">V-1 · OPEN</div>
+      <div class="gas-grid" style="margin-top:12px;grid-template-columns:repeat(9,1fr);gap:1px">
+        <div class="c" style="width:auto;height:28px;aspect-ratio:1"></div><div class="c" style="width:auto;height:auto;aspect-ratio:1"></div><div class="c" style="width:auto;aspect-ratio:1"></div><div class="c" style="width:auto;aspect-ratio:1"></div><div class="c" style="width:auto;aspect-ratio:1"></div><div class="c" style="width:auto;aspect-ratio:1"></div><div class="c" style="width:auto;aspect-ratio:1"></div><div class="c" style="width:auto;aspect-ratio:1"></div><div class="c" style="width:auto;aspect-ratio:1"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 18 Component sheet -->
+<section class="frame" id="s18">
+  <div class="frame-meta">
+    <span class="name">18 · ورقة المكوّنات</span>
+    <span class="state">STATE: design tokens</span>
+    <span class="caption">نية التصميم: مرجع بصري ثابت للمنافسة والمراجعة — ألوان، مقياس خط، أزرار، رقائق، تنويهات، رموز صمامات.</span>
+  </div>
+  <div class="frame-body desktop">
+    <div class="h-gold">الألوان</div>
+    <div class="swatches" style="margin-bottom:20px">
+      <div class="swatch"><div class="box" style="background:#080f11"></div><code>--bg #080f11</code></div>
+      <div class="swatch"><div class="box" style="background:#0e191c"></div><code>--panel</code></div>
+      <div class="swatch"><div class="box" style="background:#142428"></div><code>--panel2</code></div>
+      <div class="swatch"><div class="box" style="background:#1e3438"></div><code>--line</code></div>
+      <div class="swatch"><div class="box" style="background:#2dd4bf"></div><code>--teal #2dd4bf</code></div>
+      <div class="swatch"><div class="box" style="background:#12706a"></div><code>--teal-d</code></div>
+      <div class="swatch"><div class="box" style="background:#e0b429"></div><code>--gold #e0b429</code></div>
+      <div class="swatch"><div class="box" style="background:#8a6d13"></div><code>--gold-d</code></div>
+      <div class="swatch"><div class="box" style="background:#e05252"></div><code>--danger</code></div>
+      <div class="swatch"><div class="box" style="background:#e0a02a"></div><code>--warn</code></div>
+      <div class="swatch"><div class="box" style="background:#35b37e"></div><code>--ok</code></div>
+      <div class="swatch"><div class="box" style="background:#8b7ae0"></div><code>--violet</code></div>
+      <div class="swatch"><div class="box" style="background:#e4efee"></div><code>--text</code></div>
+      <div class="swatch"><div class="box" style="background:#7d9a98"></div><code>--muted</code></div>
+    </div>
+    <div class="h-gold">مقياس الخط</div>
+    <div class="type-scale" style="margin-bottom:20px">
+      <div style="font-size:1.5rem;font-weight:700;color:var(--gold)">عنوان قسم · IBM Plex Sans Arabic 700</div>
+      <div style="font-size:1.1rem;font-weight:600;color:var(--teal)">عنوان فرعي · 600</div>
+      <div style="font-size:15px;font-weight:400">نص الجسم 15px / line-height 1.75</div>
+      <div class="mono" style="font-size:13px;color:var(--muted)">IBM Plex Mono · tags · timers · logs · FCV-101</div>
+    </div>
+    <div class="h-gold">الأزرار ورقائق الحالة</div>
+    <div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:8px;align-items:center">
+      <button class="btn" type="button">افتراضي</button>
+      <button class="btn primary" type="button">أساسي</button>
+      <button class="btn gold" type="button">ذهبي</button>
+      <button class="btn danger" type="button">خطر</button>
+      <button class="btn disabled" type="button" disabled>معطّل</button>
+      <span class="chip open">OPEN</span>
+      <span class="chip closed">CLOSED</span>
+      <span class="chip ok">مكتمل</span>
+      <span class="chip err">خطأ</span>
+    </div>
+    <div class="h-gold" style="margin-top:16px">التنويهات</div>
+    <div class="callout">ملاحظة (ذهبي) — معلومة سياقية</div>
+    <div class="callout crit">حرج (أحمر) — عاقبة مباشرة على السلامة</div>
+    <div class="callout tip">نصيحة (تركواز) — ممارسة سلوكية</div>
+    <div class="h-gold" style="margin-top:16px">رموز الصمامات</div>
+    <div class="valve-set">
+      <svg width="60" height="70" aria-label="مفتوح"><path d="M10 10 L30 30 L10 50 Z" fill="#35b37e"/><path d="M50 10 L30 30 L50 50 Z" fill="#35b37e"/><text x="30" y="66" text-anchor="middle" fill="#35b37e" font-size="10" font-family="IBM Plex Mono">OPEN</text></svg>
+      <svg width="60" height="70" aria-label="مغلق"><path d="M10 10 L30 30 L10 50 Z" fill="#e05252"/><path d="M50 10 L30 30 L50 50 Z" fill="#e05252"/><text x="30" y="66" text-anchor="middle" fill="#e05252" font-size="10" font-family="IBM Plex Mono">SHUT</text></svg>
+      <svg width="60" height="70" aria-label="معزول"><path d="M10 10 L30 30 L10 50 Z" fill="#555"/><path d="M50 10 L30 30 L50 50 Z" fill="#555"/><text x="30" y="66" text-anchor="middle" fill="#7d9a98" font-size="10" font-family="IBM Plex Mono">ISO</text></svg>
+      <svg width="60" height="70" aria-label="FL"><path d="M10 10 L30 30 L10 50 Z" fill="#8b7ae0"/><path d="M50 10 L30 30 L50 50 Z" fill="#8b7ae0"/><text x="30" y="66" text-anchor="middle" fill="#8b7ae0" font-size="10" font-family="IBM Plex Mono">FL</text></svg>
+    </div>
+  </div>
+</section>
+
+</div>
+
+<footer style="max-width:1280px;margin:48px auto 0;padding-top:20px;border-top:1px solid var(--line);font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--muted)">
+  MIRAN UI MOCKUPS · STATIC · NON-INTERACTIVE · JABAL FIELD READINESS SYSTEM · 2026
+</footer>
+</body>
+</html>

@@ -1,0 +1,1512 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>مِران — نظام التأهيب الميداني للمشغل المبتدئ</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans+Arabic:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#080f11;--panel:#0e191c;--panel2:#142428;--line:#1e3438;
+  --teal:#2dd4bf;--teal-d:#12706a;--gold:#e0b429;--gold-d:#8a6d13;
+  --danger:#e05252;--warn:#e0a02a;--ok:#35b37e;--violet:#8b7ae0;
+  --text:#e4efee;--muted:#7d9a98;
+}
+*,*::before,*::after{box-sizing:border-box}
+html{font-size:15px}
+body{
+  margin:0;font-family:'IBM Plex Sans Arabic',sans-serif;font-weight:400;
+  background-color:var(--bg);color:var(--text);line-height:1.75;
+  background-image:
+    radial-gradient(ellipse 55% 40% at 92% 0%, rgba(45,212,191,.08), transparent 55%),
+    radial-gradient(ellipse 50% 45% at 5% 100%, rgba(224,180,41,.07), transparent 50%);
+  background-attachment:fixed;min-height:100vh;
+}
+button,input,select{font:inherit;color:inherit}
+button{cursor:pointer}
+button:disabled{cursor:not-allowed;opacity:.42}
+:focus-visible{outline:2px solid var(--teal);outline-offset:2px}
+.mono{font-family:'IBM Plex Mono',monospace}
+.tag{direction:ltr;unicode-bidi:isolate;font-family:'IBM Plex Mono',monospace;white-space:nowrap}
+.muted{color:var(--muted)}
+.gold{color:var(--gold)}.teal{color:var(--teal)}.ok{color:var(--ok)}.danger{color:var(--danger)}.warn{color:var(--warn)}
+
+.app{max-width:1180px;margin:0 auto;padding:16px 14px 48px}
+header.site{
+  display:flex;gap:14px;align-items:flex-start;flex-wrap:wrap;
+  padding:14px 0 16px;border-bottom:1px solid var(--line);margin-bottom:0;
+}
+.monogram{
+  width:52px;height:52px;border:1.5px solid var(--gold);border-radius:2px;
+  display:flex;align-items:center;justify-content:center;color:var(--gold);
+  font-weight:700;font-size:15px;flex-shrink:0;background:var(--panel);
+}
+header.site h1{font-size:1.15rem;font-weight:600;margin:0 0 4px;color:var(--text)}
+header.site .sub{font-size:13px;color:var(--muted);margin:0}
+header.site .eyebrow{font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.1em;color:var(--muted);margin:0 0 4px}
+
+.tabs{
+  display:flex;flex-wrap:wrap;gap:4px;padding:12px 0;border-bottom:1px solid var(--line);
+  position:sticky;top:0;z-index:20;background:rgba(8,15,17,.92);backdrop-filter:blur(6px);
+}
+.tabs button{
+  font-family:'IBM Plex Mono',monospace;font-size:11px;padding:7px 10px;
+  background:var(--panel);border:1px solid var(--line);border-radius:2px;color:var(--muted);
+}
+.tabs button[aria-selected="true"]{background:var(--teal);border-color:var(--teal);color:var(--bg);font-weight:600}
+.tabs button:hover:not([aria-selected="true"]){border-color:var(--teal-d);color:var(--text)}
+
+.panel{display:none;padding:18px 0 8px}
+.panel.active{display:block}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:2px;padding:14px 16px;margin-bottom:14px}
+.card2{background:var(--panel2);border:1px solid var(--line);border-radius:2px;padding:12px 14px}
+.h-gold{color:var(--gold);font-size:1.08rem;font-weight:600;margin:0 0 10px}
+.h-teal{color:var(--teal);font-size:.98rem;font-weight:600;margin:0 0 8px}
+p{margin:0 0 10px}
+ul,ol{margin:0 0 12px;padding-inline-start:1.3em}
+li{margin-bottom:4px}
+
+.callout{
+  padding:10px 12px;background:var(--panel2);border:1px solid var(--line);
+  border-right:3px solid var(--gold);border-radius:2px;margin:12px 0;font-size:14px;
+}
+.callout.crit{border-right-color:var(--danger)}
+.callout.tip{border-right-color:var(--teal)}
+
+table.data{width:100%;border-collapse:collapse;font-size:13px;margin:10px 0}
+table.data th,table.data td{border:1px solid var(--line);padding:7px 9px;text-align:right;vertical-align:top}
+table.data th{background:var(--panel2);color:var(--gold);font-weight:600}
+table.data td.empty{color:var(--muted);font-style:italic}
+
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:6px;
+  padding:8px 12px;background:var(--panel2);border:1px solid var(--line);
+  border-radius:2px;color:var(--text);font-size:13px;
+}
+.btn:hover:not(:disabled){border-color:var(--teal-d)}
+.btn.primary{background:var(--teal-d);border-color:var(--teal)}
+.btn.gold{border-color:var(--gold-d);color:var(--gold)}
+.btn.danger{border-color:var(--danger);color:var(--danger)}
+.btn.block{width:100%;margin-bottom:6px}
+.chip{
+  display:inline-block;font-family:'IBM Plex Mono',monospace;font-size:10px;
+  padding:1px 6px;border:1px solid var(--line);border-radius:2px;color:var(--muted);vertical-align:middle;
+}
+.chip.open{color:var(--ok);border-color:var(--ok)}
+.chip.closed{color:var(--danger);border-color:var(--danger)}
+.chip.on{color:var(--teal);border-color:var(--teal)}
+.chip.ok{color:var(--ok);border-color:var(--ok)}
+.chip.err{color:var(--danger);border-color:var(--danger)}
+
+.grid-iso{display:grid;grid-template-columns:1.25fr 1fr;gap:14px}
+@media(max-width:920px){.grid-iso{grid-template-columns:1fr}}
+.iso-svg-wrap{background:var(--bg);border:1px solid var(--line);border-radius:2px;padding:8px}
+.iso-log{
+  font-family:'IBM Plex Mono',monospace;font-size:11px;max-height:160px;overflow:auto;
+  background:var(--bg);border:1px solid var(--line);padding:8px;margin-top:8px;border-radius:2px;
+}
+.iso-log .e-ok{color:var(--ok)}.iso-log .e-err{color:var(--danger)}.iso-log .e-info{color:var(--muted)}
+.check-list{font-family:'IBM Plex Mono',monospace;font-size:11px;line-height:1.9;margin-top:10px}
+.check-list .done{color:var(--ok)}
+.result-card{padding:12px;border:1px solid var(--ok);background:rgba(53,179,126,.1);border-radius:2px;margin-top:10px}
+.result-card.fail{border-color:var(--danger);background:rgba(224,82,82,.1)}
+.readouts{display:flex;flex-wrap:wrap;gap:10px;font-family:'IBM Plex Mono',monospace;font-size:12px;margin:8px 0}
+.readouts span{background:var(--panel2);border:1px solid var(--line);padding:4px 8px;border-radius:2px}
+
+.gas-layout{display:grid;grid-template-columns:1fr 220px;gap:14px}
+@media(max-width:720px){.gas-layout{grid-template-columns:1fr}}
+.gas-board{
+  display:grid;grid-template-columns:repeat(9,1fr);gap:3px;
+  background:var(--bg);border:1px solid var(--line);padding:8px;border-radius:2px;
+}
+.gas-cell{
+  aspect-ratio:1;border:1px solid var(--line);background:var(--panel2);border-radius:1px;padding:0;min-height:0;
+}
+.gas-cell.plume{background:rgba(224,82,82,.4);border-color:var(--danger)}
+.gas-cell.edge{background:rgba(224,160,42,.35);border-color:var(--warn)}
+.gas-cell.src{background:var(--danger);border-color:#fff}
+.gas-cell.player{background:var(--teal);border-color:var(--teal);box-shadow:inset 0 0 0 2px var(--bg)}
+.gas-cell.muster{background:rgba(53,179,126,.45);border-color:var(--ok)}
+.gas-cell.player.muster{box-shadow:inset 0 0 0 2px var(--ok)}
+.windsock-wrap{text-align:center}
+
+.radio-timer{font-family:'IBM Plex Mono',monospace;font-size:14px;color:var(--gold)}
+.radio-timer.low{color:var(--danger)}
+.timer-bar{height:7px;background:var(--line);border-radius:1px;overflow:hidden;margin:6px 0 12px}
+.timer-bar>i{display:block;height:100%;background:var(--teal);width:100%;transform-origin:right center}
+.timer-bar.low>i{background:var(--danger)}
+.slots{display:grid;gap:6px}
+.slot{
+  display:flex;gap:8px;align-items:center;min-height:42px;padding:8px 10px;
+  border:1px dashed var(--line);background:var(--panel2);border-radius:2px;
+}
+.slot.filled{border-style:solid;border-color:var(--teal-d)}
+.slot .num{font-family:'IBM Plex Mono',monospace;color:var(--gold);width:18px;flex-shrink:0}
+.chip-pool{display:flex;flex-wrap:wrap;gap:6px;margin-top:12px}
+.chip-pool button{
+  padding:8px 10px;background:var(--panel);border:1px solid var(--line);border-radius:2px;font-size:12px;text-align:right;
+}
+.chip-pool button:hover:not(:disabled){border-color:var(--teal)}
+.chip-pool button.used{opacity:.35}
+.readback-line{
+  display:flex;justify-content:space-between;align-items:flex-start;gap:10px;
+  width:100%;text-align:right;padding:10px 12px;margin-bottom:6px;
+  background:var(--panel2);border:1px solid var(--line);border-radius:2px;
+}
+.readback-line .lab{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--teal);display:block;margin-bottom:2px}
+.readback-line:hover:not(:disabled){border-color:var(--gold-d)}
+
+.quiz-opt{
+  display:block;width:100%;text-align:right;padding:10px 12px;margin-bottom:6px;
+  background:var(--panel2);border:1px solid var(--line);border-radius:2px;
+}
+.quiz-opt:hover:not(:disabled){border-color:var(--teal-d)}
+.quiz-opt.correct{border-color:var(--ok);background:rgba(53,179,126,.12)}
+.quiz-opt.wrong{border-color:var(--danger);background:rgba(224,82,82,.12)}
+.quiz-opt.reveal-correct{border-color:var(--ok)}
+
+.stats{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:10px}
+.stat{background:var(--panel2);border:1px solid var(--line);padding:12px;border-radius:2px}
+.stat .n{font-family:'IBM Plex Mono',monospace;font-size:1.45rem;color:var(--teal);font-weight:600}
+.stat .l{font-size:12px;color:var(--muted)}
+.event-log{font-family:'IBM Plex Mono',monospace;font-size:11px;max-height:280px;overflow:auto;background:var(--bg);border:1px solid var(--line);padding:10px;border-radius:2px}
+.storage-notice{border-right-color:var(--warn);color:var(--warn)}
+
+.layers .row{padding:5px 10px;border:1px solid var(--line);margin:3px 0;font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--muted)}
+.layers .row.sis{border-color:var(--gold);color:var(--gold);background:rgba(224,180,41,.08);font-weight:600;padding:8px 10px}
+
+.fig{background:var(--bg);border:1px solid var(--line);border-radius:2px;padding:10px;margin:12px 0;overflow-x:auto}
+.fig svg{display:block;max-width:100%;height:auto;margin:0 auto}
+
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}
+}
+@media print{
+  .tabs,header.site .eyebrow,button,.chip-pool{display:none!important}
+  .panel{display:block!important;break-inside:avoid;page-break-inside:avoid}
+  body{background:#fff;color:#000}
+  .card,.card2{border-color:#ccc}
+}
+@media(max-width:380px){
+  .app{padding:10px 8px 32px}
+  header.site h1{font-size:1rem}
+  .tabs button{padding:6px 7px;font-size:10px}
+}
+</style>
+</head>
+<body>
+<div class="app">
+<header class="site">
+  <div class="monogram" aria-hidden="true">مِران</div>
+  <div>
+    <p class="eyebrow">JABAL / FIELD READINESS SYSTEM</p>
+    <h1>مِران — نظام التأهيب الميداني للمشغل المبتدئ</h1>
+    <p class="sub">ست وحدات تحاكي اللحظة الأولى في المعمل، لا الفصل الدراسي</p>
+  </div>
+</header>
+
+<nav class="tabs" role="tablist" aria-label="وحدات مِران">
+  <button type="button" role="tab" id="tab-00" aria-controls="panel-00" aria-selected="true" data-tab="00">00 المفهوم</button>
+  <button type="button" role="tab" id="tab-01" aria-controls="panel-01" aria-selected="false" data-tab="01">01 الوسوم والصمامات</button>
+  <button type="button" role="tab" id="tab-02" aria-controls="panel-02" aria-selected="false" data-tab="02">02 PZV والحماية</button>
+  <button type="button" role="tab" id="tab-03" aria-controls="panel-03" aria-selected="false" data-tab="03">03 التجاوز والعزل</button>
+  <button type="button" role="tab" id="tab-04" aria-controls="panel-04" aria-selected="false" data-tab="04">04 الهروب من الغاز</button>
+  <button type="button" role="tab" id="tab-05" aria-controls="panel-05" aria-selected="false" data-tab="05">05 بلاغ الطوارئ</button>
+  <button type="button" role="tab" id="tab-06" aria-controls="panel-06" aria-selected="false" data-tab="06">06 محطة التحويل</button>
+  <button type="button" role="tab" id="tab-07" aria-controls="panel-07" aria-selected="false" data-tab="07">07 اختبار شامل</button>
+  <button type="button" role="tab" id="tab-08" aria-controls="panel-08" aria-selected="false" data-tab="08">08 سجل الأداء</button>
+</nav>
+
+<!-- 00 -->
+<section class="panel active" id="panel-00" role="tabpanel" aria-labelledby="tab-00">
+  <div class="card">
+    <h2 class="h-gold">الحاجز السلوكي، لا المنهج</h2>
+    <p>يفشل المشغّل المبتدئ في اللحظة الأولى غالباً لأسباب سلوكية لا معرفية. يعرف تعريف التصريح، لكنه يتردد قبل طلبه. يحفظ ترتيب العزل على الورق، ثم يغلق المدخل قبل فتح التجاوز تحت ضغط الوقت. يسمع خطأ في القراءة العكسية من غرفة التحكم، ويصمت احتراماً للرتبة — فيُرسل فريق الطوارئ إلى معدة خاطئة بينما التسرب مستمر.</p>
+    <p><strong>مِران</strong> لا يُدرِّس المنهج البديل للإجراءات المعتمدة. يُدرِّب <em>الحاجز</em>: الضغط على زر اللاسلكي، فهم <em>لماذا</em> هذا الترتيب، وتصحيح الأعلى رتبة عندما يكرر معلومة خاطئة.</p>
+  </div>
+  <div class="card">
+    <h3 class="h-teal">الوحدات الست</h3>
+    <table class="data">
+      <thead><tr><th>الوحدة</th><th>ما يُدرَّب</th><th>العاقبة إن فُقد</th></tr></thead>
+      <tbody>
+        <tr><td>الوسوم والصمامات</td><td>قراءة الوسم، أوضاع الفشل، أنواع <span class="tag">ZV</span></td><td>عزل على صمام تفعيل لا على عزل صيانة</td></tr>
+        <tr><td><span class="tag">PZV</span> وطبقات الحماية</td><td>مكان SIS، التجاوز، إثبات الاختبار</td><td>وحدة تعمل بلا حماية مع تجاوز منسي</td></tr>
+        <tr><td>التجاوز والعزل</td><td>تسلسل عزل حيّ مع عواقب</td><td>رحلة عملية أو ضغط محبوس أو تصريف حيّ</td></tr>
+        <tr><td>الهروب من الغاز</td><td>أعلى الريح ونقطة التجمع</td><td>الركض مع السحابة = البقاء داخلها</td></tr>
+        <tr><td>بلاغ الطوارئ</td><td>ترتيب البلاغ + تصحيح القراءة العكسية</td><td>استجابة في مكان خطأ أو بلاغ ناقص</td></tr>
+        <tr><td>محطة التحويل</td><td>حدود الصلاحية وحدود الاقتراب</td><td>لمس مصاب ما زال على المصدر = إصابة ثانية</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="card">
+    <h3 class="h-teal">ربط بالمعايير المنشورة</h3>
+    <p class="muted">العمود الثالث فارغ عمداً: املأه برقم الوثيقة المعتمدة في منشأتك.</p>
+    <table class="data">
+      <thead><tr><th>الموضوع</th><th>المرجع المنشور المعتمد عليه</th><th>رقم وثيقة المنشأة</th></tr></thead>
+      <tbody>
+        <tr><td>رموز حلقات الأجهزة</td><td><span class="tag">ISA 5.1</span></td><td class="empty">— يُملأ محلياً —</td></tr>
+        <tr><td>سلامة الأجهزة الوظيفية / SIS</td><td><span class="tag">IEC 61511</span></td><td class="empty">— يُملأ محلياً —</td></tr>
+        <tr><td>الإغلاق والتعليق (LOTO)</td><td>مبدأ LOTO المعتمد صناعياً</td><td class="empty">— يُملأ محلياً —</td></tr>
+        <tr><td>السلامة الكهربائية في مكان العمل</td><td><span class="tag">NFPA 70E</span></td><td class="empty">— يُملأ محلياً —</td></tr>
+        <tr><td>أجهزة تصريف الضغط</td><td><span class="tag">API 520 / 521</span></td><td class="empty">— يُملأ محلياً —</td></tr>
+        <tr><td>السلامة والصحة المهنية</td><td>الإطار الوطني لـ OSH المعمول به</td><td class="empty">— يُملأ محلياً —</td></tr>
+      </tbody>
+    </table>
+    <div class="callout crit">تنويه ملزم: مِران أداة تهيئة سلوكية تسبق التدريب المعتمد وتكمّله. لا تستبدل إجراءات المنشأة، ولا الشهادات الرسمية، ولا تصاريح العمل، ولا تعليمات المشغّل المناوب.</div>
+  </div>
+</section>
+
+<!-- 01 -->
+<section class="panel" id="panel-01" role="tabpanel" aria-labelledby="tab-01" hidden>
+  <div class="card">
+    <h2 class="h-gold">تشريح وسم الحلقة</h2>
+    <p>الوسم ليس رمزاً للحفظ؛ هو جملة مقروءة. في <span class="tag">FCV-101</span> كل حرف يحمل معنى تشغيلياً يغيّر قرارك على الأرض.</p>
+    <div class="fig">
+      <svg viewBox="0 0 560 230" width="560" height="230" role="img" aria-label="تفكيك وسم FCV-101 حرفاً حرفاً">
+        <rect width="560" height="230" fill="#080f11"/>
+        <text x="280" y="52" text-anchor="middle" fill="#e0b429" font-family="IBM Plex Mono,monospace" font-size="44" font-weight="600" direction="ltr">FCV-101</text>
+        <line x1="188" y1="62" x2="100" y2="120" stroke="#2dd4bf"/><line x1="228" y1="62" x2="210" y2="140" stroke="#2dd4bf"/>
+        <line x1="268" y1="62" x2="320" y2="140" stroke="#2dd4bf"/><line x1="330" y1="62" x2="430" y2="120" stroke="#e0b429"/>
+        <text x="100" y="138" text-anchor="middle" fill="#2dd4bf" font-size="14" font-family="IBM Plex Sans Arabic,sans-serif">F · تدفق</text>
+        <text x="100" y="158" text-anchor="middle" fill="#7d9a98" font-size="12" font-family="IBM Plex Sans Arabic,sans-serif">المتغير المقاس/المتحكم</text>
+        <text x="210" y="158" text-anchor="middle" fill="#2dd4bf" font-size="14" font-family="IBM Plex Sans Arabic,sans-serif">C · تحكم</text>
+        <text x="210" y="178" text-anchor="middle" fill="#7d9a98" font-size="12" font-family="IBM Plex Sans Arabic,sans-serif">وظيفة الحلقة</text>
+        <text x="320" y="158" text-anchor="middle" fill="#2dd4bf" font-size="14" font-family="IBM Plex Sans Arabic,sans-serif">V · صمام</text>
+        <text x="320" y="178" text-anchor="middle" fill="#7d9a98" font-size="12" font-family="IBM Plex Sans Arabic,sans-serif">الجهاز النهائي</text>
+        <text x="430" y="138" text-anchor="middle" fill="#e0b429" font-size="14" font-family="IBM Plex Mono,monospace">101</text>
+        <text x="430" y="158" text-anchor="middle" fill="#7d9a98" font-size="12" font-family="IBM Plex Sans Arabic,sans-serif">رقم الحلقة</text>
+      </svg>
+    </div>
+    <table class="data">
+      <thead><tr><th>الحرف الأول (متغير)</th><th>معنى</th><th>الحرف الثاني (وظيفة)</th><th>معنى</th></tr></thead>
+      <tbody>
+        <tr><td class="mono">F</td><td>تدفق</td><td class="mono">I</td><td>بيان / مؤشر</td></tr>
+        <tr><td class="mono">P</td><td>ضغط</td><td class="mono">C</td><td>تحكم</td></tr>
+        <tr><td class="mono">T</td><td>حرارة</td><td class="mono">T</td><td>إرسال (مرسل)</td></tr>
+        <tr><td class="mono">L</td><td>مستوى</td><td class="mono">V</td><td>صمام</td></tr>
+        <tr><td class="mono">Z</td><td>موضع / أمان موضعي</td><td class="mono">S / H / L</td><td>مفتاح / عالٍ / منخفض</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="card">
+    <h3 class="h-teal">التباس FC: متحكم تدفق أم Fail Closed؟</h3>
+    <p>داخل <strong>فقاعة الحلقة</strong> على مخطط P&amp;ID، <span class="tag">FC</span> تعني <em>Flow Controller</em> — جهاز تحكم في التدفق. أما في <strong>عمود فعل الفشل</strong> في جدول الصمامات، فـ <span class="tag">FC</span> تعني <em>Fail Closed</em> — يغلق عند فقدان هواء الأداة أو الطاقة. الخلط بينهما يجعلك تقرأ جدول العزل كأنك تقرأ وظيفة التحكم، فتفترض سلوكاً خاطئاً عند انقطاع الهواء أثناء العمل.</p>
+    <div class="fig">
+      <svg viewBox="0 0 540 210" width="540" height="210" role="img" aria-label="مقارنة أوضاع الفشل FC و FO و FL">
+        <rect width="540" height="210" fill="#080f11"/>
+        <g transform="translate(70,35)">
+          <rect x="28" y="0" width="24" height="26" fill="#142428" stroke="#7d9a98"/>
+          <path d="M18 26 L62 26 L40 68 Z" fill="#e05252" stroke="#e4efee"/><path d="M18 110 L62 110 L40 68 Z" fill="#e05252" stroke="#e4efee"/>
+          <text x="40" y="138" text-anchor="middle" fill="#e05252" font-family="IBM Plex Mono,monospace" font-size="14">FC</text>
+          <text x="40" y="156" text-anchor="middle" fill="#7d9a98" font-size="11" font-family="IBM Plex Sans Arabic,sans-serif">يغلق عند الفقد</text>
+          <text x="40" y="172" text-anchor="middle" fill="#7d9a98" font-size="10" font-family="IBM Plex Sans Arabic,sans-serif">تغذية فرن / عزل وقود</text>
+        </g>
+        <g transform="translate(220,35)">
+          <rect x="28" y="0" width="24" height="26" fill="#142428" stroke="#7d9a98"/>
+          <path d="M18 26 L62 26 L40 68 Z" fill="#35b37e" stroke="#e4efee"/><path d="M18 110 L62 110 L40 68 Z" fill="#35b37e" stroke="#e4efee"/>
+          <text x="40" y="138" text-anchor="middle" fill="#35b37e" font-family="IBM Plex Mono,monospace" font-size="14">FO</text>
+          <text x="40" y="156" text-anchor="middle" fill="#7d9a98" font-size="11" font-family="IBM Plex Sans Arabic,sans-serif">يفتح عند الفقد</text>
+          <text x="40" y="172" text-anchor="middle" fill="#7d9a98" font-size="10" font-family="IBM Plex Sans Arabic,sans-serif">تبريد / تصريف حرج</text>
+        </g>
+        <g transform="translate(370,35)">
+          <rect x="28" y="0" width="24" height="26" fill="#142428" stroke="#7d9a98"/>
+          <path d="M18 26 L62 26 L40 68 Z" fill="#8b7ae0" stroke="#e4efee"/><path d="M18 110 L62 110 L40 68 Z" fill="#8b7ae0" stroke="#e4efee"/>
+          <text x="40" y="138" text-anchor="middle" fill="#8b7ae0" font-family="IBM Plex Mono,monospace" font-size="14">FL</text>
+          <text x="40" y="156" text-anchor="middle" fill="#7d9a98" font-size="11" font-family="IBM Plex Sans Arabic,sans-serif">يثبت آخر موضع</text>
+          <text x="40" y="172" text-anchor="middle" fill="#7d9a98" font-size="10" font-family="IBM Plex Sans Arabic,sans-serif">حيث الحركة العشوائية أخطر</text>
+        </g>
+      </svg>
+    </div>
+  </div>
+  <div class="card">
+    <h3 class="h-teal">أنواع صمامات <span class="tag">ZV</span> وإثبات الموضع</h3>
+    <table class="data">
+      <thead><tr><th>النوع</th><th>الدور النموذجي</th><th>فعل فشل شائع</th></tr></thead>
+      <tbody>
+        <tr><td class="mono">ESDV</td><td>إغلاق طارئ للسلامة</td><td class="mono">FC</td></tr>
+        <tr><td class="mono">SDV</td><td>إغلاق عند إيقاف الوحدة</td><td class="mono">FC</td></tr>
+        <tr><td class="mono">BDV</td><td>تفريغ / تصريف سريع</td><td class="mono">FO</td></tr>
+        <tr><td class="mono">XV</td><td>تشغيل تسلسلي / عزل عملية</td><td class="mono">FC / FL</td></tr>
+        <tr><td class="mono">MOV</td><td>تشغيل بمحرك — بطيء نسبياً</td><td>حسب التصميم</td></tr>
+      </tbody>
+    </table>
+    <p><span class="tag">ZSH</span> يثبت أن الصمام في وضع مفتوح، و<span class="tag">ZSL</span> يثبت أنه مغلق. الإشارة الكهربائية «مغلق» ليست بديل عزل صيانة.</p>
+    <div class="callout crit">تحذير حرج: صمام <span class="tag">ZV</span> المغلق والمؤكَّد بمفتاح موضع هو جهاز تفعيل ضمن نظام أمان أو تسلسل — <strong>ليس</strong> عزلاً معتمداً للصيانة. العمل خلفه دون عزل ميكانيكي مزدوج وLOTO يعرّضك لفتح غير متوقع عند إعادة ضبط أو اختبار أو عطل منطق.</div>
+  </div>
+</section>
+
+<!-- 02 -->
+<section class="panel" id="panel-02" role="tabpanel" aria-labelledby="tab-02" hidden>
+  <div class="card">
+    <h2 class="h-gold"><span class="tag">PZV</span> — صمام الأمان الآلي</h2>
+    <p>فكّك الوسم: <strong>P</strong> = ضغط، <strong>Z</strong> = ينتمي لمنظومة الأجهزة الآمنة (SIS) لا لمنظومة التحكم العملية (BPCS)، <strong>V</strong> = صمام. حرف Z هنا ليس «مغيراً عادياً»؛ هو إشارة أن هذا الجهاز جزء من طبقة حماية مستقلة.</p>
+    <div class="fig">
+      <svg viewBox="0 0 520 120" width="520" height="120" role="img" aria-label="حلقة PZV من المرسل إلى الصمام">
+        <rect width="520" height="120" fill="#080f11"/>
+        <rect x="12" y="40" width="70" height="40" fill="#142428" stroke="#2dd4bf"/><text x="47" y="64" text-anchor="middle" fill="#2dd4bf" font-size="12" font-family="IBM Plex Mono,monospace">PZT</text>
+        <line x1="82" y1="60" x2="110" y2="60" stroke="#e0b429" stroke-width="2"/>
+        <rect x="110" y="28" width="120" height="64" fill="#142428" stroke="#e0b429"/><text x="170" y="55" text-anchor="middle" fill="#e0b429" font-size="11" font-family="IBM Plex Mono,monospace">LOGIC SOLVER</text><text x="170" y="72" text-anchor="middle" fill="#7d9a98" font-size="10" font-family="IBM Plex Mono,monospace">PZHH trip</text>
+        <line x1="230" y1="60" x2="260" y2="60" stroke="#e0b429" stroke-width="2"/>
+        <rect x="260" y="42" width="55" height="36" fill="#142428" stroke="#e05252"/><text x="287" y="64" text-anchor="middle" fill="#e05252" font-size="11" font-family="IBM Plex Mono,monospace">SOV</text>
+        <line x1="315" y1="60" x2="350" y2="60" stroke="#e0b429" stroke-width="2"/>
+        <path d="M355 40 L390 60 L355 80 Z" fill="#e05252" stroke="#e4efee"/><path d="M425 40 L390 60 L425 80 Z" fill="#e05252" stroke="#e4efee"/>
+        <text x="390" y="100" text-anchor="middle" fill="#e05252" font-size="12" font-family="IBM Plex Mono,monospace">PZV FC</text>
+        <text x="287" y="100" text-anchor="middle" fill="#7d9a98" font-size="9" font-family="IBM Plex Sans Arabic,sans-serif">قطع الهواء</text>
+      </svg>
+    </div>
+    <p class="muted" style="font-size:13px">مسار: مرسل ضغط ← حلال منطق يحمل نقطة رحلة <span class="tag">PZHH</span> ← ملف لولبي يقطع هواء الأداة ← صمام <span class="tag">PZV</span> يفشل مغلقاً.</p>
+    <table class="data">
+      <thead><tr><th>مواقع فيزيائية نموذجية</th></tr></thead>
+      <tbody>
+        <tr><td>حدود بطارية الوحدة (battery limits)</td></tr>
+        <tr><td>تصريف الضاغط</td></tr>
+        <tr><td>مدخل وعاء / فاصل</td></tr>
+        <tr><td>خط تدفق رأس البئر</td></tr>
+        <tr><td>مخرج خزان</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="card">
+    <h3 class="h-teal"><span class="tag">PCV</span> مقابل <span class="tag">PZV</span> مقابل <span class="tag">PSV</span></h3>
+    <table class="data">
+      <thead><tr><th></th><th class="mono">PCV</th><th class="mono">PZV</th><th class="mono">PSV</th></tr></thead>
+      <tbody>
+        <tr><td>النظام</td><td>BPCS</td><td>SIS</td><td>ميكانيكي</td></tr>
+        <tr><td>الحركة</td><td>تعديل مستمر</td><td>فتح/إغلاق طارئ</td><td>رفع عند الضغط</td></tr>
+        <tr><td>اعتماد الطاقة</td><td>هواء/كهرباء تحكم</td><td>منطق + مشغّل</td><td>ضغط العملية نفسه</td></tr>
+        <tr><td>الوظيفة</td><td>الإبقاء على نقطة الضبط</td><td>منع الوصول للخطر</td><td>التصريف بعد تجاوز الحد</td></tr>
+        <tr><td>طبقة الحماية</td><td>تحكم أساسي</td><td>SIS</td><td>تصريف ميكانيكي</td></tr>
+      </tbody>
+    </table>
+    <div class="callout tip"><span class="tag">PCV</span> يُبقي الضغط حيث يجب، <span class="tag">PZV</span> يمنعه من بلوغ الخطر، <span class="tag">PSV</span> يعمل بعد أن يصل الخطر.</div>
+  </div>
+  <div class="card">
+    <h3 class="h-teal">طبقات الحماية</h3>
+    <div class="layers" role="list" aria-label="طبقات الحماية السبع">
+      <div class="row" role="listitem">1 · التصميم المتأصل (Inherent design)</div>
+      <div class="row" role="listitem">2 · نظام التحكم الأساسي BPCS</div>
+      <div class="row" role="listitem">3 · إنذار + استجابة المشغّل</div>
+      <div class="row sis" role="listitem">4 · SIS — الطبقة المُبرَزة · هنا يعيش PZV</div>
+      <div class="row" role="listitem">5 · التصريف الميكانيكي (PSV / rupture)</div>
+      <div class="row" role="listitem">6 · الاحتواء (bund / flare / drain)</div>
+      <div class="row" role="listitem">7 · الاستجابة للطوارئ</div>
+    </div>
+  </div>
+  <div class="card">
+    <h3 class="h-teal">مفاتيح التجاوز للصيانة (MOS)</h3>
+    <p>تجاوز وظيفة أمان ليس «موافقة شفهية من المناوب». كل تجاوز منسي يعني وحدة تعمل بلا الطبقة التي صُمِّمت لحمايتك.</p>
+    <ol>
+      <li>تفويض مكتوب — لا شفهي فقط.</li>
+      <li>تقييم مخاطر يحدد التدابير التعويضية (مراقبة بشرية، خفض معدل، عزل جزئي).</li>
+      <li>حد زمني مسبق الإعلان.</li>
+      <li>قيد في سجل التجاوزات المفتوحة.</li>
+      <li>مراقبة بشرية مستمرة للمتغير المتجاوز.</li>
+      <li>تسليم صريح عند تغيير الوردية.</li>
+      <li>إزالة التجاوز مع اختبار وظيفي وتوثيق.</li>
+    </ol>
+    <div class="callout crit">السؤال عن تجاوز مفتوح ورثته مع الوردية جزء من الوظيفة — لا وقاحة. الصمت يترك الحماية معطّلة باسم «كان شغّال من قبلي».</div>
+    <h3 class="h-teal">اختبار الإثبات</h3>
+    <ul>
+      <li><strong>Full proof test</strong> — يثبت كامل وظيفة الأمان خلال فترة الإثبات.</li>
+      <li><strong>Partial stroke test</strong> — يحرك الصمام جزئياً دون تعطيل العملية كاملة.</li>
+      <li><strong>Solenoid test</strong> — يثبت أن الملف يقطع الهواء فعلياً.</li>
+    </ul>
+  </div>
+</section>
+
+<!-- 03 Isolation -->
+<section class="panel" id="panel-03" role="tabpanel" aria-labelledby="tab-03" hidden>
+  <div class="card">
+    <h2 class="h-gold">محاكي العزل والتجاوز</h2>
+    <p>اعزل <span class="tag">FCV-101</span> للصيانة دون إسقاط الوحدة. الترتيب خطأ = عاقبة محددة في السجل، لا رسالة عامة.</p>
+  </div>
+  <div class="grid-iso">
+    <div>
+      <div class="iso-svg-wrap">
+        <svg id="isoSvg" viewBox="0 0 480 220" width="100%" height="220" role="img" aria-label="مخطط أنابيب وصمامات لعزل FCV-101">
+          <rect width="480" height="220" fill="#080f11"/>
+          <line x1="24" y1="100" x2="456" y2="100" stroke="#7d9a98" stroke-width="4" id="mainLine"/>
+          <text x="30" y="88" fill="#7d9a98" font-size="11" font-family="IBM Plex Mono,monospace">FEED</text>
+          <text x="400" y="88" fill="#7d9a98" font-size="11" font-family="IBM Plex Mono,monospace">TO UNIT</text>
+          <path id="bypassLine" d="M90 100 L90 40 L340 40 L340 100" fill="none" stroke="#7d9a98" stroke-width="3"/>
+          <!-- V-3 -->
+          <g id="v3g" transform="translate(195,10)"><path class="vb" d="M0 15 L20 30 L0 45 Z"/><path class="vb" d="M40 15 L20 30 L40 45 Z"/><text x="20" y="8" text-anchor="middle" fill="#7d9a98" font-size="10" font-family="IBM Plex Mono,monospace">V-3</text></g>
+          <!-- V-1 -->
+          <g id="v1g" transform="translate(100,70)"><path class="vb" d="M0 15 L20 30 L0 45 Z"/><path class="vb" d="M40 15 L20 30 L40 45 Z"/><text x="20" y="68" text-anchor="middle" fill="#7d9a98" font-size="10" font-family="IBM Plex Mono,monospace">V-1</text></g>
+          <!-- FCV -->
+          <g id="fcvg" transform="translate(200,70)">
+            <rect x="12" y="-8" width="16" height="18" fill="#142428" stroke="#2dd4bf"/>
+            <path class="vb" d="M0 15 L20 30 L0 45 Z"/><path class="vb" d="M40 15 L20 30 L40 45 Z"/>
+            <text x="20" y="68" text-anchor="middle" fill="#2dd4bf" font-size="10" font-family="IBM Plex Mono,monospace">FCV-101</text>
+          </g>
+          <!-- V-2 -->
+          <g id="v2g" transform="translate(300,70)"><path class="vb" d="M0 15 L20 30 L0 45 Z"/><path class="vb" d="M40 15 L20 30 L40 45 Z"/><text x="20" y="68" text-anchor="middle" fill="#7d9a98" font-size="10" font-family="IBM Plex Mono,monospace">V-2</text></g>
+          <!-- drain -->
+          <line x1="220" y1="100" x2="220" y2="155" stroke="#7d9a98" stroke-width="2"/>
+          <g id="v4g" transform="translate(200,145)"><path class="vb" d="M0 0 L20 12 L0 24 Z"/><path class="vb" d="M40 0 L20 12 L40 24 Z"/><text x="20" y="40" text-anchor="middle" fill="#7d9a98" font-size="10" font-family="IBM Plex Mono,monospace">V-4</text></g>
+          <circle id="piGauge" cx="400" cy="155" r="22" fill="#142428" stroke="#e05252" stroke-width="2"/>
+          <text id="piText" x="400" y="160" text-anchor="middle" fill="#e4efee" font-size="12" font-family="IBM Plex Mono,monospace">12.4</text>
+          <text x="400" y="190" text-anchor="middle" fill="#7d9a98" font-size="10" font-family="IBM Plex Mono,monospace">PI bar</text>
+          <g id="lotoBadge" visibility="hidden">
+            <rect x="185" y="85" width="70" height="24" fill="#e0b429" stroke="#8a6d13"/>
+            <text x="220" y="102" text-anchor="middle" fill="#080f11" font-size="12" font-weight="700" font-family="IBM Plex Mono,monospace">LOTO</text>
+          </g>
+        </svg>
+      </div>
+      <div class="readouts">
+        <span>Flow: <strong id="isoFlow" class="teal">100%</strong></span>
+        <span>Body P: <strong id="isoP" class="danger">12.4 bar</strong></span>
+        <span>Status: <strong id="isoStatus">في الخدمة</strong></span>
+      </div>
+      <div class="iso-log" id="isoLog" aria-live="polite"></div>
+    </div>
+    <div class="card2">
+      <h3 class="h-teal">لوحة التحكم</h3>
+      <button type="button" class="btn gold block" id="isoPermit">طلب تصريح غرفة التحكم <span class="chip" id="chipPermit">NO</span></button>
+      <button type="button" class="btn block" id="isoMode">المتحكم <span class="chip" id="chipMode">AUTO</span></button>
+      <button type="button" class="btn block" id="isoV1">V-1 مدخل <span class="chip open" id="chipV1">OPEN</span></button>
+      <button type="button" class="btn block" id="isoV2">V-2 مخرج <span class="chip open" id="chipV2">OPEN</span></button>
+      <button type="button" class="btn block" id="isoV3">V-3 تجاوز <span class="chip closed" id="chipV3">CLOSED</span></button>
+      <button type="button" class="btn block" id="isoV4">V-4 تصريف <span class="chip closed" id="chipV4">CLOSED</span></button>
+      <button type="button" class="btn block" id="isoLoto">تطبيق LOTO <span class="chip" id="chipLoto">OFF</span></button>
+      <button type="button" class="btn primary block" id="isoReset">إعادة التعيين</button>
+      <div class="check-list" id="isoCheck"></div>
+      <div id="isoResult" hidden></div>
+    </div>
+  </div>
+</section>
+
+<!-- 04 Gas -->
+<section class="panel" id="panel-04" role="tabpanel" aria-labelledby="tab-04" hidden>
+  <div class="card">
+    <h2 class="h-gold">محاكي الهروب من الغاز</h2>
+    <p>شبكة 9×9 · حركة تشيبشيف (8 اتجاهات) · خطوة واحدة لكل نقرة. اهرب إلى نقطة التجمع <strong>أعلى الريح</strong>. الأسهم + 7/9/1/3 · <span class="mono">R</span> سيناريو جديد (عندما تكون هذه الوحدة نشطة فقط).</p>
+  </div>
+  <div class="gas-layout">
+    <div>
+      <div class="gas-board" id="gasBoard" role="grid" aria-label="شبكة الهروب من الغاز 9 في 9"></div>
+      <div id="gasResult" style="margin-top:10px"></div>
+    </div>
+    <div class="card2 windsock-wrap">
+      <svg id="windsockSvg" viewBox="0 0 140 140" width="140" height="140" role="img" aria-label="كمّ الريح واتجاهها">
+        <circle cx="70" cy="70" r="58" fill="none" stroke="#1e3438"/>
+        <text x="70" y="16" text-anchor="middle" fill="#7d9a98" font-size="11" font-family="IBM Plex Mono,monospace">N</text>
+        <text x="130" y="74" text-anchor="middle" fill="#7d9a98" font-size="11" font-family="IBM Plex Mono,monospace">E</text>
+        <text x="70" y="136" text-anchor="middle" fill="#7d9a98" font-size="11" font-family="IBM Plex Mono,monospace">S</text>
+        <text x="10" y="74" text-anchor="middle" fill="#7d9a98" font-size="11" font-family="IBM Plex Mono,monospace">W</text>
+        <g id="sockArm" transform="rotate(0 70 70)">
+          <polygon points="70,28 82,78 70,68 58,78" fill="#e0b429"/>
+          <circle cx="70" cy="70" r="4" fill="#2dd4bf"/>
+        </g>
+      </svg>
+      <div class="mono" style="font-size:12px;text-align:right;margin-top:8px">
+        <div>الريح من: <strong id="gasWind" class="gold">—</strong></div>
+        <div>الخطوات: <strong id="gasSteps">0</strong> / 16</div>
+        <div>الحالة: <strong id="gasStatus">—</strong></div>
+      </div>
+      <button type="button" class="btn primary block" id="gasNew" style="margin-top:12px">سيناريو جديد</button>
+    </div>
+  </div>
+</section>
+
+<!-- 05 Radio -->
+<section class="panel" id="panel-05" role="tabpanel" aria-labelledby="tab-05" hidden>
+  <div class="card">
+    <h2 class="h-gold">محاكي بلاغ الطوارئ</h2>
+    <p>مرحلتان: رتّب عناصر البلاغ تحت ضغط الوقت، ثم صحّح — أو أكّد — القراءة العكسية من غرفة التحكم. هذه الوحدة تُدرِّب الحاجز الذي يصمت أمامه المبتدئ.</p>
+  </div>
+  <div class="card2" id="radioStage1">
+    <div class="radio-timer" id="radioTimer">الوقت: 45s</div>
+    <div class="timer-bar" id="radioBar"><i id="radioBarFill"></i></div>
+    <div class="card" id="radioScenario" style="margin-bottom:12px"></div>
+    <h3 class="h-teal">رتّب عناصر البلاغ (8)</h3>
+    <div class="slots" id="radioSlots"></div>
+    <div class="chip-pool" id="radioPool"></div>
+  </div>
+  <div class="card2" id="radioStage2" hidden>
+    <h3 class="h-gold">القراءة العكسية — غرفة التحكم</h3>
+    <p class="muted">اضغط السطر الذي تعتقد أنه خطأ، أو أكّد إن كانت القراءة سليمة بالكامل.</p>
+    <div id="radioReadback"></div>
+    <button type="button" class="btn primary" id="radioConfirm" style="margin-top:10px">تأكيد القراءة العكسية — لا أخطاء</button>
+  </div>
+  <div id="radioResult" style="margin-top:12px"></div>
+  <button type="button" class="btn gold" id="radioNew" style="margin-top:10px">بلاغ جديد</button>
+</section>
+
+<!-- 06 Substation -->
+<section class="panel" id="panel-06" role="tabpanel" aria-labelledby="tab-06" hidden>
+  <div class="callout crit">قاعدة حاكمة: المشغّل غير الكهربائي <strong>لا يُشغِّل</strong>، <strong>لا يعزل</strong>، <strong>لا يفتح</strong> أي لوحة. صلاحيته: دخول مصرّح، ملاحظة، وإبلاغ. أي تجاوز لهذا الحد يحوّلك إلى مصدر خطر إضافي.</div>
+  <div class="card">
+    <h2 class="h-gold">محطة التحويل — للمشغّل الميداني</h2>
+    <table class="data">
+      <thead><tr><th>الطبقة</th><th>نطاق نموذجي</th><th>استخدام</th></tr></thead>
+      <tbody>
+        <tr><td>جهد فائق</td><td class="mono">&gt; 230 kV</td><td>نقل</td></tr>
+        <tr><td>جهد عالٍ</td><td class="mono">35–230 kV</td><td>نقل/توزيع أولي</td></tr>
+        <tr><td>جهد متوسط</td><td class="mono">1–35 kV</td><td>محركات كبيرة، توزيع موقع</td></tr>
+        <tr><td>جهد منخفض</td><td class="mono">&lt; 1 kV</td><td>MCC، إنارة، مقابس</td></tr>
+        <tr><td>جهد تحكم</td><td class="mono">24–220 V</td><td>دوائر تحكم وحماية</td></tr>
+      </tbody>
+    </table>
+    <div class="callout">الجهد المنخفض لا يعني غياب الحذر. معظم الإصابات الكهربائية الصناعية القاتلة تقع دون ألف فولت — لأن التعرّض له أكثر تكراراً والرضا الزائف أعلى.</div>
+  </div>
+  <div class="card">
+    <h3 class="h-teal">رسم أحادي الخط مبسّط</h3>
+    <div class="fig">
+      <svg viewBox="0 0 480 180" width="480" height="180" role="img" aria-label="رسم أحادي الخط لمحطة تحويل">
+        <rect width="480" height="180" fill="#080f11"/>
+        <line x1="20" y1="40" x2="90" y2="40" stroke="#e0b429" stroke-width="2"/>
+        <text x="20" y="28" fill="#7d9a98" font-size="10" font-family="IBM Plex Mono,monospace">INFEED</text>
+        <rect x="90" y="28" width="30" height="24" fill="#142428" stroke="#2dd4bf"/><text x="105" y="44" text-anchor="middle" fill="#2dd4bf" font-size="9" font-family="IBM Plex Mono,monospace">CB</text>
+        <line x1="120" y1="40" x2="170" y2="40" stroke="#e0b429" stroke-width="2"/>
+        <polygon points="170,26 195,40 170,54" fill="none" stroke="#e0b429"/><text x="182" y="70" text-anchor="middle" fill="#7d9a98" font-size="9" font-family="IBM Plex Mono,monospace">XFMR</text>
+        <line x1="195" y1="40" x2="240" y2="40" stroke="#2dd4bf" stroke-width="2"/>
+        <line x1="240" y1="40" x2="240" y2="90" stroke="#2dd4bf" stroke-width="2"/>
+        <line x1="140" y1="90" x2="400" y2="90" stroke="#2dd4bf" stroke-width="3"/>
+        <text x="270" y="82" fill="#7d9a98" font-size="10" font-family="IBM Plex Mono,monospace">MV BUS</text>
+        <line x1="180" y1="90" x2="180" y2="140" stroke="#7d9a98"/><text x="180" y="158" text-anchor="middle" fill="#7d9a98" font-size="9" font-family="IBM Plex Mono,monospace">L-MOTOR</text>
+        <line x1="280" y1="90" x2="280" y2="120" stroke="#7d9a98"/>
+        <polygon points="268,120 292,120 280,145" fill="none" stroke="#e0b429"/><text x="280" y="168" text-anchor="middle" fill="#7d9a98" font-size="9" font-family="IBM Plex Mono,monospace">MCC LV</text>
+        <line x1="360" y1="90" x2="360" y2="140" stroke="#7d9a98"/><text x="360" y="158" text-anchor="middle" fill="#7d9a98" font-size="9" font-family="IBM Plex Mono,monospace">DC PROT</text>
+      </svg>
+    </div>
+  </div>
+  <div class="card">
+    <h3 class="h-teal">صدمة وقوس كهربائي</h3>
+    <table class="data">
+      <thead><tr><th>الخطر</th><th>الآلية</th><th>التحكم</th></tr></thead>
+      <tbody>
+        <tr><td>صدمة</td><td>تيار يمر عبر الجسم</td><td>عزل، LOTO، PPE، مسافة</td></tr>
+        <tr><td>قوس كهربائي</td><td>بلازما حرارية وضغط</td><td>حدود قوس، ملابس قوس، تقليل الطاقة</td></tr>
+      </tbody>
+    </table>
+    <div class="callout crit">القوس الكهربائي لا يحتاج ملامسة. يكفي الاقتراب ضمن طاقة الحادث المحددة على ملصق اللوحة.</div>
+    <div class="fig">
+      <svg viewBox="0 0 280 180" width="280" height="180" role="img" aria-label="حدود الاقتراب الثلاث حول جزء حي مكشوف">
+        <rect width="280" height="180" fill="#080f11"/>
+        <circle cx="140" cy="85" r="70" fill="none" stroke="#e0a02a" stroke-dasharray="5 3"/>
+        <circle cx="140" cy="85" r="48" fill="none" stroke="#e05252"/>
+        <circle cx="140" cy="85" r="28" fill="none" stroke="#e0b429"/>
+        <rect x="132" y="77" width="16" height="16" fill="#e05252"/>
+        <text x="140" y="168" text-anchor="middle" fill="#7d9a98" font-size="11" font-family="IBM Plex Sans Arabic,sans-serif">مقيد · محدود · قوس — من ملصق اللوحة لا بالتخمين</text>
+      </svg>
+    </div>
+  </div>
+  <div class="card">
+    <h3 class="h-teal">تسلسل العزل الكهربائي (8) ثم الاختبار الثلاثي</h3>
+    <ol>
+      <li>تحديد الدائرة والمصدر من الوثائق لا من الذاكرة.</li>
+      <li>تنسيق مع الجهة المسؤولة عن الكهرباء.</li>
+      <li>فصل المصدر المعتمد.</li>
+      <li>تطبيق LOTO على أجهزة الفصل.</li>
+      <li>تفريغ الطاقة المخزنة (مكثفات، كابلات).</li>
+      <li>إثبات انعدام الجهد.</li>
+      <li>تأريض مؤقت حيث يلزم.</li>
+      <li>إعلان المنطقة آمنة للعمل ضمن التصريح.</li>
+    </ol>
+    <p><strong>الاختبار الثلاثي:</strong> أثبت جهاز القياس على مصدر حي معروف → اختبر الدائرة → أثبت الجهاز مجدداً على مصدر حي. جهاز معطوب يقرأ صفراً على دائرة حية — والجسم يدفع الثمن.</p>
+  </div>
+  <div class="card">
+    <h3 class="h-teal">مخاطر حسب الموقع</h3>
+    <table class="data">
+      <thead><tr><th>الموقع</th><th>الخطر</th></tr></thead>
+      <tbody>
+        <tr><td>غرفة البطاريات</td><td>هيدروجين + حمض</td></tr>
+        <tr><td>محول زيتي</td><td>حريق زيت</td></tr>
+        <tr><td>GIS</td><td>منتجات تحلل بعد القوس</td></tr>
+        <tr><td>إطفاء غازي</td><td>اختناق عند التفريغ</td></tr>
+        <tr><td>قبو كابلات</td><td>مكان محصور</td></tr>
+        <tr><td>أثناء عطل أرضي</td><td>جهد خطوة ولمس</td></tr>
+      </tbody>
+    </table>
+    <h3 class="h-teal">سلوك عند الدخول</h3>
+    <ul>
+      <li>تحقق من التصريح وملصق القوس قبل فتح الباب.</li>
+      <li>لا تحمل أدوات معدنية سائبة قرب الأجزاء الحية.</li>
+      <li>لا تعتمد على «اللوحة تبدو ميتة».</li>
+      <li>أخرج فوراً عند صوت غير مألوف أو رائحة أوзом.</li>
+    </ul>
+    <div class="callout crit">عند حادث كهربائي: <strong>لا تلمس المصاب</strong> ما دام على اتصال بالمصدر. افصل المصدر أولاً أو استخدم وسيلة عزل معتمدة — وإلا تصبح الإصابة الثانية قصتك.</div>
+  </div>
+</section>
+
+<!-- 07 Quiz -->
+<section class="panel" id="panel-07" role="tabpanel" aria-labelledby="tab-07" hidden>
+  <div class="card">
+    <h2 class="h-gold">اختبار شامل</h2>
+    <p class="mono muted">سؤال <span id="quizIdx">1</span> / <span id="quizTotal">14</span> · الدرجة <span id="quizScore">0</span></p>
+    <div id="quizQ" class="h-teal" style="margin-top:10px"></div>
+    <div id="quizOpts" style="margin-top:12px"></div>
+    <div id="quizExplain" class="callout tip" hidden></div>
+    <div style="margin-top:12px;display:flex;gap:8px;flex-wrap:wrap">
+      <button type="button" class="btn primary" id="quizNext" hidden>التالي</button>
+      <button type="button" class="btn gold" id="quizRestart" hidden>إعادة الاختبار</button>
+    </div>
+  </div>
+</section>
+
+<!-- 08 Report -->
+<section class="panel" id="panel-08" role="tabpanel" aria-labelledby="tab-08" hidden>
+  <div class="card">
+    <h2 class="h-gold">سجل أداء الجلسة</h2>
+    <div id="storageNotice" class="callout storage-notice" hidden>التخزين المحلي غير متاح في هذه البيئة. الجلسة في الذاكرة فقط — ستُفقد عند إغلاق الصفحة.</div>
+    <div class="stats" id="reportStats"></div>
+    <h3 class="h-teal" style="margin-top:16px">سجل الأحداث (الأحدث أولاً)</h3>
+    <div class="event-log" id="eventLog"></div>
+    <div style="margin-top:12px;display:flex;flex-wrap:wrap;gap:8px">
+      <button type="button" class="btn" id="btnPrint">طباعة</button>
+      <button type="button" class="btn" id="btnExport">تصدير نصي</button>
+      <button type="button" class="btn danger" id="btnResetAll">تصفير الجلسة</button>
+    </div>
+  </div>
+</section>
+
+</div>
+
+<script>
+(function(){
+'use strict';
+
+/* ========== Storage ========== */
+var memoryStore = {};
+var storageOk = true;
+function sGet(k){
+  try{ if(!storageOk) return memoryStore[k]||null; return localStorage.getItem(k); }
+  catch(e){ storageOk=false; return memoryStore[k]||null; }
+}
+function sSet(k,v){
+  try{ if(!storageOk){ memoryStore[k]=v; return; } localStorage.setItem(k,v); }
+  catch(e){ storageOk=false; memoryStore[k]=v; }
+}
+function sTest(){
+  try{ localStorage.setItem('__m','1'); localStorage.removeItem('__m'); storageOk=true; }
+  catch(e){ storageOk=false; }
+}
+sTest();
+
+/* ========== State ========== */
+var state = {
+  quizIndex:0, quizScore:0, quizDone:false, quizAnswered:false,
+  isoAttempts:0, isoErrors:0,
+  gasRounds:0, gasPasses:0,
+  radioRounds:0, radioPasses:0, radioCaught:0,
+  events:[]
+};
+function loadState(){
+  try{
+    var raw=sGet('miran_state_v1');
+    if(raw){ var o=JSON.parse(raw); for(var k in o) if(Object.prototype.hasOwnProperty.call(state,k)) state[k]=o[k]; }
+  }catch(e){}
+}
+function saveState(){
+  if(state.events.length>300) state.events=state.events.slice(-300);
+  sSet('miran_state_v1', JSON.stringify(state));
+}
+function logEvent(type, msg){
+  state.events.push({t:Date.now(), type:type, msg:msg});
+  if(state.events.length>300) state.events.shift();
+  saveState();
+  renderReport();
+}
+loadState();
+
+/* ========== Tabs ========== */
+var activeTab='00';
+var tabBtns=document.querySelectorAll('.tabs [role="tab"]');
+var panels=document.querySelectorAll('.panel');
+function showTab(id){
+  activeTab=id;
+  tabBtns.forEach(function(b){
+    var on=b.getAttribute('data-tab')===id;
+    b.setAttribute('aria-selected', on?'true':'false');
+  });
+  panels.forEach(function(p){
+    var on=p.id==='panel-'+id;
+    p.classList.toggle('active', on);
+    if(on) p.removeAttribute('hidden'); else p.setAttribute('hidden','');
+  });
+  if(id==='04') gasEnsure();
+  if(id==='05') radioEnsure();
+  if(id==='07') quizRender();
+  if(id==='08') renderReport();
+}
+tabBtns.forEach(function(b){
+  b.addEventListener('click', function(){ showTab(b.getAttribute('data-tab')); });
+});
+
+/* ========== Isolation ========== */
+var iso = {
+  permit:false, mode:'AUTO',
+  v1:true, v2:true, v3:false, v4:false,
+  pressure:12.4, complete:false, errors:0, steps:{},
+  log:[]
+};
+var STEP_KEYS=['permit','manual','v3','v1','v2','v4','zero','loto'];
+var STEP_LABELS={
+  permit:'1. تصريح ممنوح',
+  manual:'2. المتحكم MANUAL',
+  v3:'3. فتح التجاوز V-3',
+  v1:'4. غلق المدخل V-1',
+  v2:'5. غلق المخرج V-2',
+  v4:'6. فتح التصريف V-4',
+  zero:'7. ضغط صفر على PI',
+  loto:'8. تطبيق LOTO'
+};
+
+function isoPush(cls, msg){
+  var now=new Date();
+  var ts=('0'+now.getMinutes()).slice(-2)+':'+('0'+now.getSeconds()).slice(-2);
+  iso.log.unshift({cls:cls, msg:'['+ts+'] '+msg});
+  if(iso.log.length>40) iso.log.pop();
+}
+function isoFlow(){
+  if(iso.v3) return 92 + (iso.v1&&iso.v2?8:0);
+  if(iso.v1&&iso.v2) return 100;
+  return 0;
+}
+function isoPressure(){
+  if(!iso.v1 && !iso.v2 && iso.v4) return 0;
+  return 12.4;
+}
+function isoUpdateModel(){
+  iso.pressure=isoPressure();
+  if(iso.pressure===0) iso.steps.zero=true;
+  var f=isoFlow();
+  if(f<70 && !iso.complete){
+    /* status handled in render */
+  }
+  if(iso.steps.permit&&iso.steps.manual&&iso.steps.v3&&iso.steps.v1&&iso.steps.v2&&iso.steps.v4&&iso.steps.zero&&iso.steps.loto){
+    if(!iso.complete){
+      iso.complete=true;
+      state.isoAttempts++;
+      state.isoErrors+=iso.errors;
+      logEvent(iso.errors===0?'ok':'err','عزل: مكتمل · أخطاء '+iso.errors);
+      isoPush('e-ok','اكتمل العزل. الأزرار معطّلة — أعد التعيين لمحاولة جديدة.');
+      saveState();
+    }
+  }
+}
+function isoSetValveColors(){
+  function paint(id, open){
+    var g=document.getElementById(id);
+    if(!g) return;
+    var paths=g.querySelectorAll('.vb');
+    var col=open?'#35b37e':'#e05252';
+    paths.forEach(function(p){ p.setAttribute('fill',col); p.setAttribute('stroke','#e4efee'); });
+  }
+  paint('v1g', iso.v1); paint('v2g', iso.v2); paint('v3g', iso.v3); paint('v4g', iso.v4);
+  var fcv=document.getElementById('fcvg');
+  if(fcv){
+    var isoed=!iso.v1&&!iso.v2;
+    fcv.querySelectorAll('.vb').forEach(function(p){
+      p.setAttribute('fill', isoed?'#555555':(iso.v1&&iso.v2?'#35b37e':'#7d9a98'));
+      p.setAttribute('stroke','#e4efee');
+    });
+  }
+  var pi=document.getElementById('piGauge');
+  var pt=document.getElementById('piText');
+  if(pi){ pi.setAttribute('stroke', iso.pressure===0?'#35b37e':'#e05252'); }
+  if(pt){ pt.textContent=iso.pressure===0?'0.0':'12.4'; pt.setAttribute('fill', iso.pressure===0?'#35b37e':'#e4efee'); }
+  var by=document.getElementById('bypassLine');
+  if(by) by.setAttribute('stroke', iso.v3?'#2dd4bf':'#7d9a98');
+  var lo=document.getElementById('lotoBadge');
+  if(lo) lo.setAttribute('visibility', iso.steps.loto?'visible':'hidden');
+}
+function isoRender(){
+  isoUpdateModel();
+  var f=isoFlow();
+  document.getElementById('isoFlow').textContent=f+'%';
+  document.getElementById('isoFlow').className=f<70?'danger':'teal';
+  document.getElementById('isoP').textContent=iso.pressure.toFixed(1)+' bar';
+  document.getElementById('isoP').className=iso.pressure===0?'ok':'danger';
+  var st=document.getElementById('isoStatus');
+  if(iso.complete) st.textContent='مكتمل';
+  else if(f<70) st.innerHTML='<span class="danger">اضطراب عملية</span>';
+  else st.textContent='في الخدمة';
+
+  document.getElementById('chipPermit').textContent=iso.permit?'YES':'NO';
+  document.getElementById('chipPermit').className='chip'+(iso.permit?' on':'');
+  document.getElementById('chipMode').textContent=iso.mode;
+  document.getElementById('chipMode').className='chip'+(iso.mode==='MANUAL'?' on':'');
+  function vc(open,id){ var el=document.getElementById(id); el.textContent=open?'OPEN':'CLOSED'; el.className='chip '+(open?'open':'closed'); }
+  vc(iso.v1,'chipV1'); vc(iso.v2,'chipV2'); vc(iso.v3,'chipV3'); vc(iso.v4,'chipV4');
+  document.getElementById('chipLoto').textContent=iso.steps.loto?'ON':'OFF';
+  document.getElementById('chipLoto').className='chip'+(iso.steps.loto?' ok':'');
+
+  var dis=iso.complete;
+  ['isoPermit','isoMode','isoV1','isoV2','isoV3','isoV4','isoLoto'].forEach(function(id){
+    document.getElementById(id).disabled=dis;
+  });
+
+  var chk=document.getElementById('isoCheck');
+  chk.innerHTML=STEP_KEYS.map(function(k){
+    return '<div class="'+(iso.steps[k]?'done':'')+'">'+(iso.steps[k]?'☑':'☐')+' '+STEP_LABELS[k]+'</div>';
+  }).join('');
+
+  var log=document.getElementById('isoLog');
+  log.innerHTML=iso.log.map(function(e){ return '<div class="'+e.cls+'">'+e.msg+'</div>'; }).join('') || '<div class="e-info">جاهز — اطلب التصريح أولاً.</div>';
+
+  var res=document.getElementById('isoResult');
+  if(iso.complete){
+    res.hidden=false;
+    if(iso.errors===0){
+      res.className='result-card';
+      res.innerHTML='<strong>مكتمل — صفر أخطاء</strong><br>العزل مثبت، الجسم مُهوَّى، LOTO مطبّق. هذا هو المسار الذي يحمي الصيانة والعملية معاً.';
+    }else{
+      res.className='result-card fail';
+      res.innerHTML='<strong>مكتمل مع أخطاء: '+iso.errors+'</strong><br>راجع السجل: كل خطأ يمثّل عاقبة كانت ستظهر في المعمل الحقيقي.';
+    }
+  }else{ res.hidden=true; res.innerHTML=''; }
+
+  isoSetValveColors();
+}
+function isoErr(msg){
+  iso.errors++;
+  isoPush('e-err','خطأ: '+msg);
+  logEvent('err','عزل: '+msg);
+}
+function isoReset(){
+  iso={permit:false,mode:'AUTO',v1:true,v2:true,v3:false,v4:false,pressure:12.4,complete:false,errors:0,steps:{},log:[]};
+  isoPush('e-info','أُعيد التعيين — النظام في الخدمة.');
+  isoRender();
+}
+document.getElementById('isoPermit').addEventListener('click', function(){
+  if(iso.complete) return;
+  iso.permit=true; iso.steps.permit=true;
+  isoPush('e-ok','تصريح ممنوح — غرفة التحكم على علم بعمل العزل.');
+  isoRender();
+});
+document.getElementById('isoMode').addEventListener('click', function(){
+  if(iso.complete) return;
+  if(!iso.permit){ isoErr('تصرف قبل التصريح: غرفة التحكم غير عالمة؛ أي اضطراب سيُقرأ كعطل مفاجئ.'); isoRender(); return; }
+  iso.mode = iso.mode==='AUTO'?'MANUAL':'AUTO';
+  if(iso.mode==='MANUAL'){ iso.steps.manual=true; isoPush('e-ok','المتحكم على MANUAL.'); }
+  else { iso.steps.manual=false; isoPush('e-info','المتحكم عاد إلى AUTO.'); }
+  isoRender();
+});
+document.getElementById('isoV3').addEventListener('click', function(){
+  if(iso.complete) return;
+  if(!iso.permit){ isoErr('تصرف قبل التصريح: غرفة التحكم غير عالمة.'); isoRender(); return; }
+  if(!iso.v3 && iso.mode==='AUTO'){
+    isoErr('فتح التجاوز والمتحكم AUTO: المتحكم يرى ارتفاع التدفق فيغلق صمام التحكم ضدك — تتأرجح العملية.');
+    isoRender(); return;
+  }
+  iso.v3=!iso.v3;
+  if(iso.v3){ iso.steps.v3=true; isoPush('e-ok','V-3 مفتوح — مسار التجاوز جاهز.'); }
+  else { iso.steps.v3=false; isoPush('e-info','V-3 أُغلق.'); }
+  isoRender();
+});
+document.getElementById('isoV1').addEventListener('click', function(){
+  if(iso.complete) return;
+  if(!iso.permit){ isoErr('تصرف قبل التصريح: غرفة التحكم غير عالمة.'); isoRender(); return; }
+  if(iso.v1 && !iso.v3){
+    isoErr('إغلاق V-1 قبل فتح التجاوز: فُقد التدفق إلى الوحدة — احتمال رحلة عملية.');
+    /* still allow state change to show consequence */
+  }
+  iso.v1=!iso.v1;
+  if(!iso.v1 && iso.v3){ iso.steps.v1=true; isoPush('e-ok','V-1 مغلق.'); }
+  else if(iso.v1){ iso.steps.v1=false; isoPush('e-info','V-1 مفتوح.'); }
+  else { iso.steps.v1=false; isoPush('e-info','V-1 مغلق (ترتيب غير مكتمل).'); }
+  isoRender();
+});
+document.getElementById('isoV2').addEventListener('click', function(){
+  if(iso.complete) return;
+  if(!iso.permit){ isoErr('تصرف قبل التصريح.'); isoRender(); return; }
+  if(iso.v2 && iso.v1){
+    isoErr('إغلاق V-2 وV-1 ما زال مفتوحاً: ضغط الخط الكامل محبوس في جسم الصمام والمصدر حيّ خلفه.');
+  }
+  iso.v2=!iso.v2;
+  if(!iso.v2 && !iso.v1){ iso.steps.v2=true; isoPush('e-ok','V-2 مغلق — الكتل مكتملة.'); }
+  else if(iso.v2){ iso.steps.v2=false; isoPush('e-info','V-2 مفتوح.'); }
+  else { iso.steps.v2=false; isoPush('e-info','V-2 مغلق.'); }
+  isoRender();
+});
+document.getElementById('isoV4').addEventListener('click', function(){
+  if(iso.complete) return;
+  if(!iso.permit){ isoErr('تصرف قبل التصريح.'); isoRender(); return; }
+  if(!iso.v4 && (iso.v1 || iso.v2)){
+    isoErr('فتح التصريف قبل اكتمال العزل: تُصرِّف ضد ضغط حيّ — خطر على الأفراد والمعدات.');
+  }
+  iso.v4=!iso.v4;
+  if(iso.v4 && !iso.v1 && !iso.v2){ iso.steps.v4=true; isoPush('e-ok','V-4 مفتوح — تهوية الجسم.'); }
+  else if(!iso.v4){ iso.steps.v4=false; iso.steps.zero=false; isoPush('e-info','V-4 مغلق.'); }
+  else { iso.steps.v4=false; isoPush('e-info','V-4 مفتوح (العزل غير مكتمل).'); }
+  isoRender();
+});
+document.getElementById('isoLoto').addEventListener('click', function(){
+  if(iso.complete) return;
+  if(iso.pressure>0){
+    isoErr('محاولة LOTO والضغط فوق الصفر: القفل لا يُفرِّغ الضغط. أكمل العزل والتهوية أولاً. الخطوة 8 لم تُحتسب.');
+    isoRender(); return;
+  }
+  if(!(iso.steps.permit&&iso.steps.manual&&iso.steps.v3&&iso.steps.v1&&iso.steps.v2&&iso.steps.v4&&iso.steps.zero)){
+    isoErr('LOTO قبل اكتمال السلسلة — ثبّت العزل والضغط الصفري أولاً.');
+    isoRender(); return;
+  }
+  iso.steps.loto=true;
+  isoPush('e-ok','LOTO مطبّق.');
+  isoRender();
+});
+document.getElementById('isoReset').addEventListener('click', isoReset);
+isoReset();
+
+/* ========== Gas Escape ========== */
+var COMPASS=[
+  {name:'N', from:[0,-1]},{name:'NE', from:[1,-1]},{name:'E', from:[1,0]},{name:'SE', from:[1,1]},
+  {name:'S', from:[0,1]},{name:'SW', from:[-1,1]},{name:'W', from:[-1,0]},{name:'NW', from:[-1,-1]}
+];
+function unit(v){
+  var m=Math.max(Math.abs(v[0]),Math.abs(v[1]),1);
+  /* already unit steps for 8-dir */
+  return [v[0], v[1]];
+}
+function cheb(a,b){ return Math.max(Math.abs(a[0]-b[0]), Math.abs(a[1]-b[1])); }
+function key(c){ return c[0]+','+c[1]; }
+function inGrid(c){ return c[0]>=0&&c[0]<9&&c[1]>=0&&c[1]<9; }
+function perp(v){ return [-v[1], v[0]]; }
+
+var gas=null;
+function gasGenerate(){
+  for(var attempt=0; attempt<60; attempt++){
+    var dir=COMPASS[Math.floor(Math.random()*8)];
+    var fromVec=unit(dir.from);
+    var travelVec=[-fromVec[0], -fromVec[1]];
+    var src=[3+Math.floor(Math.random()*3), 3+Math.floor(Math.random()*3)];
+    var plume={}, edge={};
+    for(var s=0;s<=7;s++){
+      var cx=src[0]+travelVec[0]*s;
+      var cy=src[1]+travelVec[1]*s;
+      var w=Math.floor(s/2.4);
+      var pv=perp(travelVec);
+      for(var o=-w;o<=w;o++){
+        var cell=[cx+pv[0]*o, cy+pv[1]*o];
+        if(!inGrid(cell)) continue;
+        if(w>0 && Math.abs(o)===w) edge[key(cell)]=1;
+        else plume[key(cell)]=1;
+      }
+    }
+    /* source always plume */
+    plume[key(src)]=1;
+    delete edge[key(src)];
+
+    var starts=[];
+    var musters=[];
+    for(var x=0;x<9;x++) for(var y=0;y<9;y++){
+      var c=[x,y];
+      var k=key(c);
+      if(plume[k]||edge[k]) continue;
+      if(c[0]===src[0]&&c[1]===src[1]) continue;
+      var dx=c[0]-src[0], dy=c[1]-src[1];
+      var dotT=dx*travelVec[0]+dy*travelVec[1];
+      var dotF=dx*fromVec[0]+dy*fromVec[1];
+      var d=cheb(c,src);
+      if(dotT>0 && d>=2 && d<=4) starts.push(c);
+      if(dotF>=2 && d>=3) musters.push(c);
+    }
+    if(!starts.length || !musters.length) continue;
+    var player=starts[Math.floor(Math.random()*starts.length)];
+    var muster=musters[Math.floor(Math.random()*musters.length)];
+    /* safety: player not in plume/edge */
+    if(plume[key(player)]||edge[key(player)]) continue;
+    return {
+      wind:dir.name, fromVec:fromVec, travelVec:travelVec, src:src,
+      plume:plume, edge:edge, player:player.slice(), muster:muster.slice(),
+      start:player.slice(), steps:0, downwindSteps:0, status:'نشط', over:false
+    };
+  }
+  /* fallback deterministic safe-ish */
+  return gasGenerateFallback();
+}
+function gasGenerateFallback(){
+  var fromVec=[0,-1], travelVec=[0,1], src=[4,4];
+  var plume={}, edge={};
+  for(var s=0;s<=5;s++){
+    var w=Math.floor(s/2.4);
+    for(var o=-w;o<=w;o++){
+      var cell=[src[0]+o, src[1]+travelVec[1]*s];
+      if(!inGrid(cell)) continue;
+      if(w>0&&Math.abs(o)===w) edge[key(cell)]=1; else plume[key(cell)]=1;
+    }
+  }
+  plume[key(src)]=1;
+  return {wind:'N', fromVec:fromVec, travelVec:travelVec, src:src, plume:plume, edge:edge,
+    player:[4,7], muster:[4,0], start:[4,7], steps:0, downwindSteps:0, status:'نشط', over:false};
+}
+
+function gasEnsure(){ if(!gas){ gas=gasGenerate(); gasRender(); } }
+function gasNew(){
+  gas=gasGenerate();
+  state.gasRounds++;
+  saveState();
+  document.getElementById('gasResult').innerHTML='';
+  gasRender();
+}
+function gasMove(dx,dy){
+  if(!gas||gas.over) return;
+  var np=[gas.player[0]+dx, gas.player[1]+dy];
+  if(!inGrid(np)) return;
+  gas.steps++;
+  var moveVec=[dx,dy];
+  if(moveVec[0]*gas.travelVec[0]+moveVec[1]*gas.travelVec[1]>0) gas.downwindSteps++;
+  gas.player=np;
+  var k=key(np);
+  if(np[0]===gas.src[0]&&np[1]===gas.src[1] || gas.plume[k]){
+    gas.over=true; gas.status='فشل';
+    document.getElementById('gasResult').innerHTML='<div class="result-card fail"><strong>فشل — دخول السحابة أو المصدر</strong><br>عند التركيز العالي تفقد الوعي خلال ثوانٍ. لا تعبر الريشة ولا تقترب من نقطة التسرب.</div>';
+    logEvent('err','غاز: فشل — دخول السحابة');
+    saveState();
+  } else if(gas.edge[k]){
+    gas.over=true; gas.status='فشل';
+    document.getElementById('gasResult').innerHTML='<div class="result-card fail"><strong>فشل — دخول حافة السحابة</strong><br>حواف الريشة ليست آمنة: التركيز يتذبذب مع هبّات الريح. اعتبر الحافة داخل الخطر.</div>';
+    logEvent('err','غاز: فشل — حافة السحابة');
+    saveState();
+  } else if(np[0]===gas.muster[0]&&np[1]===gas.muster[1]){
+    gas.over=true; gas.status='نجاح';
+    state.gasPasses++;
+    var msg=gas.downwindSteps===0
+      ? 'مسار نظيف: لم تتحرك مع اتجاه انتقال السحابة. هذا هو السلوك المطلوب — أعلى الريح نحو نقطة التجمع.'
+      : 'وصلت، لكنك اتخذت '+gas.downwindSteps+' خطوة مع اتجاه انتقال السحابة. كل خطوة منها تُبقيك داخل السحابة بسرعة حركتها — في الميدان قد يكون ذلك قاتلاً.';
+    document.getElementById('gasResult').innerHTML='<div class="result-card"><strong>وصلت إلى نقطة التجمع</strong><br>'+msg+'</div>';
+    logEvent('ok','غاز: نجاح · خطوات أسفل الريح '+gas.downwindSteps);
+    saveState();
+  } else if(gas.steps>=16){
+    gas.over=true; gas.status='فشل';
+    document.getElementById('gasResult').innerHTML='<div class="result-card fail"><strong>فشل — تجاوز 16 خطوة</strong><br>السحابة تتوسع. التردد في اختيار الاتجاه هو ما يقتل — قرر أعلى الريح فوراً.</div>';
+    logEvent('err','غاز: فشل — نفاد الخطوات');
+    saveState();
+  }
+  gasRender();
+}
+function gasRender(){
+  if(!gas) return;
+  var board=document.getElementById('gasBoard');
+  board.innerHTML='';
+  for(var y=0;y<9;y++) for(var x=0;x<9;x++){
+    var c=[x,y], k=key(c);
+    var btn=document.createElement('button');
+    btn.type='button';
+    btn.className='gas-cell';
+    btn.setAttribute('role','gridcell');
+    btn.setAttribute('aria-label','صف '+(y+1)+' عمود '+(x+1));
+    if(gas.plume[k]) btn.classList.add('plume');
+    if(gas.edge[k]) btn.classList.add('edge');
+    if(c[0]===gas.src[0]&&c[1]===gas.src[1]) btn.classList.add('src');
+    if(c[0]===gas.muster[0]&&c[1]===gas.muster[1]) btn.classList.add('muster');
+    if(c[0]===gas.player[0]&&c[1]===gas.player[1]) btn.classList.add('player');
+    (function(dx,dy){
+      btn.addEventListener('click', function(){
+        if(gas.over) return;
+        var px=gas.player[0], py=gas.player[1];
+        var ddx=dx-px, ddy=dy-py;
+        if(Math.max(Math.abs(ddx),Math.abs(ddy))===1) gasMove(ddx,ddy);
+      });
+    })(x,y);
+    board.appendChild(btn);
+  }
+  document.getElementById('gasWind').textContent=gas.wind;
+  document.getElementById('gasSteps').textContent=gas.steps;
+  document.getElementById('gasStatus').textContent=gas.status;
+  /* windsock: wind FROM direction - point sock toward where wind goes = travel */
+  var ang={N:180,NE:225,E:270,SE:315,S:0,SW:45,W:90,NW:135};
+  document.getElementById('sockArm').setAttribute('transform','rotate('+(ang[gas.wind]||0)+' 70 70)');
+}
+document.getElementById('gasNew').addEventListener('click', gasNew);
+
+document.addEventListener('keydown', function(ev){
+  if(activeTab!=='04'||!gas||gas.over) return;
+  var map={
+    ArrowUp:[0,-1],ArrowDown:[0,1],ArrowLeft:[-1,0],ArrowRight:[1,0],
+    '7':[-1,-1],'9':[1,-1],'1':[-1,1],'3':[1,1],
+    'r':null,'R':null
+  };
+  if(!(ev.key in map) && !['7','9','1','3'].includes(ev.key)) return;
+  if(ev.key==='r'||ev.key==='R'){ ev.preventDefault(); gasNew(); return; }
+  var d=map[ev.key];
+  if(d){ ev.preventDefault(); gasMove(d[0],d[1]); }
+});
+
+/* ========== Radio ========== */
+var RADIO_ELEMENTS=[
+  {id:'call', label:'نداء طوارئ مكرر'},
+  {id:'loc', label:'الموقع الدقيق ووسم المعدة'},
+  {id:'type', label:'نوع الطارئ'},
+  {id:'mat', label:'المادة والحجم/الشدة'},
+  {id:'wind', label:'اتجاه الريح'},
+  {id:'cas', label:'الإصابات'},
+  {id:'id', label:'الاسم ورقم الشارة'},
+  {id:'wait', label:'انتظر القراءة العكسية'}
+];
+var RADIO_ORDER=['call','loc','type','mat','wind','cas','id','wait'];
+var RADIO_REASONS={
+  call:'النداء يقطع الضجيج ويثبت أن القناة للطوارئ.',
+  loc:'الموقع قبل التفاصيل: إن انقطع الإرسال بعد سطرين يصل الفريق للمكان.',
+  type:'يحدد طبيعة الاستجابة (غاز/حريق/إصابة).',
+  mat:'المادة والحجم يحددان منطقة الخطر والPPE.',
+  wind:'الريح توجّه الاقتراب ونقطة التجمع.',
+  cas:'الإصابات تحدد الإسعاف والأولوية.',
+  id:'هوية المُبلِّغ للتواصل اللاحق.',
+  wait:'إغلاق الحلقة بالقراءة العكسية يمنع العمل على بيانات خاطئة.'
+};
+var SCENARIOS=[
+  {loc:'وحدة التقطير · مضخة', tag:'P-210A', type:'تسرب غاز حامض', mat:'H2S · حجم متوسط', wind:'من الشمال', cas:'إصابة استنشاق واحدة', name:'خالد العتيبي', badge:'4471'},
+  {loc:'مزرعة الخزانات · الحوض', tag:'T-12', type:'حريق في الحوض', mat:'منتج نفطي · ألسنة مرئية', wind:'من الشرق', cas:'حرق سطحي لمصاب واحد', name:'سارة الدوسري', badge:'8820'},
+  {loc:'معمل الغاز · ضاغط', tag:'C-401B', type:'تسرب غاز قابل للاشتعال', mat:'غاز طبيعي · صوت عالٍ', wind:'من الجنوب الغربي', cas:'لا إصابات', name:'فهد الشمري', badge:'1103'},
+  {loc:'رصيف التحميل', tag:'ML-03', type:'انسكاب منتج', mat:'نفط خام · داخل الحوض', wind:'من الغرب', cas:'لا إصابات', name:'نورة القحطاني', badge:'5566'},
+  {loc:'محطة التحويل · لوحة', tag:'SWGR-2A', type:'حريق كهربائي', mat:'دخان من اللوحة', wind:'ساكن', cas:'لا إصابات', name:'ماجد الحربي', badge:'3344'},
+  {loc:'سقالات وحدة المرافق', tag:'SCF-07', type:'سقوط من ارتفاع', mat:'—', wind:'من الجنوب', cas:'مصاب واعٍ على الأرض', name:'ريم الزهراني', badge:'7799'}
+];
+
+var radio={
+  scenario:null, pool:[], slots:[], stage:1, remaining:45,
+  timer:null, over:false, readback:[], errorIdx:-1, shuffled:false
+};
+
+function shuffle(a){
+  var b=a.slice();
+  for(var i=b.length-1;i>0;i--){ var j=Math.floor(Math.random()*(i+1)); var t=b[i]; b[i]=b[j]; b[j]=t; }
+  return b;
+}
+function radioStopTimer(){
+  if(radio.timer){ clearInterval(radio.timer); radio.timer=null; }
+}
+function radioStartTimer(sec){
+  radioStopTimer();
+  radio.remaining=sec;
+  radio.timer=setInterval(function(){
+    radio.remaining--;
+    radioUpdateTimer();
+    if(radio.remaining<=0){
+      radioStopTimer();
+      radioFail('انتهى الوقت. التردد في البلاغ يترك الفريق بلا معلومات قابلة للتنفيذ.');
+    }
+  },1000);
+  radioUpdateTimer();
+}
+function radioUpdateTimer(){
+  var el=document.getElementById('radioTimer');
+  var bar=document.getElementById('radioBar');
+  var fill=document.getElementById('radioBarFill');
+  if(!el) return;
+  el.textContent='الوقت: '+Math.max(0,radio.remaining)+'s';
+  el.className='radio-timer'+(radio.remaining<=12?' low':'');
+  bar.className='timer-bar'+(radio.remaining<=12?' low':'');
+  var max=radio.stage===1?45:Math.max(28, radio.remaining+1);
+  /* approximate width from remaining / 45 for stage1, keep visual for stage2 */
+  var pct=Math.max(0, Math.min(100, (radio.remaining/45)*100));
+  fill.style.width=pct+'%';
+}
+function radioEnsure(){ if(!radio.scenario) radioNew(); }
+function radioNew(){
+  radioStopTimer();
+  radio.over=false;
+  radio.stage=1;
+  radio.scenario=SCENARIOS[Math.floor(Math.random()*SCENARIOS.length)];
+  radio.pool=shuffle(RADIO_ELEMENTS.map(function(e){ return e.id; }));
+  radio.slots=[];
+  radio.readback=[];
+  radio.errorIdx=-1;
+  document.getElementById('radioStage1').hidden=false;
+  document.getElementById('radioStage2').hidden=true;
+  document.getElementById('radioResult').innerHTML='';
+  radioRenderScenario();
+  radioRenderSlots();
+  radioStartTimer(45);
+  state.radioRounds++;
+  saveState();
+}
+function radioRenderScenario(){
+  var s=radio.scenario;
+  document.getElementById('radioScenario').innerHTML=
+    '<strong>السيناريو</strong><br>'+
+    'الموقع: '+s.loc+' · المعدة <span class="tag">'+s.tag+'</span><br>'+
+    'الحدث: '+s.type+' · '+s.mat+'<br>'+
+    'الريح: '+s.wind+' · الإصابات: '+s.cas+'<br>'+
+    'أنت: '+s.name+' · شارة <span class="tag">'+s.badge+'</span>';
+}
+function labelOf(id){
+  for(var i=0;i<RADIO_ELEMENTS.length;i++) if(RADIO_ELEMENTS[i].id===id) return RADIO_ELEMENTS[i].label;
+  return id;
+}
+function radioRenderSlots(){
+  var slots=document.getElementById('radioSlots');
+  var html='';
+  for(var i=0;i<8;i++){
+    var filled=radio.slots[i];
+    html+='<div class="slot'+(filled?' filled':'')+'"><span class="num">'+(i+1)+'</span>'+(filled?labelOf(filled):'')+
+      (filled?' <button type="button" class="btn" data-unslot="'+i+'" style="margin-right:auto;padding:2px 8px;font-size:11px">إزالة</button>':'')+
+      '</div>';
+  }
+  slots.innerHTML=html;
+  slots.querySelectorAll('[data-unslot]').forEach(function(b){
+    b.addEventListener('click', function(){
+      if(radio.over||radio.stage!==1) return;
+      var i=+b.getAttribute('data-unslot');
+      radio.slots.splice(i,1);
+      radioRenderSlots();
+      radioRenderPool();
+    });
+  });
+  radioRenderPool();
+}
+function radioRenderPool(){
+  var pool=document.getElementById('radioPool');
+  pool.innerHTML='';
+  radio.pool.forEach(function(id){
+    var used=radio.slots.indexOf(id)>=0;
+    var btn=document.createElement('button');
+    btn.type='button';
+    btn.textContent=labelOf(id);
+    if(used){ btn.className='used'; btn.disabled=true; }
+    btn.addEventListener('click', function(){
+      if(radio.over||radio.stage!==1||used) return;
+      radio.slots.push(id);
+      radioRenderSlots();
+      if(radio.slots.length===8) radioCheckOrder();
+    });
+    pool.appendChild(btn);
+  });
+}
+function radioCheckOrder(){
+  for(var i=0;i<8;i++){
+    if(radio.slots[i]!==RADIO_ORDER[i]){
+      radioFail(
+        'ترتيب خاطئ عند الخانة '+(i+1)+'. وضعت «'+labelOf(radio.slots[i])+'» والمطلوب «'+labelOf(RADIO_ORDER[i])+'». '+
+        (RADIO_REASONS[RADIO_ORDER[i]]||'')+
+        ' البلاغ مُرتَّب ليبقى مفيداً إن انقطع الإرسال بعد السطرين الأولين — لذلك الموقع يسبق كل تفصيل.'
+      );
+      return;
+    }
+  }
+  radioEnterStage2();
+}
+function radioEnterStage2(){
+  radio.stage=2;
+  document.getElementById('radioStage1').hidden=true;
+  document.getElementById('radioStage2').hidden=false;
+  if(radio.remaining<28) radio.remaining=28;
+  /* build correct readback lines */
+  var s=radio.scenario;
+  var lines=[
+    {lab:'الموقع', text:s.loc+' · <span class="tag">'+s.tag+'</span>', plain:s.loc+' · '+s.tag},
+    {lab:'الحالة', text:s.type+' · '+s.mat, plain:s.type+' · '+s.mat},
+    {lab:'الريح', text:s.wind, plain:s.wind},
+    {lab:'الإصابات', text:s.cas, plain:s.cas},
+    {lab:'المُبلِّغ', text:s.name+' · شارة <span class="tag">'+s.badge+'</span>', plain:s.name+' · '+s.badge}
+  ];
+  radio.errorIdx=-1;
+  if(Math.random()<0.6){
+    radio.errorIdx=Math.floor(Math.random()*5);
+    var L=lines[radio.errorIdx];
+    if(radio.errorIdx===0){
+      /* transpose equipment digits */
+      var tag=s.tag.replace(/(\d)(\d)/, function(m,a,b){ return b+a; });
+      if(tag===s.tag) tag=s.tag.replace(/(\d)$/, function(m,d){ return String((+d+1)%10); });
+      L.text=s.loc+' · <span class="tag">'+tag+'</span>';
+      L.plain=s.loc+' · '+tag;
+    } else if(radio.errorIdx===1){
+      L.text='حالة عامة غير محددة'; L.plain=L.text;
+    } else if(radio.errorIdx===2){
+      var winds=['من الشمال','من الجنوب','من الشرق','من الغرب'];
+      var w=winds[(winds.indexOf(s.wind)+1+Math.floor(Math.random()*3))%winds.length]||'من الشرق';
+      L.text=w; L.plain=w;
+    } else if(radio.errorIdx===3){
+      L.text='لا إصابات'; L.plain=L.text;
+      if(s.cas.indexOf('لا')===0) L.text='مصابان اثنان'; L.plain=L.text;
+    } else {
+      var b=s.badge.split('');
+      if(b.length>=2){ var t=b[0]; b[0]=b[b.length-1]; b[b.length-1]=t; }
+      var nb=b.join('');
+      L.text=s.name+' · شارة <span class="tag">'+nb+'</span>';
+      L.plain=s.name+' · '+nb;
+    }
+  }
+  radio.readback=lines;
+  var box=document.getElementById('radioReadback');
+  box.innerHTML='';
+  lines.forEach(function(line, idx){
+    var btn=document.createElement('button');
+    btn.type='button';
+    btn.className='readback-line';
+    btn.innerHTML='<span><span class="lab">'+line.lab+'</span>'+line.text+'</span><span class="chip">اضغط إن خطأ</span>';
+    btn.addEventListener('click', function(){ radioTapLine(idx); });
+    box.appendChild(btn);
+  });
+}
+function radioFail(msg){
+  if(radio.over) return;
+  radio.over=true;
+  radioStopTimer();
+  document.getElementById('radioResult').innerHTML='<div class="result-card fail"><strong>فشل</strong><br>'+msg+'</div>';
+  logEvent('err','راديو: فشل — '+msg.slice(0,80));
+  saveState();
+  document.querySelectorAll('#radioPool button, #radioReadback button, #radioConfirm').forEach(function(b){ b.disabled=true; });
+}
+function radioPass(msg, caught){
+  if(radio.over) return;
+  radio.over=true;
+  radioStopTimer();
+  state.radioPasses++;
+  if(caught) state.radioCaught++;
+  document.getElementById('radioResult').innerHTML='<div class="result-card"><strong>نجاح</strong><br>'+msg+'</div>';
+  logEvent('ok','راديو: نجاح'+(caught?' · صُحِّحت القراءة العكسية':''));
+  saveState();
+  document.querySelectorAll('#radioReadback button, #radioConfirm').forEach(function(b){ b.disabled=true; });
+}
+function radioTapLine(idx){
+  if(radio.over||radio.stage!==2) return;
+  if(radio.errorIdx>=0){
+    if(idx===radio.errorIdx){
+      radioPass('غرفة التحكم أعادت عنصر «'+radio.readback[idx].lab+'» خطأً، وصحّحته. هذه بالضبط اللحظة التي يتجنبها المبتدئ خجلاً أو احتراماً للرتبة — وهي اللحظة التي تُوجِّه فريق الاستجابة إلى البيانات الصحيحة.', true);
+    } else {
+      radioFail('ضغطت سطراً صحيحاً بينما الخطأ في «'+radio.readback[radio.errorIdx].lab+'». اقرأ القراءة العكسية كلمة كلمة — خاصة الأرقام والوسوم.');
+    }
+  } else {
+    radioFail('القراءة العكسية كانت سليمة. التدقيق مطلوب، لكن الاعتراض بلا سبب يحرق زمن الاستجابة.');
+  }
+}
+document.getElementById('radioConfirm').addEventListener('click', function(){
+  if(radio.over||radio.stage!==2) return;
+  if(radio.errorIdx>=0){
+    radioFail('أكّدت قراءة عكسية فيها خطأ في «'+radio.readback[radio.errorIdx].lab+'». الفريق سينتشر على بيانات خاطئة.');
+  } else {
+    radioPass('أكّدت قراءة عكسية سليمة. أُغلقت الحلقة — غرفة التحكم والميدان على نفس الحقيقة.', false);
+  }
+});
+document.getElementById('radioNew').addEventListener('click', radioNew);
+
+/* ========== Quiz ========== */
+var QUIZ=[
+  {q:'ماذا يعني الوسم LCV على مخطط الأجهزة؟', opts:['صمام تحكم في المستوى','صمام أمان للضغط','مؤشر تدفق محلي','مفتاح موضع مغلق'], a:0, exp:'L = مستوى، C = تحكم، V = صمام. قراءة الحروف بالترتيب تمنع الخلط مع أجهزة الأمان.'},
+  {q:'صمام تغذية فرن بفعل فشل FC — ماذا يحدث عند فقدان هواء الأداة؟', opts:['يبقى في آخر موضع','ينفتح بالكامل','ينغلق','يتأرجح'], a:2, exp:'Fail Closed يغلق. على تغذية وقود هذا يمنع استمرار الوقود دون تحكم — عاقبة عكسية لو كان FO.'},
+  {q:'في وسم PZV، حرف Z يشير إلى أن الصمام:', opts:['صمام يدوي','جزء من SIS لا BPCS','مخصص للصيانة فقط','مفتوح دائماً'], a:1, exp:'Z تضع الجهاز في طبقة الأجهزة الآمنة المستقلة عن التحكم اليومي.'},
+  {q:'بعد فقدان كامل للطاقة الكهربائية، أي جهاز ما زال قادراً على حماية الوعاء من الضغط الزائد؟', opts:['PCV','PZV يعتمد على SOV كهربائي فقط','PSV الميكانيكي','إنذار المشغّل'], a:2, exp:'PSV يعمل بطاقة العملية نفسها. هذا سبب وجوده كطبقة بعد SIS.'},
+  {q:'أي ترتيب صحيح لطبقات الحماية من الأقرب للعملية؟', opts:['طوارئ ← SIS ← BPCS','BPCS ← إنذار/مشغّل ← SIS ← تصريف ميكانيكي','PSV ← PCV ← طوارئ','LOTO ← قوس ← صدمة'], a:1, exp:'الطبقات تتصاعد: تحكم، إنذار، SIS، تصريف، احتواء، طوارئ.'},
+  {q:'يطلب منك مشغّف أعلى رتبة تجاوز وظيفة أمان «لدقائق» شفهياً. التصرف الصحيح:', opts:['نفّذ فوراً احتراماً للرتبة','ارفض التنفيذ دون تفويض مكتوب وتقييم مخاطر وسجل','تجاهل الطلب واصمت','سجّل في دفتر الجيب فقط'], a:1, exp:'التجاوز الشفهي يترك الوحدة بلا حماية بلا أثر. الرفض المهني جزء من الوظيفة.'},
+  {q:'عند عزل صمام تحكم على خط حي، أي ترتيب صحيح؟', opts:['أغلق المدخل ثم افتح التجاوز','افتح التجاوز ثم أغلق المدخل ثم المخرج','افتح التصريف أولاً','LOTO ثم أغلق أي صمام'], a:1, exp:'التجاوز أولاً يحفظ التدفق للوحدة. غلق المدخل قبله يقطع التغذية ويُحدث رحلة.'},
+  {q:'ESDV مؤكد مغلق عبر ZSL — هل يكفي كعزل صيانة؟', opts:['نعم إذا كان FC','لا — جهاز تفعيل وليس عزل صيانة معتمد','نعم مع تصريح شفهي','نعم إن كان MOV'], a:1, exp:'قد يعاد فتحه باختبار أو إعادة ضبط أو عطل. الصيانة تحتاج عزل ميكانيكي وLOTO.'},
+  {q:'تسرب أمامك والريح من خلفك (المصدر أعلى الريح منك). القرار الأفضل للحركة الأولية:', opts:['اركض مع اتجاه الريح مبتعداً','تحرك عبر السحابة بسرعة',' croس أعلى الريح / عبر الريح نحو التجمع','اقترب من المصدر لتقييمه'], a:2, exp:'الركض مع انتقال السحابة يُبقيك داخلها. أعلى الريح أو العبور العرضي الآمن نحو نقطة التجمع.'},
+  {q:'كنت تشم الغاز ثم اختفت الرائحة وأنت ما زلت في المنطقة. التفسير الصحيح:', opts:['الجو صار آمناً','قد يكون تخدير شمّ — تصعيد لا أمان','توقفت المضخة حتماً','الريح انعكست لصالحك'], a:1, exp:'فقدان الشم مؤشر خطر لا سلامة. اعتبر التركيز قد ارتفع.'},
+  {q:'مصاب يلامس مصدراً كهربائياً. أول فعل:', opts:['اسحبه بيديك','افصل المصدر أو استخدم عزل معتمد قبل اللمس','صب ماء','ابدأ إنعاشاً فوراً مع الإمساك به'], a:1, exp:'لمسه وأنت غير معزول يجعلك المسار الثاني للتيار.'},
+  {q:'ما هو الاختبار الثلاثي للجهد؟', opts:['ثلاث قراءات في ثلاث نقاط عشوائية','أثبت الجهاز على حي → اختبر الدائرة → أثبت الجهاز مجدداً','اختبر ثم LOTO ثم اختبر','قياس مرة واحدة يكفي إن كان الجهاز جديداً'], a:1, exp:'جهاز معطوب يقرأ صفراً على دائرة حية. الإثبات قبل وبعد يكشف العطل.'},
+  {q:'«الجهد منخفض (أقل من 1000V) إذن آمن بدون PPE» — العبارة:', opts:['صحيحة في MCC','خاطئة — معظم الوفيات الصناعية تحت 1000V','صحيحة إن كان 24V فقط دائماً','صحيحة خارج المحطة'], a:1, exp:'التكرار العالي للتعرض للجهد المنخفض مع الاستهتار يرفع الوفيات.'},
+  {q:'العنصر الأخير في بلاغ الطوارئ المتسلسل قبل إغلاق الحلقة هو:', opts:['نوع المادة','انتظار القراءة العكسية','اتجاه الريح','رقم الشارة فقط'], a:1, exp:'انتظر القراءة العكسية ثم صحّح أو أكّد — وإلا يعمل الفريق على نسخة مشوّهة من بلاغك.'}
+];
+
+function quizRender(){
+  document.getElementById('quizTotal').textContent=QUIZ.length;
+  if(state.quizDone || state.quizIndex>=QUIZ.length){
+    document.getElementById('quizIdx').textContent=QUIZ.length;
+    document.getElementById('quizQ').textContent='انتهى الاختبار';
+    document.getElementById('quizOpts').innerHTML='';
+    document.getElementById('quizExplain').hidden=false;
+    document.getElementById('quizExplain').textContent='النتيجة: '+state.quizScore+' من '+QUIZ.length+'. راجع الوحدات التي أخطأت فيها — كل سؤال مربوط بعاقبة تشغيلية.';
+    document.getElementById('quizNext').hidden=true;
+    document.getElementById('quizRestart').hidden=false;
+    return;
+  }
+  var item=QUIZ[state.quizIndex];
+  document.getElementById('quizIdx').textContent=state.quizIndex+1;
+  document.getElementById('quizScore').textContent=state.quizScore;
+  document.getElementById('quizQ').textContent=item.q;
+  document.getElementById('quizExplain').hidden=true;
+  document.getElementById('quizNext').hidden=true;
+  document.getElementById('quizRestart').hidden=true;
+  state.quizAnswered=false;
+  var box=document.getElementById('quizOpts');
+  box.innerHTML='';
+  item.opts.forEach(function(opt,i){
+    var b=document.createElement('button');
+    b.type='button';
+    b.className='quiz-opt';
+    b.textContent=opt;
+    b.addEventListener('click', function(){ quizAnswer(i); });
+    box.appendChild(b);
+  });
+}
+function quizAnswer(i){
+  if(state.quizAnswered||state.quizDone) return;
+  state.quizAnswered=true;
+  var item=QUIZ[state.quizIndex];
+  var buttons=document.querySelectorAll('#quizOpts .quiz-opt');
+  buttons.forEach(function(b,idx){
+    b.disabled=true;
+    if(idx===item.a) b.classList.add('correct');
+    if(idx===i && i!==item.a) b.classList.add('wrong');
+  });
+  if(i===item.a){ state.quizScore++; logEvent('ok','اختبار: صح — س'+(state.quizIndex+1)); }
+  else logEvent('err','اختبار: خطأ — س'+(state.quizIndex+1));
+  document.getElementById('quizScore').textContent=state.quizScore;
+  document.getElementById('quizExplain').hidden=false;
+  document.getElementById('quizExplain').textContent=item.exp;
+  document.getElementById('quizNext').hidden=false;
+  saveState();
+}
+document.getElementById('quizNext').addEventListener('click', function(){
+  state.quizIndex++;
+  if(state.quizIndex>=QUIZ.length){ state.quizDone=true; logEvent('info','اختبار: انتهى '+state.quizScore+'/'+QUIZ.length); }
+  saveState();
+  quizRender();
+});
+document.getElementById('quizRestart').addEventListener('click', function(){
+  state.quizIndex=0; state.quizScore=0; state.quizDone=false; state.quizAnswered=false;
+  saveState(); quizRender();
+});
+
+/* ========== Report ========== */
+function renderReport(){
+  var notice=document.getElementById('storageNotice');
+  if(!storageOk){ notice.hidden=false; } else { notice.hidden=true; }
+  document.getElementById('reportStats').innerHTML=
+    '<div class="stat"><div class="n">'+state.quizScore+'/'+QUIZ.length+'</div><div class="l">اختبار شامل</div></div>'+
+    '<div class="stat"><div class="n">'+state.isoAttempts+'</div><div class="l">محاولات عزل</div></div>'+
+    '<div class="stat"><div class="n">'+state.isoErrors+'</div><div class="l">أخطاء عزل متراكمة</div></div>'+
+    '<div class="stat"><div class="n">'+state.gasPasses+'/'+state.gasRounds+'</div><div class="l">نجاح هروب الغاز</div></div>'+
+    '<div class="stat"><div class="n">'+state.radioPasses+'</div><div class="l">بلاغات ناجحة</div></div>'+
+    '<div class="stat"><div class="n">'+state.radioCaught+'</div><div class="l">تصحيحات قراءة عكسية</div></div>';
+  var log=document.getElementById('eventLog');
+  var ev=state.events.slice().reverse();
+  log.innerHTML=ev.length?ev.map(function(e){
+    var d=new Date(e.t);
+    var ts=('0'+d.getHours()).slice(-2)+':'+('0'+d.getMinutes()).slice(-2);
+    var cls=e.type==='ok'?'e-ok':e.type==='err'?'e-err':'e-info';
+    return '<div class="'+cls+'">['+ts+'] '+e.msg+'</div>';
+  }).join(''):'<div class="e-info">لا أحداث بعد. ابدأ بأحد المحاكيات.</div>';
+}
+document.getElementById('btnPrint').addEventListener('click', function(){ window.print(); });
+document.getElementById('btnExport').addEventListener('click', function(){
+  var lines=['MIRAN session export', new Date().toISOString(), ''];
+  lines.push('Quiz: '+state.quizScore+'/'+QUIZ.length);
+  lines.push('Isolation attempts: '+state.isoAttempts+' errors: '+state.isoErrors);
+  lines.push('Gas: '+state.gasPasses+'/'+state.gasRounds);
+  lines.push('Radio passes: '+state.radioPasses+' caught: '+state.radioCaught);
+  lines.push('','Events:');
+  state.events.forEach(function(e){ lines.push(new Date(e.t).toISOString()+' ['+e.type+'] '+e.msg); });
+  var blob=new Blob([lines.join('\n')],{type:'text/plain;charset=utf-8'});
+  var a=document.createElement('a');
+  a.href=URL.createObjectURL(blob);
+  a.download='miran-session.txt';
+  a.click();
+  setTimeout(function(){ URL.revokeObjectURL(a.href); }, 2000);
+});
+document.getElementById('btnResetAll').addEventListener('click', function(){
+  if(!confirm('تصفير كل إحصاءات الجلسة؟')) return;
+  state={quizIndex:0,quizScore:0,quizDone:false,quizAnswered:false,isoAttempts:0,isoErrors:0,gasRounds:0,gasPasses:0,radioRounds:0,radioPasses:0,radioCaught:0,events:[]};
+  saveState();
+  isoReset();
+  gas=null;
+  radio.scenario=null;
+  radioStopTimer();
+  renderReport();
+  logEvent('info','جُلسة صُفِّرت');
+});
+
+/* init */
+renderReport();
+if(!storageOk) logEvent('info','التخزين غير متاح — وضع الذاكرة فقط');
+
+})();
+</script>
+</body>
+</html>
