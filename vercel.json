@@ -1,7 +1,10 @@
 {
   "cleanUrls": true,
   "rewrites": [
-    { "source": "/", "destination": "/index.html" }
+    { "source": "/", "destination": "/index.html" },
+    { "source": "/platform", "destination": "/platform.html" },
+    { "source": "/learn", "destination": "/index.html" },
+    { "source": "/mockups", "destination": "/mockups.html" }
   ],
   "headers": [
     {
