@@ -194,16 +194,41 @@ table.data td.empty{color:var(--muted);font-style:italic}
   header.site h1{font-size:1rem}
   .tabs button{padding:6px 7px;font-size:10px}
 }
+
+/* Product shell — shared with platform.html */
+.product-bar{
+  display:flex;flex-wrap:wrap;gap:6px;align-items:center;
+  padding:4px 0 12px;margin-bottom:2px;border-bottom:1px solid var(--line);
+}
+.product-bar .pb-label{
+  font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--muted);
+  letter-spacing:.08em;margin-inline-end:6px;
+}
+.product-bar a{
+  font-family:'IBM Plex Mono',monospace;font-size:11px;padding:7px 12px;
+  background:var(--panel);border:1px solid var(--line);border-radius:2px;
+  color:var(--muted);text-decoration:none;
+}
+.product-bar a:hover{border-color:var(--teal-d);color:var(--text)}
+.product-bar a.on{border-color:var(--gold);color:var(--gold);background:var(--panel2)}
+.product-bar a.ext{opacity:.9}
+@media print{.product-bar{display:none!important}}
 </style>
 </head>
 <body>
 <div class="app">
+<nav class="product-bar" aria-label="أقسام منتج مِران">
+  <span class="pb-label">MIRAN</span>
+  <a href="index.html" class="on" aria-current="page">التعلّم</a>
+  <a href="platform.html">المنصة</a>
+  <a href="mockups.html" class="ext">النماذج</a>
+</nav>
 <header class="site">
   <div class="monogram" aria-hidden="true">مِران</div>
   <div>
     <p class="eyebrow">JABAL / FIELD READINESS SYSTEM</p>
     <h1>مِران — نظام التأهيب الميداني للمشغل المبتدئ</h1>
-    <p class="sub">ست وحدات تحاكي اللحظة الأولى في المعمل، لا الفصل الدراسي</p>
+    <p class="sub">ست وحدات تحاكي اللحظة الأولى في المعمل، لا الفصل الدراسي · <a href="platform.html" style="color:var(--teal);text-decoration:none">المنصة التشغيلية ←</a></p>
   </div>
 </header>
 
@@ -255,6 +280,12 @@ table.data td.empty{color:var(--muted);font-style:italic}
       </tbody>
     </table>
     <div class="callout crit">تنويه ملزم: مِران أداة تهيئة سلوكية تسبق التدريب المعتمد وتكمّله. لا تستبدل إجراءات المنشأة، ولا الشهادات الرسمية، ولا تصاريح العمل، ولا تعليمات المشغّل المناوب.</div>
+  </div>
+  <div class="card">
+    <h3 class="h-teal">من التعلّم إلى المنصة</h3>
+    <p>هذا المسار (<strong>التعلّم</strong>) يبني الفهم ويُدرّب الحاجز في جلسة فردية: محتوى، محاكيات، اختبار، وسجل أداء محلي.</p>
+    <p><a href="platform.html" style="color:var(--gold);font-weight:600;text-decoration:none">المنصة التشغيلية (v3)</a> تضيف طبقة المنشأة: تسجيل متدربين، تشخيص سلوكي على ثلاثة محاور (مبادرة · تسلسل · تصحيح)، لوحة مشرف، تأليف سيناريوهات JSON، وتقرير تدقيق قابل للطباعة.</p>
+    <div class="callout tip">استخدم التعلّم أولًا للتهيئة. عند إدارة دفعات أو إصدار أحكام جاهزية — انتقل إلى <a href="platform.html" style="color:var(--teal)">المنصة</a>.</div>
   </div>
 </section>
 

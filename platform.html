@@ -1,0 +1,1007 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>مِران v3 — منصة التأهيب الميداني</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#080f11;--panel:#0e191c;--panel2:#142428;--line:#1e3438;
+ --teal:#2dd4bf;--teal-d:#12706a;--gold:#e0b429;--gold-d:#8a6d13;
+ --danger:#e05252;--warn:#e0a02a;--ok:#35b37e;--violet:#8b7ae0;
+ --text:#e4efee;--muted:#7d9a98;--mono:'IBM Plex Mono',monospace;--sans:'IBM Plex Sans Arabic',sans-serif}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--text);font-family:var(--sans);font-size:15px;line-height:1.75;
+ background-image:radial-gradient(circle at 16% 0%,#0f2427 0%,transparent 54%),radial-gradient(circle at 92% 100%,#1a1608 0%,transparent 48%);
+ background-attachment:fixed;min-height:100vh}
+.wrap{max-width:1180px;margin:0 auto;padding:0 16px 90px}
+header{padding:30px 0 18px;border-bottom:1px solid var(--line);margin-bottom:18px;
+ display:flex;justify-content:space-between;align-items:flex-end;gap:20px;flex-wrap:wrap}
+.hl{display:flex;align-items:center;gap:14px}
+.mark{width:46px;height:46px;border:2px solid var(--gold);border-radius:3px;display:grid;place-items:center;
+ font-family:var(--mono);color:var(--gold);font-size:12px;flex-shrink:0}
+h1{font-size:22px;font-weight:600}
+.eyebrow{font-family:var(--mono);font-size:10.5px;color:var(--teal);letter-spacing:2.5px;margin-bottom:6px}
+.who{font-family:var(--mono);font-size:12px;color:var(--muted);text-align:left;line-height:1.9}
+.who b{color:var(--gold)}
+nav{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:22px}
+.tab{background:var(--panel);border:1px solid var(--line);color:var(--muted);padding:9px 14px;border-radius:3px;
+ cursor:pointer;font-family:var(--sans);font-size:13px;font-weight:500;transition:.15s;display:flex;gap:7px;align-items:center}
+.tab:hover{border-color:var(--teal-d);color:var(--text)}
+.tab.on{background:var(--panel2);border-color:var(--gold);color:var(--gold)}
+.tab .n{font-family:var(--mono);font-size:10px;opacity:.6}
+.tab:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible,.cell:focus-visible{outline:2px solid var(--teal);outline-offset:2px}
+.view{display:none}.view.on{display:block}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:4px;padding:20px;margin-bottom:16px}
+.card h2{font-size:17px;font-weight:600;margin-bottom:5px}
+.card h3{font-size:15px;font-weight:600;margin:18px 0 8px;color:var(--gold)}
+.lead{color:var(--muted);font-size:13.5px;margin-bottom:14px}
+.card p{color:#c3d6d4;margin-bottom:10px}
+.hr{height:1px;background:var(--line);margin:16px 0}
+table{width:100%;border-collapse:collapse;font-size:13.5px;margin:8px 0}
+th{background:var(--panel2);color:var(--gold);text-align:right;padding:8px 10px;border:1px solid var(--line);font-size:12.5px}
+td{padding:8px 10px;border:1px solid var(--line);color:#cadedd;vertical-align:top}
+td.k{font-family:var(--mono);color:var(--teal);white-space:nowrap;font-size:12px}
+.note{border-right:3px solid var(--gold);background:#1a160822;padding:11px 14px;margin:10px 0;font-size:13.5px;color:#d8cfae}
+.crit{border-right:3px solid var(--danger);background:#2a10102e;padding:11px 14px;margin:10px 0;font-size:13.5px;color:#f0c3c3}
+.tip{border-right:3px solid var(--teal);background:#0b26243d;padding:11px 14px;margin:10px 0;font-size:13.5px;color:#b9e5e0}
+button{font-family:var(--sans);cursor:pointer;border-radius:3px;transition:.15s;font-size:13.5px}
+.btn{background:var(--panel2);border:1px solid var(--line);color:var(--text);padding:9px 16px;font-weight:500}
+.btn:hover:not(:disabled){border-color:var(--teal);color:var(--teal)}
+.btn.g{border-color:var(--gold-d);color:var(--gold)}
+.btn.g:hover:not(:disabled){background:#1c1808;border-color:var(--gold)}
+.btn.d{border-color:#5a2020;color:#e79090}
+.btn.d:hover:not(:disabled){background:#2a1010;border-color:var(--danger)}
+.btn:disabled{opacity:.3;cursor:not-allowed}
+.btnrow{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
+input,select,textarea{background:#060d0f;border:1px solid var(--line);color:var(--text);
+ padding:9px 12px;border-radius:3px;font-family:var(--sans);font-size:14px;width:100%}
+textarea{font-family:var(--mono);font-size:12px;line-height:1.7;min-height:200px;resize:vertical}
+label{display:block;font-size:12.5px;color:var(--muted);margin-bottom:5px;margin-top:12px}
+.frm{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+@media(max-width:700px){.frm{grid-template-columns:1fr}}
+.simgrid{display:grid;grid-template-columns:1fr 310px;gap:16px}
+@media(max-width:940px){.simgrid{grid-template-columns:1fr}}
+.pid{background:#060d0f;border:1px solid var(--line);border-radius:4px;padding:10px}
+.pid svg{width:100%;height:auto;display:block}
+.acts{display:flex;flex-direction:column;gap:7px}
+.ab{background:var(--panel2);border:1px solid var(--line);color:var(--text);padding:10px 13px;
+ text-align:right;display:flex;justify-content:space-between;align-items:center;gap:10px;width:100%}
+.ab:hover:not(:disabled){border-color:var(--teal)}
+.ab:disabled{opacity:.42;cursor:not-allowed}
+.ab .lbl{font-family:var(--mono);font-size:11.5px;color:var(--teal)}
+.ab .st{font-family:var(--mono);font-size:10.5px;padding:2px 7px;border-radius:2px;background:#0a1416;color:var(--muted)}
+.ab .st.on{color:var(--ok);border:1px solid #1d4a38}
+.ab .st.off{color:var(--danger);border:1px solid #4a1d1d}
+.readout{background:#060d0f;border:1px solid var(--line);padding:11px;font-family:var(--mono);font-size:11.5px;margin-bottom:11px}
+.readout div{display:flex;justify-content:space-between;padding:3px 0;color:var(--muted)}
+.readout b{color:var(--teal);font-weight:500}.readout b.alarm{color:var(--danger)}
+.log{background:#060d0f;border:1px solid var(--line);padding:11px;height:180px;overflow-y:auto;
+ font-family:var(--mono);font-size:11.5px;line-height:1.9;margin-top:11px}
+.log .ok{color:var(--ok)}.log .er{color:var(--danger)}.log .wn{color:var(--warn)}.log .in{color:var(--muted)}
+.steps{list-style:none;font-family:var(--mono);font-size:11.5px}
+.steps li{padding:5px 0;color:var(--muted);border-bottom:1px dashed #16282c}
+.steps li.done{color:var(--ok)}
+.steps li.done::before{content:"\2713  ";color:var(--ok)}
+.steps li:not(.done)::before{content:"\25CB  ";opacity:.5}
+.result{padding:13px;border-radius:4px;margin-top:12px;font-size:13.5px;display:none}
+.result.on{display:block}
+.result.pass{background:#0d241c;border:1px solid #1d4a38;color:#8ee4bd}
+.result.fail{background:#241010;border:1px solid #4a1d1d;color:#f0a8a8}
+.gaswrap{display:grid;grid-template-columns:1fr 280px;gap:16px}
+@media(max-width:940px){.gaswrap{grid-template-columns:1fr}}
+.grid{direction:ltr;display:grid;grid-template-columns:repeat(9,1fr);gap:3px;background:#060d0f;
+ border:1px solid var(--line);padding:8px;border-radius:4px}
+.cell{aspect-ratio:1;background:#0e1a1d;border:1px solid #16282c;display:grid;place-items:center;
+ font-size:15px;border-radius:2px;padding:0;color:var(--text);cursor:default}
+.cell.reach{cursor:pointer;border-color:var(--teal-d);background:#0f2426}
+.cell.reach:hover{background:#16383a}
+.cell.plume{background:#3a1a0d;border-color:#6b3418}
+.cell.plume2{background:#25130a;border-color:#4a2612}
+.cell.src{background:#5a1d1d;border-color:var(--danger)}
+.cell.me{background:#124b45;border-color:var(--teal)}
+.cell.mus{background:#1a3a12;border-color:var(--ok)}
+.cell.trail{background:#0d2b2f}
+.compass{display:grid;place-items:center;padding:12px;background:#060d0f;border:1px solid var(--line);border-radius:4px}
+.kbd{font-family:var(--mono);font-size:11px;color:var(--muted);margin-top:8px}
+.kbd b{color:var(--teal);background:#0e1a1d;border:1px solid var(--line);padding:1px 5px;border-radius:2px}
+.radio{background:#060d0f;border:1px solid var(--line);border-radius:4px;padding:16px}
+.timer{font-family:var(--mono);font-size:26px;color:var(--gold);text-align:center}
+.timer.hot{color:var(--danger)}
+.bar{height:4px;background:#16282c;border-radius:2px;overflow:hidden;margin-bottom:12px}
+.bar i{display:block;height:100%;background:var(--gold);transition:width .3s linear}
+.slotlist{display:flex;flex-direction:column;gap:6px;margin:12px 0}
+.slot{background:var(--panel2);border:1px dashed var(--line);padding:9px 12px;font-size:13px;
+ display:flex;gap:10px;align-items:center;min-height:42px}
+.slot .num{font-family:var(--mono);font-size:11px;color:var(--gold);width:22px;flex-shrink:0}
+.slot.filled{border-style:solid;border-color:var(--teal-d);background:#0d2124}
+.pool{display:flex;flex-wrap:wrap;gap:7px}
+.chip{background:var(--panel2);border:1px solid var(--line);color:var(--text);padding:8px 12px;font-size:12.5px}
+.chip:hover:not(:disabled){border-color:var(--gold);color:var(--gold)}
+.chip.used{opacity:.22;pointer-events:none}
+.transcript{font-family:var(--mono);font-size:12px;line-height:2;background:#060d0f;
+ border:1px solid var(--line);padding:13px;margin:11px 0}
+.transcript .you{color:var(--teal)}.transcript .ctl{color:var(--gold)}
+.rbline{display:flex;gap:10px;align-items:center;padding:8px 11px;margin-bottom:5px;
+ background:var(--panel2);border:1px solid var(--line);cursor:pointer;font-size:12.5px;width:100%;text-align:right;color:var(--text)}
+.rbline:hover:not(:disabled){border-color:var(--gold)}
+.rbline .k{font-family:var(--mono);font-size:10.5px;color:var(--muted);min-width:74px}
+.rbline.picked{border-color:var(--danger);background:#241010}
+.bars{display:flex;flex-direction:column;gap:16px;margin-top:8px}
+.brow .top{display:flex;justify-content:space-between;font-size:13.5px;margin-bottom:6px}
+.brow .top b{font-family:var(--mono);font-size:13px}
+.track{height:22px;background:#0a1416;border:1px solid var(--line);border-radius:3px;overflow:hidden;position:relative}
+.track i{display:block;height:100%;transition:width .4s ease}
+.track span{position:absolute;left:8px;top:0;line-height:22px;font-family:var(--mono);font-size:11px;color:var(--muted)}
+.desc{font-size:12.5px;color:var(--muted);margin-top:5px;line-height:1.7}
+.scoregrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px}
+.sc{background:var(--panel2);border:1px solid var(--line);padding:14px;border-radius:4px;text-align:center}
+.sc .v{font-family:var(--mono);font-size:24px;color:var(--gold);line-height:1.2}
+.sc .l{font-size:11.5px;color:var(--muted);margin-top:4px}
+.pill{display:inline-block;font-family:var(--mono);font-size:10.5px;padding:2px 8px;border-radius:2px;
+ border:1px solid var(--line);color:var(--muted)}
+.pill.ok{color:var(--ok);border-color:#1d4a38}.pill.bad{color:var(--danger);border-color:#4a1d1d}
+.pill.mid{color:var(--warn);border-color:#4a3a1d}
+.rep{background:#fff;color:#111;padding:28px;border-radius:4px;font-size:13px;line-height:1.8;display:none}
+.rep.on{display:block}
+.rep h3{color:#8a6d13;font-size:16px;margin:16px 0 8px}
+.rep table{font-size:12.5px}
+.rep th{background:#f2efe4;color:#5a4a10;border-color:#ddd}
+.rep td{color:#222;border-color:#ddd}
+.rep .hd{border-bottom:2px solid #8a6d13;padding-bottom:12px;margin-bottom:14px;display:flex;justify-content:space-between;align-items:flex-end}
+.rep .code{font-family:var(--mono);font-size:11px;color:#666}
+@media print{nav,header,.btnrow,.noprint,.product-bar{display:none!important}
+ .view{display:none!important}.view.on{display:block!important}
+ body{background:#fff}.card{border:0;padding:0;background:#fff}}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+
+/* Product shell — shared with index.html */
+.product-bar{
+  display:flex;flex-wrap:wrap;gap:6px;align-items:center;
+  padding:16px 0 12px;margin-bottom:4px;border-bottom:1px solid var(--line)}
+.product-bar .pb-label{
+  font-family:var(--mono);font-size:10px;color:var(--muted);
+  letter-spacing:.08em;margin-inline-end:6px}
+.product-bar a{
+  font-family:var(--mono);font-size:11px;padding:7px 12px;
+  background:var(--panel);border:1px solid var(--line);border-radius:3px;
+  color:var(--muted);text-decoration:none}
+.product-bar a:hover{border-color:var(--teal-d);color:var(--text)}
+.product-bar a.on{border-color:var(--gold);color:var(--gold);background:var(--panel2)}
+.product-bar a.ext{opacity:.9}
+.learn-link{margin-top:10px;font-size:13px}
+.learn-link a{color:var(--teal);text-decoration:none}
+.learn-link a:hover{color:var(--gold)}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<nav class="product-bar" aria-label="أقسام منتج مِران">
+  <span class="pb-label">MIRAN</span>
+  <a href="index.html">التعلّم</a>
+  <a href="platform.html" class="on" aria-current="page">المنصة</a>
+  <a href="mockups.html" class="ext">النماذج</a>
+</nav>
+
+<header>
+  <div class="hl">
+    <div class="mark">مِران</div>
+    <div>
+      <div class="eyebrow">JABAL / MIRAN PLATFORM v3</div>
+      <h1>منصة التأهيب الميداني</h1>
+      <p class="learn-link">محتوى التعلّم والوحدات الست ← <a href="index.html">نظام التأهيب (التعلّم)</a></p>
+    </div>
+  </div>
+  <div class="who" id="whoBox">لم يُحدَّد متدرب</div>
+</header>
+
+<nav>
+  <button class="tab on" data-v="t0"><span class="n">00</span> المتدرب</button>
+  <button class="tab" data-v="t1"><span class="n">01</span> العزل</button>
+  <button class="tab" data-v="t2"><span class="n">02</span> الهروب</button>
+  <button class="tab" data-v="t3"><span class="n">03</span> البلاغ</button>
+  <button class="tab" data-v="t4"><span class="n">04</span> التشخيص السلوكي</button>
+  <button class="tab" data-v="t5"><span class="n">05</span> لوحة المشرف</button>
+  <button class="tab" data-v="t6"><span class="n">06</span> تأليف السيناريوهات</button>
+  <button class="tab" data-v="t7"><span class="n">07</span> تقرير التدقيق</button>
+</nav>
+
+<!-- ===== 00 TRAINEE ===== -->
+<section class="view on" id="t0">
+  <div class="card">
+    <h2>تسجيل المتدرب</h2>
+    <p class="lead">كل جلسة تُنسب لمتدرب. بدون تسجيل لا يُنتج النظام سجلًا قابلًا للتدقيق.</p>
+    <div class="frm">
+      <div><label>الاسم الكامل</label><input id="fName" placeholder="مثال: سالم القحطاني"></div>
+      <div><label>الرقم الوظيفي</label><input id="fBadge" placeholder="مثال: 442719"></div>
+      <div><label>المنشأة / المقاول</label><input id="fOrg" placeholder="اسم الجهة"></div>
+      <div><label>الوحدة أو القسم</label><input id="fUnit" placeholder="مثال: وحدة التقطير"></div>
+    </div>
+    <div class="btnrow">
+      <button class="btn g" id="btnStart">بدء الجلسة</button>
+      <button class="btn" id="btnEnd">إنهاء الجلسة</button>
+    </div>
+    <div class="hr"></div>
+    <label>متدرب مسجّل سابقًا</label>
+    <select id="selTrainee"><option value="">— اختر —</option></select>
+    <div class="btnrow"><button class="btn" id="btnLoad">استئناف</button></div>
+  </div>
+
+  <div class="card">
+    <h2>ما الذي يقيسه هذا النظام</h2>
+    <p>المحاكيات الثلاثة ليست اختبار معرفة. كل خطأ فيها مُصنَّف مسبقًا إلى واحد من ثلاثة حواجز سلوكية، والتشخيص يبني ملفًا لكل متدرب على هذه المحاور الثلاثة.</p>
+    <table>
+      <tr><th style="width:20%">الحاجز</th><th style="width:40%">تعريفه</th><th>مصدر القياس</th></tr>
+      <tr><td class="k">المبادرة</td><td>التردد في التصرف أو الإبلاغ خشية أن يكون في غير محله</td><td>زمن أول إدخال في البلاغ، انتهاء الوقت، التردد في الحركة أثناء الإخلاء</td></tr>
+      <tr><td class="k">التسلسل</td><td>معرفة الخطوات دون معرفة ترتيبها الملزم وسببه</td><td>مخالفات ترتيب العزل، ترتيب عناصر البلاغ، الحركة مع اتجاه الريح</td></tr>
+      <tr><td class="k">التصحيح</td><td>الامتناع عن تصحيح خطأ صادر عن جهة أعلى</td><td>اكتشاف الخطأ المحقون في تكرار غرفة التحكم مقابل التأكيد الأعمى</td></tr>
+    </table>
+    <div class="crit">المتدرب الذي يجتاز كل المحاكيات ودرجته في محور التصحيح منخفضة هو أخطر ملف يمكن أن يخرج من هذا النظام: يعرف كل شيء ولا يعترض على أحد.</div>
+    <div class="tip">للمحتوى التعليمي (الوسوم، PZV، محطة التحويل، الاختبار الشامل) استخدم مسار <a href="index.html" style="color:var(--gold)">التعلّم</a>. المنصة تقيس السلوك وتُدير الدفعات؛ التعلّم يبني الأساس.</div>
+  </div>
+</section>
+
+<!-- ===== 01 ISOLATION ===== -->
+<section class="view" id="t1">
+  <div class="card">
+    <h2>محاكي العزل — مدفوع بالسيناريوهات</h2>
+    <p class="lead">المخطط والأزرار والتسلسل والمخالفات كلها مقروءة من ملف السيناريو. إضافة سيناريو جديد لا تتطلب أي تعديل برمجي.</p>
+    <label>السيناريو</label>
+    <select id="isoSel"></select>
+    <div class="btnrow"><button class="btn g" id="isoStart">تشغيل</button></div>
+    <div class="hr"></div>
+    <div class="simgrid">
+      <div>
+        <div class="pid" id="isoPid"></div>
+        <div class="log" id="isoLog"></div>
+      </div>
+      <div>
+        <div class="readout" id="isoRead"></div>
+        <div class="acts" id="isoActs"></div>
+        <div class="hr"></div>
+        <ul class="steps" id="isoSteps"></ul>
+        <div class="result" id="isoRes"></div>
+        <div class="btnrow"><button class="btn" id="isoReset">إعادة</button></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 02 GAS ===== -->
+<section class="view" id="t2">
+  <div class="card">
+    <h2>محاكي الهروب من الغاز</h2>
+    <p class="lead">اتجاه ريح ومصدر تسرّب عشوائيان في كل جولة. نقطة البداية تُختار دائمًا خارج السحابة وحوافها.</p>
+    <div class="gaswrap">
+      <div>
+        <div class="grid" id="gasGrid"></div>
+        <div class="kbd">الأسهم للاتجاهات الأربعة · <b>7</b> <b>9</b> <b>1</b> <b>3</b> للقطرية · <b>R</b> جولة جديدة</div>
+      </div>
+      <div>
+        <div class="compass"><div style="width:126px" id="sock"></div></div>
+        <div class="readout" id="gasRead" style="margin-top:11px"></div>
+        <div class="result" id="gasRes"></div>
+        <div class="btnrow"><button class="btn g" id="gasNew">جولة جديدة</button></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 03 RADIO ===== -->
+<section class="view" id="t3">
+  <div class="card">
+    <h2>محاكي بلاغ الطوارئ</h2>
+    <p class="lead">مرحلتان: ترتيب البلاغ تحت مؤقّت، ثم فحص تكرار غرفة التحكم الذي يحمل خطأً متعمّدًا في نسبة من الجولات.</p>
+    <div class="radio">
+      <div class="timer" id="radT">45</div>
+      <div class="bar"><i id="radBar" style="width:100%"></i></div>
+      <div class="transcript" id="radScen"></div>
+      <div class="slotlist" id="radSlots"></div>
+      <div class="pool" id="radPool"></div>
+      <div id="radS2" style="display:none">
+        <div class="hr"></div>
+        <h3 style="color:var(--gold);font-size:14.5px;margin-bottom:6px">تكرار غرفة التحكم</h3>
+        <p style="color:var(--muted);font-size:12.5px;margin-bottom:9px">اقرأ كلمة كلمة. اضغط العنصر الخاطئ لتصحيحه، أو أكّد إن كان التكرار سليمًا.</p>
+        <div id="radRB"></div>
+        <div class="btnrow"><button class="btn g" id="radOk">التكرار صحيح — تأكيد</button></div>
+      </div>
+      <div class="result" id="radRes"></div>
+      <div class="btnrow"><button class="btn" id="radNew">بلاغ جديد</button></div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 04 DIAGNOSTICS ===== -->
+<section class="view" id="t4">
+  <div class="card">
+    <h2>التشخيص السلوكي</h2>
+    <p class="lead">درجة كل محور تُحسب من نسبة المحاولات السليمة إلى إجمالي المحاولات المرتبطة به. تحت خمس محاولات في محور، الدرجة إرشادية فقط.</p>
+    <div class="bars" id="diagBars"></div>
+    <div class="hr"></div>
+    <h3>الحكم والتوصية</h3>
+    <div id="diagVerdict"></div>
+  </div>
+  <div class="card">
+    <h2>سجل الأحداث</h2>
+    <div class="log" id="diagLog" style="height:auto;min-height:140px;max-height:360px"></div>
+    <div class="btnrow"><button class="btn" id="expTxt">تصدير نصي</button><button class="btn d" id="clrSess">مسح جلسة المتدرب الحالي</button></div>
+  </div>
+</section>
+
+<!-- ===== 05 SUPERVISOR ===== -->
+<section class="view" id="t5">
+  <div class="card">
+    <h2>لوحة المشرف</h2>
+    <p class="lead">كل المتدربين المسجّلين على هذا الجهاز. الحالة تُحسب آليًا من درجات المحاور الثلاثة.</p>
+    <div class="scoregrid" id="supStats" style="margin-bottom:16px"></div>
+    <div style="overflow-x:auto"><table id="supTable"></table></div>
+    <div class="btnrow">
+      <button class="btn g" id="supReport">إصدار تقرير تدقيق للمحدد</button>
+      <button class="btn" id="supCsv">تصدير CSV</button>
+      <button class="btn d" id="supWipe">مسح كل البيانات</button>
+    </div>
+  </div>
+  <div class="card">
+    <h2>معايير الحالة</h2>
+    <table>
+      <tr><th style="width:22%">الحالة</th><th>الشرط</th><th style="width:32%">القرار التشغيلي المقترح</th></tr>
+      <tr><td><span class="pill ok">جاهز</span></td><td>كل المحاور الثلاثة ٧٥٪ فأعلى، وخمس محاولات فأكثر في كل محور</td><td>مؤهل للمناوبة تحت إشراف معتاد</td></tr>
+      <tr><td><span class="pill mid">جزئي</span></td><td>محور واحد أو أكثر بين ٥٠٪ و٧٥٪</td><td>يستمر التدريب على المحور الضعيف قبل الاعتماد</td></tr>
+      <tr><td><span class="pill bad">غير جاهز</span></td><td>محور واحد أو أكثر تحت ٥٠٪</td><td>لا يُسند له عمل منفرد — راجع التوصية في التشخيص</td></tr>
+      <tr><td><span class="pill">بيانات ناقصة</span></td><td>أقل من خمس محاولات في أي محور</td><td>الجلسة غير كافية لإصدار حكم</td></tr>
+    </table>
+    <div class="note">هذه العتبات قابلة للضبط وليست معيارًا معتمدًا. تُراجَع مع الجهة المسؤولة عن التدريب في المنشأة قبل استخدامها في أي قرار تأهيل.</div>
+  </div>
+</section>
+
+<!-- ===== 06 AUTHORING ===== -->
+<section class="view" id="t6">
+  <div class="card">
+    <h2>تأليف السيناريوهات</h2>
+    <p class="lead">السيناريو ملف JSON. ممارس السلامة يكتبه دون معرفة برمجية. يُلصق هنا ويُختبر فورًا.</p>
+    <h3>المخطط</h3>
+    <table>
+      <tr><th style="width:20%">الحقل</th><th>الوصف</th></tr>
+      <tr><td class="k">id, title, unit</td><td>معرّف فريد وعنوان واسم الوحدة</td></tr>
+      <tr><td class="k">diagram</td><td>عرض وارتفاع، ومصفوفة خطوط، ومصفوفة رموز لكل منها نوع وإحداثيات ووسم</td></tr>
+      <tr><td class="k">actions</td><td>كل زر: معرّف، وسم، نوع valve أو proc، وحالة ابتدائية</td></tr>
+      <tr><td class="k">steps</td><td>الخطوات بالترتيب، لكل خطوة شرط اكتمال</td></tr>
+      <tr><td class="k">violations</td><td>لكل مخالفة: المُطلِق، والشرط، ونص العاقبة، والمحور السلوكي</td></tr>
+      <tr><td class="k">zeroWhen</td><td>شروط إثبات صفر الضغط</td></tr>
+    </table>
+    <h3>لغة الشروط</h3>
+    <table>
+      <tr><td class="k">open:V-1</td><td>الصمام مفتوح</td><td class="k">shut:V-1</td><td>الصمام مغلق</td></tr>
+      <tr><td class="k">done:permit</td><td>الإجراء منفَّذ</td><td class="k">!done:permit</td><td>الإجراء غير منفَّذ</td></tr>
+      <tr><td class="k">allshut:block</td><td>كل صمامات العزل مغلقة</td><td class="k">mode:MANUAL</td><td>وضع المتحكم</td></tr>
+    </table>
+    <div class="tip">شروط متعددة في مصفوفة واحدة تعني «و». المخالفة تُقيَّم قبل تنفيذ الفعل، لا بعده.</div>
+    <label>الصق سيناريو JSON</label>
+    <textarea id="authTxt" placeholder='{"id":"...","title":"...","actions":[...]}'></textarea>
+    <div class="btnrow">
+      <button class="btn g" id="authAdd">تحقق وأضف</button>
+      <button class="btn" id="authSample">تحميل مثال</button>
+      <button class="btn" id="authExport">تصدير كل السيناريوهات</button>
+    </div>
+    <div class="result" id="authRes"></div>
+  </div>
+</section>
+
+<!-- ===== 07 AUDIT ===== -->
+<section class="view" id="t7">
+  <div class="card noprint">
+    <h2>تقرير التدقيق</h2>
+    <p class="lead">مستند بخلفية بيضاء جاهز للطباعة. يحمل رقمًا تسلسليًا ورمز تحقق داخليًا محسوبًا من محتوى السجل.</p>
+    <div class="btnrow">
+      <button class="btn g" id="genRep">إصدار للمتدرب الحالي</button>
+      <button class="btn" onclick="window.print()">طباعة</button>
+    </div>
+    <div class="crit">رمز التحقق مجموع اختباري داخلي يكشف التعديل على السجل. ليس توقيعًا رقميًا معتمدًا ولا يُقدَّم على أنه كذلك.</div>
+  </div>
+  <div class="rep" id="repBox"></div>
+</section>
+
+</div>
+
+<script>
+/* ================= storage ================= */
+const Store=(()=>{let ok=true,mem={};
+ try{localStorage.setItem('__t','1');localStorage.removeItem('__t');}catch(e){ok=false;}
+ return{ok,get:k=>{try{return ok?localStorage.getItem(k):(mem[k]||null);}catch(e){return mem[k]||null;}},
+ set:(k,v)=>{try{ok?localStorage.setItem(k,v):mem[k]=v;}catch(e){mem[k]=v;}},
+ del:k=>{try{ok?localStorage.removeItem(k):delete mem[k];}catch(e){delete mem[k];}}};})();
+const DB_KEY='miran_v3_db',SC_KEY='miran_v3_scenarios';
+let DB={trainees:{},current:null};
+try{const r=Store.get(DB_KEY);if(r)DB=JSON.parse(r);}catch(e){}
+const saveDB=()=>Store.set(DB_KEY,JSON.stringify(DB));
+
+const BLANK=()=>({name:'',badge:'',org:'',unit:'',created:Date.now(),
+ axes:{initiative:{n:0,ok:0},sequence:{n:0,ok:0},correction:{n:0,ok:0}},
+ runs:{iso:0,gas:0,rad:0},events:[]});
+function T(){return DB.current?DB.trainees[DB.current]:null;}
+function log(txt,kind,axis,pass){
+ const t=T();if(!t)return;
+ t.events.push({txt,kind,axis:axis||null,pass:pass===undefined?null:!!pass,ts:Date.now()});
+ if(t.events.length>500)t.events=t.events.slice(-500);
+ if(axis){t.axes[axis].n++;if(pass)t.axes[axis].ok++;}
+ saveDB();renderDiag();renderSup();
+}
+function need(){if(!T()){alert('سجّل متدربًا أولًا من تبويب «المتدرب».');return false;}return true;}
+
+/* ================= nav ================= */
+document.querySelectorAll('.tab').forEach(b=>b.onclick=()=>{
+ document.querySelectorAll('.tab').forEach(x=>x.classList.remove('on'));
+ document.querySelectorAll('.view').forEach(x=>x.classList.remove('on'));
+ b.classList.add('on');document.getElementById(b.dataset.v).classList.add('on');
+ window.scrollTo({top:0,behavior:'smooth'});
+});
+
+/* ================= trainee ================= */
+function whoRender(){
+ const t=T();
+ document.getElementById('whoBox').innerHTML=t?
+  ('<b>'+t.name+'</b> · '+t.badge+'<br>'+(t.org||'—')+' · '+(t.unit||'—')):'لم يُحدَّد متدرب';
+ const s=document.getElementById('selTrainee');
+ s.innerHTML='<option value="">— اختر —</option>'+Object.keys(DB.trainees).map(k=>
+  '<option value="'+k+'"'+(k===DB.current?' selected':'')+'>'+DB.trainees[k].name+' — '+DB.trainees[k].badge+'</option>').join('');
+}
+document.getElementById('btnStart').onclick=()=>{
+ const n=document.getElementById('fName').value.trim(),b=document.getElementById('fBadge').value.trim();
+ if(!n||!b){alert('الاسم والرقم الوظيفي مطلوبان.');return;}
+ const id=b+'|'+n;
+ if(!DB.trainees[id])DB.trainees[id]=BLANK();
+ Object.assign(DB.trainees[id],{name:n,badge:b,
+  org:document.getElementById('fOrg').value.trim(),unit:document.getElementById('fUnit').value.trim()});
+ DB.current=id;saveDB();whoRender();renderDiag();renderSup();
+ log('بدء جلسة تدريب','in');
+};
+document.getElementById('btnEnd').onclick=()=>{if(T())log('إنهاء الجلسة','in');DB.current=null;saveDB();whoRender();renderDiag();};
+document.getElementById('btnLoad').onclick=()=>{
+ const v=document.getElementById('selTrainee').value;if(!v)return;
+ DB.current=v;saveDB();const t=T();
+ document.getElementById('fName').value=t.name;document.getElementById('fBadge').value=t.badge;
+ document.getElementById('fOrg').value=t.org||'';document.getElementById('fUnit').value=t.unit||'';
+ whoRender();renderDiag();log('استئناف جلسة','in');
+};
+
+/* ================= scenario pack ================= */
+const CORE=[
+{id:'cdu-fcv',title:'عزل صمام تحكم FCV-101',unit:'وحدة التقطير',
+ diagram:{w:640,h:290,
+  lines:[[16,190,624,190],[180,190,180,100],[180,100,460,100],[460,100,460,190],[360,190,360,246],[268,150,268,187]],
+  labels:[[24,216,'FEED'],[566,216,'TO UNIT'],[292,88,'BYPASS']],
+  symbols:[{id:'V-1',t:'valve',x:228,y:190},{id:'FCV',t:'cv',x:320,y:190},{id:'V-2',t:'valve',x:410,y:190},
+   {id:'V-3',t:'valve',x:320,y:100},{id:'V-4',t:'valve',x:360,y:252},{id:'PI',t:'gauge',x:268,y:138}]},
+ actions:[{id:'permit',t:'proc',label:'طلب تصريح من غرفة التحكم'},
+  {id:'mode',t:'mode',label:'FIC-101'},
+  {id:'V-3',t:'valve',role:'bypass',label:'V-3 تجاوز',init:false},
+  {id:'V-1',t:'valve',role:'block',label:'V-1 مدخل',init:true},
+  {id:'V-2',t:'valve',role:'block',label:'V-2 مخرج',init:true},
+  {id:'V-4',t:'valve',role:'drain',label:'V-4 تصريف',init:false},
+  {id:'loto',t:'proc',label:'تركيب القفل والبطاقة',gate:['zero']}],
+ steps:[{id:'s1',c:['done:permit'],label:'تصريح غرفة التحكم'},
+  {id:'s2',c:['mode:MANUAL'],label:'المتحكم على MANUAL'},
+  {id:'s3',c:['open:V-3'],label:'فتح التجاوز V-3'},
+  {id:'s4',c:['shut:V-1'],label:'إغلاق المدخل V-1'},
+  {id:'s5',c:['shut:V-2'],label:'إغلاق المخرج V-2'},
+  {id:'s6',c:['open:V-4','allshut:block'],label:'تنفيس عبر التصريف'},
+  {id:'s7',c:['zero'],label:'إثبات صفر ضغط'},
+  {id:'s8',c:['done:loto'],label:'تركيب LOTO'}],
+ violations:[
+  {on:'*',c:['!done:permit'],ax:'sequence',m:'بدأت العمل بلا تصريح. غرفة التحكم لا تعلم — أي اضطراب سيُقرأ كعطل مفاجئ.'},
+  {on:'open:V-3',c:['mode:AUTO'],ax:'sequence',m:'فتحت التجاوز والمتحكم على AUTO. المتحكم يرى ارتفاع التدفق فيُغلق الصمام مقابلك — تأرجح في العملية.'},
+  {on:'shut:V-1',c:['shut:V-3'],ax:'sequence',m:'أغلقت المدخل قبل فتح التجاوز. التدفق انقطع عن الوحدة — إيقاف اضطراري.'},
+  {on:'shut:V-2',c:['open:V-1'],ax:'sequence',m:'أغلقت المخرج قبل المدخل. ضغط الخط الكامل محبوس داخل الجسم والمصدر ما زال مفتوحًا خلفه.'},
+  {on:'open:V-4',c:['!allshut:block'],ax:'sequence',m:'فتحت التصريف والعزل غير مكتمل. تصريف على ضغط حي.'},
+  {on:'done:loto',c:['!zero'],ax:'sequence',m:'محاولة تركيب القفل والضغط لم يُنفَّس. القفل لا يُفرّغ ضغطًا.'}],
+ zeroWhen:['allshut:block','open:V-4']},
+
+{id:'pump-p201',title:'عزل مضخة P-201A',unit:'وحدة التقطير',
+ diagram:{w:640,h:290,
+  lines:[[16,180,240,180],[400,180,624,180],[360,180,360,246],[300,140,300,150]],
+  labels:[[24,206,'SUCTION'],[560,206,'DISCHARGE'],[280,258,'DRAIN']],
+  symbols:[{id:'S-1',t:'valve',x:150,y:180},{id:'PUMP',t:'pump',x:320,y:180},
+   {id:'D-1',t:'valve',x:480,y:180},{id:'VENT',t:'valve',x:300,y:120},
+   {id:'DRN',t:'valve',x:360,y:252},{id:'PI',t:'gauge',x:230,y:120}]},
+ actions:[{id:'permit',t:'proc',label:'تصريح وتحويل الخدمة للاحتياطية'},
+  {id:'stop',t:'proc',label:'إيقاف المضخة وتأكيد توقف الدوران'},
+  {id:'elec',t:'proc',label:'العزل الكهربائي وسحب القاطع وقفله'},
+  {id:'S-1',t:'valve',role:'block',label:'S-1 صمام السحب',init:true},
+  {id:'D-1',t:'valve',role:'block',label:'D-1 صمام الطرد',init:true},
+  {id:'VENT',t:'valve',role:'vent',label:'التنفيس العلوي',init:false},
+  {id:'DRN',t:'valve',role:'drain',label:'التصريف السفلي',init:false},
+  {id:'loto',t:'proc',label:'قفل ميكانيكي وبطاقة'}],
+ steps:[{id:'p1',c:['done:permit'],label:'تصريح وتحويل الخدمة'},
+  {id:'p2',c:['done:stop'],label:'إيقاف المضخة'},
+  {id:'p3',c:['done:elec'],label:'عزل كهربائي وقفل'},
+  {id:'p4',c:['shut:S-1'],label:'إغلاق السحب'},
+  {id:'p5',c:['shut:D-1'],label:'إغلاق الطرد'},
+  {id:'p6',c:['open:VENT'],label:'فتح التنفيس'},
+  {id:'p7',c:['open:DRN','open:VENT'],label:'فتح التصريف'},
+  {id:'p8',c:['zero'],label:'إثبات صفر ضغط'},
+  {id:'p9',c:['done:loto'],label:'قفل ميكانيكي'}],
+ violations:[
+  {on:'*',c:['!done:permit'],ax:'sequence',m:'عمل بلا تصريح ودون تحويل الخدمة. الوحدة بلا مضخة عاملة.'},
+  {on:'shut:S-1',c:['!done:stop'],ax:'sequence',m:'أغلقت السحب والمضخة تعمل. تشغيل جاف وتكهّف يتلف المضخة خلال ثوانٍ.'},
+  {on:'shut:D-1',c:['!done:stop'],ax:'sequence',m:'أغلقت الطرد والمضخة تعمل. الضغط يرتفع على غلاف المضخة.'},
+  {on:'done:elec',c:['!done:stop'],ax:'sequence',m:'عزل كهربائي قبل الإيقاف المنظّم من لوحة التحكم.'},
+  {on:'open:DRN',c:['shut:VENT'],ax:'sequence',m:'فتحت التصريف قبل التنفيس. شفط فراغي يمنع التصريف ويشوّه القراءة.'},
+  {on:'open:DRN',c:['!allshut:block'],ax:'sequence',m:'تصريف والعزل غير مكتمل — تدفق مستمر من الخط.'},
+  {on:'done:loto',c:['!zero'],ax:'sequence',m:'قفل قبل إثبات صفر الضغط.'},
+  {on:'done:loto',c:['!done:elec'],ax:'sequence',m:'قفل ميكانيكي بلا عزل كهربائي. المضخة قابلة للدوران بأمر تشغيل.'}],
+ zeroWhen:['allshut:block','open:DRN','open:VENT']},
+
+{id:'pzv-override',title:'تجاوز PZV-301 لاختبار دوري',unit:'وحدة معالجة الغاز',
+ diagram:{w:640,h:290,
+  lines:[[16,190,624,190],[300,150,300,175],[300,120,300,150]],
+  labels:[[24,216,'FROM K-301'],[556,216,'TO HEADER'],[380,110,'SIS LOOP']],
+  symbols:[{id:'PZV',t:'cv',x:300,y:190},{id:'ISO',t:'valve',x:170,y:190},
+   {id:'LS',t:'box',x:300,y:100,label:'PZHH'},{id:'PI',t:'gauge',x:470,y:140}]},
+ actions:[{id:'auth',t:'proc',label:'تصريح مكتوب من الجهة المخوّلة'},
+  {id:'risk',t:'proc',label:'تقييم مخاطر وتحديد التدابير التعويضية'},
+  {id:'watch',t:'proc',label:'تعيين مراقب بشري للمتغير المُتجاوَز'},
+  {id:'reg',t:'proc',label:'تسجيل في سجل التجاوزات المفتوحة'},
+  {id:'mos',t:'proc',label:'تفعيل مفتاح تجاوز الصيانة MOS'},
+  {id:'test',t:'proc',label:'تنفيذ الاختبار الدوري'},
+  {id:'restore',t:'proc',label:'رفع التجاوز وإعادة الوظيفة'},
+  {id:'ftest',t:'proc',label:'اختبار وظيفي بعد الرفع'},
+  {id:'hand',t:'proc',label:'توثيق وتسليم المناوبة'}],
+ steps:[{id:'z1',c:['done:auth'],label:'تصريح مكتوب'},
+  {id:'z2',c:['done:risk'],label:'تقييم مخاطر وتدابير تعويضية'},
+  {id:'z3',c:['done:watch'],label:'مراقب بشري معيّن'},
+  {id:'z4',c:['done:reg'],label:'قيد في سجل التجاوزات'},
+  {id:'z5',c:['done:mos'],label:'تفعيل التجاوز'},
+  {id:'z6',c:['done:test'],label:'تنفيذ الاختبار'},
+  {id:'z7',c:['done:restore'],label:'رفع التجاوز'},
+  {id:'z8',c:['done:ftest'],label:'اختبار وظيفي'},
+  {id:'z9',c:['done:hand'],label:'توثيق وتسليم'}],
+ violations:[
+  {on:'done:mos',c:['!done:auth'],ax:'correction',m:'فعّلت التجاوز بلا تصريح مكتوب. موافقة شفهية لا تكفي لتعطيل طبقة سلامة — هذا الرفض جزء من عملك.'},
+  {on:'done:mos',c:['!done:risk'],ax:'sequence',m:'تجاوز بلا تدابير تعويضية. الوحدة تعمل الآن بحماية أقل ولا بديل قائم.'},
+  {on:'done:mos',c:['!done:watch'],ax:'sequence',m:'تجاوز بلا مراقب بشري للمتغير. لا أحد يرى الضغط إن ارتفع.'},
+  {on:'done:mos',c:['!done:reg'],ax:'correction',m:'تجاوز غير مسجّل. المناوبة التالية لن تعرف أن الحماية معطّلة — وهذا نمط متكرر في الحوادث الكبرى.'},
+  {on:'done:test',c:['!done:mos'],ax:'sequence',m:'اختبار بلا تفعيل التجاوز. الاختبار سيُطلق إيقافًا حقيقيًا للوحدة.'},
+  {on:'done:hand',c:['!done:restore'],ax:'correction',m:'سلّمت المناوبة والتجاوز ما زال مفعّلًا. هذه هي «الحماية المنسية» بعينها.'},
+  {on:'done:hand',c:['!done:ftest'],ax:'sequence',m:'تسليم بلا اختبار وظيفي. لا دليل أن الوظيفة عادت فعلًا.'}],
+ zeroWhen:[]}];
+
+let PACK=CORE.slice();
+try{const ex=Store.get(SC_KEY);if(ex){const a=JSON.parse(ex);if(Array.isArray(a))
+ a.forEach(s=>{if(!PACK.find(p=>p.id===s.id))PACK.push(s);});}}catch(e){}
+function savePack(){Store.set(SC_KEY,JSON.stringify(PACK.filter(s=>!CORE.find(c=>c.id===s.id))));}
+
+/* ================= isolation engine ================= */
+let IS=null;
+function fillSel(){document.getElementById('isoSel').innerHTML=
+ PACK.map(s=>'<option value="'+s.id+'">'+s.title+' — '+(s.unit||'')+'</option>').join('');}
+fillSel();
+
+function cond(c){
+ if(!IS)return false;
+ if(c.startsWith('!'))return !cond(c.slice(1));
+ const [k,v]=c.split(':');
+ if(c==='zero')return zeroOK();
+ if(k==='open')return IS.st[v]===true;
+ if(k==='shut')return IS.st[v]===false;
+ if(k==='done')return IS.st[v]===true;
+ if(k==='mode')return IS.mode===v;
+ if(k==='allshut')return IS.sc.actions.filter(a=>a.role===v).every(a=>IS.st[a.id]===false);
+ return false;
+}
+const all=arr=>(arr||[]).every(cond);
+function zeroOK(){const z=IS.sc.zeroWhen||[];if(!z.length)return true;
+ return z.every(c=>{if(c==='zero')return true;return cond(c);});}
+
+function isoStart(){
+ const sc=PACK.find(s=>s.id===document.getElementById('isoSel').value);if(!sc)return;
+ IS={sc,st:{},mode:'AUTO',done:[],errs:0,locked:false,t0:Date.now()};
+ sc.actions.forEach(a=>{IS.st[a.id]=a.t==='valve'?!!a.init:(a.t==='proc'?false:false);});
+ document.getElementById('isoLog').innerHTML='';
+ document.getElementById('isoRes').className='result';
+ ilog('سيناريو: '+sc.title+' — '+(sc.unit||''),'in');
+ isoRender();
+}
+function ilog(m,c){const l=document.getElementById('isoLog');
+ l.innerHTML+='<div class="'+(c||'in')+'">&rsaquo; '+m+'</div>';l.scrollTop=l.scrollHeight;}
+
+function isoRender(){
+ if(!IS){document.getElementById('isoPid').innerHTML='<div style="padding:40px;text-align:center;color:var(--muted);font-size:13px">اختر سيناريو واضغط تشغيل</div>';
+  document.getElementById('isoActs').innerHTML='';document.getElementById('isoSteps').innerHTML='';
+  document.getElementById('isoRead').innerHTML='';return;}
+ const d=IS.sc.diagram;let g='';
+ (d.lines||[]).forEach(l=>{g+='<line x1="'+l[0]+'" y1="'+l[1]+'" x2="'+l[2]+'" y2="'+l[3]+'" stroke="#2a4a4e" stroke-width="6"/>';});
+ (d.labels||[]).forEach(l=>{g+='<text x="'+l[0]+'" y="'+l[1]+'" fill="#7d9a98" font-size="12" font-family="monospace">'+l[2]+'</text>';});
+ (d.symbols||[]).forEach(s=>{
+  const on=IS.st[s.id],col=on===true?'#35b37e':(on===false?'#e05252':'#4a5f62');
+  if(s.t==='valve'){g+='<path d="M'+(s.x-16)+','+(s.y-15)+' L'+(s.x+16)+','+(s.y+15)+' L'+(s.x+16)+','+(s.y-15)+' L'+(s.x-16)+','+(s.y+15)+' Z" fill="'+col+'" stroke="#060d0f" stroke-width="2"/>'
+    +'<text x="'+(s.x-18)+'" y="'+(s.y+38)+'" fill="#2dd4bf" font-size="11" font-family="monospace">'+s.id+'</text>';}
+  else if(s.t==='cv'){const c2=(IS.st['V-1']===false||IS.st['ISO']===false)?'#4a5f62':'#2dd4bf';
+    g+='<path d="M'+(s.x-20)+','+(s.y-15)+' L'+(s.x+20)+','+(s.y+15)+' L'+(s.x+20)+','+(s.y-15)+' L'+(s.x-20)+','+(s.y+15)+' Z" fill="'+c2+'" stroke="#060d0f" stroke-width="2"/>'
+     +'<rect x="'+(s.x-11)+'" y="'+(s.y-48)+'" width="22" height="26" fill="#142428" stroke="'+c2+'" stroke-width="2"/>'
+     +'<line x1="'+s.x+'" y1="'+(s.y-22)+'" x2="'+s.x+'" y2="'+(s.y-14)+'" stroke="'+c2+'" stroke-width="3"/>'
+     +'<text x="'+(s.x-22)+'" y="'+(s.y+38)+'" fill="#2dd4bf" font-size="11" font-family="monospace">'+s.id+'</text>';}
+  else if(s.t==='pump'){const pc=IS.st['stop']?'#4a5f62':'#2dd4bf';
+    g+='<circle cx="'+s.x+'" cy="'+s.y+'" r="26" fill="#142428" stroke="'+pc+'" stroke-width="3"/>'
+     +'<text x="'+(s.x-8)+'" y="'+(s.y+6)+'" fill="'+pc+'" font-size="16" font-family="monospace">P</text>'
+     +'<text x="'+(s.x-26)+'" y="'+(s.y+48)+'" fill="#2dd4bf" font-size="11" font-family="monospace">P-201A</text>';}
+  else if(s.t==='box'){const bc=IS.st['mos']?'#e05252':'#e0b429';
+    g+='<rect x="'+(s.x-38)+'" y="'+(s.y-20)+'" width="76" height="40" rx="3" fill="#1c1808" stroke="'+bc+'" stroke-width="2"/>'
+     +'<text x="'+(s.x-22)+'" y="'+(s.y+5)+'" fill="'+bc+'" font-size="12" font-family="monospace">'+(s.label||'')+'</text>'
+     +(IS.st['mos']?'<text x="'+(s.x-30)+'" y="'+(s.y+38)+'" fill="#e05252" font-size="11" font-family="monospace">OVERRIDDEN</text>':'');}
+  else if(s.t==='gauge'){const z=zeroOK();
+    g+='<circle cx="'+s.x+'" cy="'+s.y+'" r="18" fill="#142428" stroke="'+(z?'#35b37e':'#e0b429')+'" stroke-width="2"/>'
+     +'<text x="'+(s.x-13)+'" y="'+(s.y+5)+'" fill="'+(z?'#35b37e':'#e0b429')+'" font-size="10" font-family="monospace">'+(z?'0.0':'12.4')+'</text>';}
+ });
+ if(IS.st['loto'])g+='<rect x="'+(d.w-120)+'" y="30" width="86" height="34" rx="3" fill="#1c1808" stroke="#e0b429" stroke-width="2"/><text x="'+(d.w-108)+'" y="52" fill="#e0b429" font-size="13" font-family="monospace">LOTO</text>';
+ document.getElementById('isoPid').innerHTML='<svg viewBox="0 0 '+d.w+' '+d.h+'" xmlns="http://www.w3.org/2000/svg" aria-label="'+IS.sc.title+'">'+g+'</svg>';
+
+ document.getElementById('isoActs').innerHTML=IS.sc.actions.map(a=>{
+  let s='—',cls='';
+  if(a.t==='valve'){s=IS.st[a.id]?'مفتوح':'مغلق';cls=IS.st[a.id]?'on':'off';}
+  else if(a.t==='mode'){s=IS.mode;cls=IS.mode==='MANUAL'?'on':'';}
+  else{s=IS.st[a.id]?'تم':'—';cls=IS.st[a.id]?'on':'';}
+  return '<button class="ab" data-a="'+a.id+'"'+(IS.locked?' disabled':'')+'><span class="'+(a.t==='valve'||a.t==='mode'?'lbl':'')+'">'+a.label+'</span><span class="st '+cls+'">'+s+'</span></button>';
+ }).join('');
+ document.querySelectorAll('#isoActs .ab').forEach(b=>b.onclick=()=>isoAct(b.dataset.a));
+
+ IS.sc.steps.forEach(st=>{if(!IS.done.includes(st.id)&&all(st.c)){IS.done.push(st.id);ilog(st.label+' — تم','ok');}});
+ document.getElementById('isoSteps').innerHTML=IS.sc.steps.map(s=>
+  '<li class="'+(IS.done.includes(s.id)?'done':'')+'">'+s.label+'</li>').join('');
+ document.getElementById('isoRead').innerHTML=
+  '<div><span>الخطوات</span><b>'+IS.done.length+' / '+IS.sc.steps.length+'</b></div>'+
+  '<div><span>المخالفات</span><b class="'+(IS.errs?'alarm':'')+'">'+IS.errs+'</b></div>'+
+  '<div><span>ضغط محبوس</span><b class="'+(zeroOK()?'':'alarm')+'">'+(zeroOK()?'لا':'نعم')+'</b></div>'+
+  '<div><span>الحالة</span><b>'+(IS.locked?'مكتمل':'قيد التنفيذ')+'</b></div>';
+
+ if(IS.done.length===IS.sc.steps.length&&!IS.locked)isoFinish();
+}
+function isoAct(id){
+ if(!IS||IS.locked)return;if(!need())return;
+ const a=IS.sc.actions.find(x=>x.id===id);if(!a)return;
+ let key;
+ if(a.t==='valve')key=(IS.st[id]?'shut:':'open:')+id;
+ else if(a.t==='mode')key='mode';
+ else key='done:'+id;
+ (IS.sc.violations||[]).forEach(v=>{
+  if(v.on!=='*'&&v.on!==key)return;
+  if(v.on==='*'&&a.id==='permit')return;
+  if(all(v.c)){IS.errs++;ilog(v.m,'er');log('العزل — '+IS.sc.title+': '+v.m,'er',v.ax||'sequence',false);}
+ });
+ if(a.t==='valve')IS.st[id]=!IS.st[id];
+ else if(a.t==='mode')IS.mode=IS.mode==='AUTO'?'MANUAL':'AUTO';
+ else{if(a.gate&&!all(a.gate)){isoRender();return;}IS.st[id]=true;}
+ isoRender();
+}
+function isoFinish(){
+ IS.locked=true;const t=T();if(t)t.runs.iso++;
+ document.querySelectorAll('#isoActs .ab').forEach(b=>b.disabled=true);
+ const el=document.getElementById('isoRes'),clean=IS.errs===0;
+ el.className='result on '+(clean?'pass':'fail');
+ el.textContent=clean?'اكتمل التسلسل دون مخالفة واحدة. الترتيب صحيح والمنطق خلفه مفهوم.'
+  :'اكتمل التسلسل مع '+IS.errs+' مخالفة. كل واحدة منها لها نتيجة حقيقية في الميدان — راجع السجل.';
+ log('العزل — '+IS.sc.title+': اكتمل بـ'+IS.errs+' مخالفة','ok','sequence',clean);
+ const secs=Math.round((Date.now()-IS.t0)/1000);
+ log('العزل — زمن الإنجاز '+secs+' ثانية','in','initiative',secs<180);
+}
+document.getElementById('isoStart').onclick=()=>{if(need())isoStart();};
+document.getElementById('isoReset').onclick=()=>{if(IS)isoStart();};
+isoRender();
+
+/* ================= gas ================= */
+const N=9,DIRS={'شمالية':[-1,0],'شمالية شرقية':[-1,1],'شرقية':[0,1],'جنوبية شرقية':[1,1],
+ 'جنوبية':[1,0],'جنوبية غربية':[1,-1],'غربية':[0,-1],'شمالية غربية':[-1,-1]};
+let G;const inB=(r,c)=>r>=0&&c>=0&&r<N&&c<N;
+function gasInit(){
+ const keys=Object.keys(DIRS);
+ for(let a=0;a<60;a++){
+  const from=keys[Math.floor(Math.random()*keys.length)],fv=DIRS[from],tv=[-fv[0],-fv[1]];
+  const src=[3+Math.floor(Math.random()*3),3+Math.floor(Math.random()*3)];
+  const P=new Set(),E=new Set();
+  for(let s=0;s<=7;s++){const w=Math.floor(s/2.4),cr=src[0]+tv[0]*s,cc=src[1]+tv[1]*s;
+   for(let o=-w;o<=w;o++){const r=cr+(-tv[1])*o,c=cc+tv[0]*o;if(!inB(r,c))continue;
+    (Math.abs(o)===w&&w>0?E:P).add(r+','+c);}}
+  const bad=k=>P.has(k)||E.has(k);
+  const st=[],mu=[];
+  for(let r=0;r<N;r++)for(let c=0;c<N;c++){
+   const k=r+','+c;if(bad(k)||k===src.join(','))continue;
+   const dr=r-src[0],dc=c-src[1],d=Math.max(Math.abs(dr),Math.abs(dc));
+   if(dr*tv[0]+dc*tv[1]>0&&d>=2&&d<=4)st.push([r,c]);
+   if(dr*fv[0]+dc*fv[1]>=2&&d>=3)mu.push([r,c]);}
+  if(!st.length||!mu.length)continue;
+  const me=st[Math.floor(Math.random()*st.length)];
+  G={from,fv,tv,src,P,E,me,mus:mu[Math.floor(Math.random()*mu.length)],
+     moves:0,trail:[me.join(',')],over:false,dw:0,t0:Date.now()};
+  document.getElementById('gasRes').className='result';sock(from);gasRender();return;}
+}
+function sock(from){const fv=DIRS[from],ang=Math.atan2(-fv[1],fv[0])*180/Math.PI;
+ document.getElementById('sock').innerHTML='<svg viewBox="0 0 120 120" style="width:100%">'+
+ '<circle cx="60" cy="60" r="53" fill="none" stroke="#1e3438" stroke-width="1.5"/>'+
+ '<text x="55" y="17" fill="#7d9a98" font-size="11" font-family="monospace">N</text>'+
+ '<text x="103" y="64" fill="#7d9a98" font-size="11" font-family="monospace">E</text>'+
+ '<text x="55" y="113" fill="#7d9a98" font-size="11" font-family="monospace">S</text>'+
+ '<text x="7" y="64" fill="#7d9a98" font-size="11" font-family="monospace">W</text>'+
+ '<g transform="rotate('+(-ang+90)+' 60 60)"><path d="M60,25 L71,40 L66,66 L54,66 L49,40 Z" fill="#e0b429" opacity=".92"/>'+
+ '<path d="M54,66 L66,66 L63,90 L57,90 Z" fill="#e0b429" opacity=".55"/>'+
+ '<path d="M57,90 L63,90 L61,103 L59,103 Z" fill="#e0b429" opacity=".3"/></g></svg>';}
+function gasRender(){
+ const g=document.getElementById('gasGrid');g.innerHTML='';
+ for(let r=0;r<N;r++)for(let c=0;c<N;c++){
+  const k=r+','+c,b=document.createElement('button');b.className='cell';
+  if(G.E.has(k))b.classList.add('plume2');if(G.P.has(k))b.classList.add('plume');
+  if(G.trail.includes(k))b.classList.add('trail');
+  if(k===G.mus.join(',')){b.classList.add('mus');b.textContent='\u2691';}
+  if(k===G.src.join(',')){b.classList.add('src');b.textContent='\u2623';}
+  if(k===G.me.join(',')){b.classList.add('me');b.textContent='\u25C9';}
+  if(!G.over&&Math.max(Math.abs(r-G.me[0]),Math.abs(c-G.me[1]))===1){
+   b.classList.add('reach');b.onclick=()=>gasMove(r,c);
+   b.setAttribute('aria-label','تحرك إلى الصف '+(r+1)+' العمود '+(c+1));}
+  else b.setAttribute('tabindex','-1');
+  g.appendChild(b);}
+ document.getElementById('gasRead').innerHTML=
+  '<div><span>اتجاه الريح</span><b>'+G.from+'</b></div>'+
+  '<div><span>الخطوات</span><b>'+G.moves+'</b></div>'+
+  '<div><span>مع الريح</span><b class="'+(G.dw?'alarm':'')+'">'+G.dw+'</b></div>'+
+  '<div><span>الحالة</span><b class="'+(G.over?'alarm':'')+'">'+(G.over?'انتهى':'إخلاء نشط')+'</b></div>';
+}
+function gasMove(r,c){
+ if(!G||G.over||!inB(r,c))return;if(!need())return;
+ const dr=r-G.me[0],dc=c-G.me[1];
+ if(Math.max(Math.abs(dr),Math.abs(dc))!==1)return;
+ if(dr===G.tv[0]&&dc===G.tv[1])G.dw++;
+ G.me=[r,c];G.moves++;G.trail.push(r+','+c);
+ const k=r+','+c;
+ if(G.P.has(k)||k===G.src.join(','))return gasEnd(false,'دخلت السحابة. عند التركيزات العالية يحدث فقدان الوعي خلال ثوانٍ.');
+ if(G.E.has(k))return gasEnd(false,'عبرت حافة السحابة. الحواف ليست آمنة — التركيز فيها يتذبذب مع هبّات الريح.');
+ if(k===G.mus.join(','))return gasEnd(true,'وصلت نقطة التجمع في '+G.moves+' خطوة.'+
+   (G.dw===0?' مسار سليم — لم تتحرك مع الريح ولو خطوة.':' لكنك تحركت مع الريح '+G.dw+' مرة.'));
+ if(G.moves>16)return gasEnd(false,'استغرقت وقتًا طويلًا. السحابة تتمدد — التردد في تحديد الاتجاه هو ما يقتل.');
+ gasRender();
+}
+function gasEnd(pass,msg){
+ G.over=true;const t=T();if(t)t.runs.gas++;
+ const el=document.getElementById('gasRes');
+ el.className='result on '+(pass?'pass':'fail');el.textContent=msg;
+ log('الهروب: '+(pass?'نجاح':'فشل')+' — '+msg.split('.')[0],pass?'ok':'er','sequence',pass&&G.dw===0);
+ const secs=Math.round((Date.now()-G.t0)/1000);
+ log('الهروب — زمن القرار '+secs+' ثانية','in','initiative',secs<45&&pass);
+ gasRender();
+}
+document.getElementById('gasNew').onclick=gasInit;
+document.addEventListener('keydown',e=>{
+ if(!document.getElementById('t2').classList.contains('on'))return;
+ if(e.key==='r'||e.key==='R'){gasInit();e.preventDefault();return;}
+ const M={'ArrowUp':[-1,0],'ArrowDown':[1,0],'ArrowRight':[0,1],'ArrowLeft':[0,-1],
+  '7':[-1,-1],'9':[-1,1],'1':[1,-1],'3':[1,1]},m=M[e.key];
+ if(!m||!G||G.over)return;e.preventDefault();gasMove(G.me[0]+m[0],G.me[1]+m[1]);});
+gasInit();
+
+/* ================= radio ================= */
+const SCEN=[
+ {unit:'وحدة التقطير — قرب المضخة P-201A',type:'تسرب غاز سام',mat:'غاز حامضي من وصلة الطرد',wind:'الريح شمالية غربية',cas:'لا توجد إصابات'},
+ {unit:'منطقة الخزانات — الخزان TK-14 بوابة ثلاثة',type:'حريق',mat:'حريق سطحي على السد الترابي',wind:'الريح جنوبية',cas:'إصابة واحدة — حروق باليد'},
+ {unit:'وحدة معالجة الغاز — الضاغط K-301',type:'تسرب غاز قابل للاشتعال',mat:'غاز طبيعي وصوت تسرب عالٍ',wind:'الريح شرقية',cas:'لا توجد إصابات'},
+ {unit:'رصيف التحميل — الذراع رقم اثنين',type:'انسكاب سائل',mat:'منتج مكرر يقارب خمسة أمتار مكعبة',wind:'الريح شمالية',cas:'لا توجد إصابات'},
+ {unit:'محطة التحويل — اللوحة رقم أربعة',type:'حريق كهربائي',mat:'دخان من لوحة الجهد المتوسط',wind:'الريح جنوبية غربية',cas:'تم إخلاء المبنى'},
+ {unit:'وحدة المعالجة — الفرن H-101',type:'إصابة عمل',mat:'سقوط من سقالة على ارتفاع ثلاثة أمتار',wind:'الريح غربية',cas:'مصاب واعٍ يشكو ألمًا في الظهر'},
+ {unit:'وحدة الاستخلاص — الوعاء V-402',type:'ارتفاع مستوى وطفح',mat:'طفح من فتحة التنفيس العلوية',wind:'الريح شمالية شرقية',cas:'لا توجد إصابات'},
+ {unit:'خط الأنابيب — الكيلو ١٢ من البوابة الشمالية',type:'تسرب من خط',mat:'بقعة متسعة وضغط الخط منخفض',wind:'الريح جنوبية شرقية',cas:'لا توجد إصابات'}];
+const ORD=['call','loc','type','mat','wind','cas','id','wait'];
+const LBL={call:'نداء طوارئ مكرر',loc:'الموقع الدقيق ورقم المعدة',type:'نوع الحالة',mat:'المادة وحجم الحدث',
+ wind:'اتجاه الريح',cas:'حالة الإصابات',id:'الاسم والرقم الوظيفي',wait:'انتظار التكرار'};
+const KN={loc:'الموقع',type:'الحالة',wind:'الريح',cas:'الإصابات',id:'المُبلِّغ'};
+let R,rT;
+function radInit(){
+ clearInterval(rT);
+ const sc=SCEN[Math.floor(Math.random()*SCEN.length)],t=T();
+ R={sc,placed:[],t:45,stage:1,err:null,pool:[...ORD].sort(()=>Math.random()-0.5),t0:Date.now(),first:null};
+ document.getElementById('radScen').innerHTML='<div class="ctl">— السيناريو —</div>'+
+  '<div class="you">'+sc.type+' في '+sc.unit+'</div><div class="you">'+sc.mat+' · '+sc.wind+' · '+sc.cas+'</div>'+
+  '<div class="you">أنت: '+(t?t.name+' — '+t.badge:'المتدرب')+'</div>';
+ document.getElementById('radS2').style.display='none';
+ document.getElementById('radRes').className='result';
+ document.getElementById('radOk').disabled=false;
+ radRender();
+ const tm=document.getElementById('radT');tm.textContent=45;tm.className='timer';
+ document.getElementById('radBar').style.width='100%';
+ rT=setInterval(()=>{R.t--;tm.textContent=Math.max(R.t,0);tm.className='timer'+(R.t<=12?' hot':'');
+  document.getElementById('radBar').style.width=Math.max(R.t/45*100,0)+'%';
+  if(R.t<=0){clearInterval(rT);radEnd(false,R.stage===1?'انتهى الوقت قبل إتمام البلاغ. البلاغ الناقص يُرسل الفريق إلى المجهول.'
+   :'انتهى الوقت قبل فحص التكرار. البلاغ غير المؤكَّد بلاغ لم يصل.');}},1000);
+}
+function radRender(){
+ document.getElementById('radSlots').innerHTML=ORD.map((_,i)=>{const p=R.placed[i];
+  return '<div class="slot '+(p?'filled':'')+'"><span class="num">'+(i+1).toString().padStart(2,'0')+'</span><span>'+(p?LBL[p]:'—')+'</span></div>';}).join('');
+ if(R.stage!==1){document.getElementById('radPool').innerHTML='';return;}
+ document.getElementById('radPool').innerHTML=R.pool.map(k=>
+  '<button class="chip '+(R.placed.includes(k)?'used':'')+'" data-k="'+k+'">'+LBL[k]+'</button>').join('');
+ document.querySelectorAll('#radPool .chip').forEach(b=>b.onclick=()=>{
+  if(!need())return;
+  if(R.first===null)R.first=Math.round((Date.now()-R.t0)/1000);
+  R.placed.push(b.dataset.k);
+  if(R.placed.length===ORD.length)radCheck();else radRender();});
+}
+function radCheck(){
+ const w=R.placed.findIndex((k,i)=>k!==ORD[i]);
+ if(w>-1)return radEnd(false,'ترتيب خاطئ عند الخانة '+(w+1)+'. وضعت «'+LBL[R.placed[w]]+'» مكان «'+LBL[ORD[w]]+'». البلاغ مرتّب ليبقى نافعًا لو انقطع الاتصال بعد أول جملتين.');
+ R.stage=2;R.t=Math.max(R.t,28);
+ const f={loc:R.sc.unit,type:R.sc.type,wind:R.sc.wind,cas:R.sc.cas,id:(T()?T().name+' — '+T().badge:'المتدرب')};
+ const ks=Object.keys(f);
+ if(Math.random()<0.6){R.err=ks[Math.floor(Math.random()*ks.length)];
+  const alt={loc:R.sc.unit.replace(/[0-9\u0660-\u0669]/g,d=>(d==='1'?'7':'1')),type:'انسكاب سائل',
+   wind:'الريح جنوبية شرقية',cas:'إصابتان',id:(T()?T().name+' — '+T().badge.split('').reverse().join(''):'مجهول')};
+  f[R.err]=alt[R.err];}
+ document.getElementById('radRB').innerHTML=ks.map(k=>
+  '<button class="rbline" data-k="'+k+'"><span class="k">'+KN[k]+'</span><span>'+f[k]+'</span></button>').join('');
+ document.querySelectorAll('.rbline').forEach(b=>b.onclick=()=>{
+  document.querySelectorAll('.rbline').forEach(x=>x.classList.remove('picked'));
+  b.classList.add('picked');const p=b.dataset.k;
+  if(p===R.err)radEnd(true,'صحيح. غرفة التحكم كررت «'+KN[p]+'» خطأً وأنت صححتها. هذه اللحظة تحديدًا يتجنبها المبتدئ خجلًا.',true);
+  else if(R.err)radEnd(false,'اخترت عنصرًا صحيحًا. الخطأ الفعلي كان في «'+KN[R.err]+'». اقرأ التكرار كلمة كلمة، وخصوصًا الأرقام.',true);
+  else radEnd(false,'التكرار كان سليمًا واعترضت على عنصر صحيح. التدقيق مطلوب، لكن الاعتراض بلا سبب يُضيّع وقت الاستجابة.',true);});
+ document.getElementById('radS2').style.display='block';radRender();
+}
+document.getElementById('radOk').onclick=()=>{if(!R||R.stage!==2)return;
+ if(R.err)radEnd(false,'أكّدت تكرارًا يحتوي خطأً في «'+KN[R.err]+'». الفريق سينطلق ببيانات غير صحيحة.',true);
+ else radEnd(true,'تكرار صحيح وتأكيد سليم. الحلقة مُقفلة.',true);};
+function radEnd(pass,msg,isCorr){
+ clearInterval(rT);R.stage=3;const t=T();if(t)t.runs.rad++;
+ const el=document.getElementById('radRes');
+ el.className='result on '+(pass?'pass':'fail');el.textContent=msg;
+ document.querySelectorAll('#radPool .chip,.rbline').forEach(b=>b.disabled=true);
+ document.getElementById('radOk').disabled=true;
+ if(isCorr)log('البلاغ — مرحلة التكرار: '+(pass?'اكتشف/أكّد بشكل سليم':'فشل في التصحيح'),pass?'ok':'er','correction',pass);
+ else log('البلاغ — مرحلة الترتيب: '+(pass?'سليم':'خطأ'),pass?'ok':'er','sequence',pass);
+ if(R.first!==null)log('البلاغ — زمن أول إدخال '+R.first+' ثانية','in','initiative',R.first<=8);
+ else log('البلاغ — لم يبدأ الإدخال','er','initiative',false);
+}
+document.getElementById('radNew').onclick=radInit;
+radInit();
+
+/* ================= diagnostics ================= */
+const AX=[['initiative','المبادرة','التردد في التصرف أو الإبلاغ'],
+ ['sequence','التسلسل','معرفة الترتيب الملزم وسببه'],
+ ['correction','التصحيح','الجرأة على تصحيح جهة أعلى']];
+function pct(a){return a.n?Math.round(a.ok/a.n*100):0;}
+function statusOf(t){
+ if(!t)return['—',''];
+ const v=AX.map(a=>t.axes[a[0]]);
+ if(v.some(x=>x.n<5))return['بيانات ناقصة',''];
+ const p=v.map(pct);
+ if(p.some(x=>x<50))return['غير جاهز','bad'];
+ if(p.some(x=>x<75))return['جزئي','mid'];
+ return['جاهز','ok'];
+}
+function renderDiag(){
+ const t=T(),box=document.getElementById('diagBars');
+ if(!t){box.innerHTML='<p style="color:var(--muted);font-size:13.5px">سجّل متدربًا لعرض التشخيص.</p>';
+  document.getElementById('diagVerdict').innerHTML='';document.getElementById('diagLog').innerHTML='';return;}
+ box.innerHTML=AX.map(a=>{const x=t.axes[a[0]],p=pct(x);
+  const col=x.n<5?'#4a5f62':(p<50?'#e05252':p<75?'#e0a02a':'#35b37e');
+  return '<div class="brow"><div class="top"><span>'+a[1]+'</span><b style="color:'+col+'">'+(x.n?p+'%':'—')+'</b></div>'+
+   '<div class="track"><i style="width:'+(x.n?p:0)+'%;background:'+col+'"></i><span>'+x.ok+' / '+x.n+' محاولة</span></div>'+
+   '<div class="desc">'+a[2]+(x.n<5?' — عدد المحاولات غير كافٍ لإصدار حكم':'')+'</div></div>';}).join('');
+ const [st,cls]=statusOf(t);
+ const weak=AX.map(a=>({a,p:pct(t.axes[a[0]]),n:t.axes[a[0]].n})).filter(o=>o.n>=3).sort((x,y)=>x.p-y.p)[0];
+ let v='<p>الحالة: <span class="pill '+cls+'">'+st+'</span></p>';
+ if(!weak)v+='<p style="color:var(--muted)">لا توجد محاولات كافية بعد. أنجز ثلاث جولات على الأقل في كل محاكٍ.</p>';
+ else{
+  const rec={initiative:'ركّز على محاكي البلاغ. الهدف أن يبدأ الإدخال خلال ثماني ثوانٍ من ظهور السيناريو. التردد هنا يتحول في الميدان إلى دقائق ضائعة.',
+   sequence:'ركّز على محاكي العزل. أعد السيناريوهات الثلاثة حتى تكتمل بلا مخالفة. اقرأ نص كل مخالفة قبل الإعادة — النص يشرح العاقبة لا الخطأ.',
+   correction:'ركّز على مرحلة التكرار في محاكي البلاغ. هذا أخطر المحاور: المتدرب الذي يعرف كل شيء ولا يعترض على أحد هو الملف الذي لا يُسند له عمل منفرد.'};
+  v+='<p>المحور الأضعف: <b style="color:var(--gold)">'+weak.a[1]+'</b> بنسبة '+weak.p+'%</p><p>'+rec[weak.a[0]]+'</p>';}
+ document.getElementById('diagVerdict').innerHTML=v;
+ document.getElementById('diagLog').innerHTML=t.events.length?t.events.slice(-80).reverse().map(e=>
+  '<div class="'+e.kind+'">['+new Date(e.ts).toLocaleTimeString('ar-SA',{hour12:false})+'] '+e.txt+'</div>').join('')
+  :'<div class="in">لا أحداث بعد.</div>';
+}
+document.getElementById('clrSess').onclick=()=>{if(!T())return;
+ const k=DB.current;DB.trainees[k]=Object.assign(BLANK(),
+  {name:DB.trainees[k].name,badge:DB.trainees[k].badge,org:DB.trainees[k].org,unit:DB.trainees[k].unit});
+ saveDB();renderDiag();renderSup();};
+document.getElementById('expTxt').onclick=()=>{const t=T();if(!t)return;
+ const txt='تقرير جلسة — مِران\n'+t.name+' — '+t.badge+'\n'+new Date().toLocaleString('ar-SA')+'\n\n'+
+  AX.map(a=>a[1]+': '+pct(t.axes[a[0]])+'% ('+t.axes[a[0]].ok+'/'+t.axes[a[0]].n+')').join('\n')+'\n\n'+
+  t.events.map(e=>'['+new Date(e.ts).toLocaleTimeString('ar-SA',{hour12:false})+'] '+e.txt).join('\n');
+ const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([txt],{type:'text/plain;charset=utf-8'}));
+ a.download='miran_'+t.badge+'.txt';a.click();};
+
+/* ================= supervisor ================= */
+let supSel=null;
+function renderSup(){
+ const ks=Object.keys(DB.trainees);
+ const done=ks.filter(k=>statusOf(DB.trainees[k])[0]==='جاهز').length;
+ const risk=ks.filter(k=>statusOf(DB.trainees[k])[0]==='غير جاهز').length;
+ const corrLow=ks.filter(k=>{const a=DB.trainees[k].axes.correction;return a.n>=5&&pct(a)<50;}).length;
+ document.getElementById('supStats').innerHTML=
+  [['متدربون',ks.length],['جاهز',done],['غير جاهز',risk],['ضعف في التصحيح',corrLow]]
+  .map(c=>'<div class="sc"><div class="v">'+c[1]+'</div><div class="l">'+c[0]+'</div></div>').join('');
+ const rows=ks.map(k=>{const t=DB.trainees[k],[st,cls]=statusOf(t);
+  return '<tr><td><input type="radio" name="supr" value="'+k+'" style="width:auto"'+(supSel===k?' checked':'')+'></td>'+
+   '<td>'+t.name+'</td><td class="k">'+t.badge+'</td><td>'+(t.unit||'—')+'</td>'+
+   AX.map(a=>'<td class="k">'+(t.axes[a[0]].n?pct(t.axes[a[0]])+'%':'—')+'</td>').join('')+
+   '<td class="k">'+(t.runs.iso+t.runs.gas+t.runs.rad)+'</td>'+
+   '<td><span class="pill '+cls+'">'+st+'</span></td></tr>';}).join('');
+ document.getElementById('supTable').innerHTML=
+  '<tr><th></th><th>الاسم</th><th>الرقم</th><th>الوحدة</th><th>مبادرة</th><th>تسلسل</th><th>تصحيح</th><th>جولات</th><th>الحالة</th></tr>'+
+  (rows||'<tr><td colspan="9" style="text-align:center;color:var(--muted)">لا متدربين</td></tr>');
+ document.querySelectorAll('input[name=supr]').forEach(r=>r.onchange=()=>supSel=r.value);
+}
+document.getElementById('supCsv').onclick=()=>{
+ const h=['name','badge','org','unit','initiative','sequence','correction','runs','status'];
+ const rows=Object.keys(DB.trainees).map(k=>{const t=DB.trainees[k];
+  return [t.name,t.badge,t.org||'',t.unit||'',pct(t.axes.initiative),pct(t.axes.sequence),
+   pct(t.axes.correction),t.runs.iso+t.runs.gas+t.runs.rad,statusOf(t)[0]].join(',');});
+ const a=document.createElement('a');
+ a.href=URL.createObjectURL(new Blob(['\ufeff'+h.join(',')+'\n'+rows.join('\n'),],{type:'text/csv;charset=utf-8'}));
+ a.download='miran_roster.csv';a.click();};
+document.getElementById('supWipe').onclick=()=>{
+ if(!confirm('سيُمسح كل المتدربين وسجلاتهم نهائيًا. متابعة؟'))return;
+ DB={trainees:{},current:null};saveDB();whoRender();renderDiag();renderSup();};
+document.getElementById('supReport').onclick=()=>{
+ if(!supSel){alert('اختر متدربًا من الجدول.');return;}
+ buildReport(supSel);document.querySelector('[data-v="t7"]').click();};
+
+/* ================= authoring ================= */
+document.getElementById('authSample').onclick=()=>{
+ document.getElementById('authTxt').value=JSON.stringify(CORE[0],null,1);};
+document.getElementById('authExport').onclick=()=>{
+ const a=document.createElement('a');
+ a.href=URL.createObjectURL(new Blob([JSON.stringify(PACK,null,1)],{type:'application/json'}));
+ a.download='miran_scenarios.json';a.click();};
+document.getElementById('authAdd').onclick=()=>{
+ const el=document.getElementById('authRes');
+ let s;try{s=JSON.parse(document.getElementById('authTxt').value);}
+ catch(e){el.className='result on fail';el.textContent='JSON غير صالح: '+e.message;return;}
+ const errs=[];
+ ['id','title','actions','steps'].forEach(f=>{if(!s[f])errs.push('حقل مفقود: '+f);});
+ if(s.actions&&!Array.isArray(s.actions))errs.push('actions يجب أن تكون مصفوفة');
+ if(s.steps&&!Array.isArray(s.steps))errs.push('steps يجب أن تكون مصفوفة');
+ if(s.actions&&s.steps){const ids=s.actions.map(a=>a.id);
+  (s.violations||[]).forEach(v=>{if(v.on&&v.on!=='*'){const tgt=v.on.split(':')[1];
+   if(tgt&&!ids.includes(tgt))errs.push('مخالفة تشير إلى إجراء غير موجود: '+tgt);}});}
+ if(PACK.find(p=>p.id===s.id))errs.push('المعرّف مستخدم مسبقًا: '+s.id);
+ if(errs.length){el.className='result on fail';el.innerHTML=errs.join('<br>');return;}
+ PACK.push(s);savePack();fillSel();
+ el.className='result on pass';el.textContent='أُضيف السيناريو «'+s.title+'». متاح الآن في تبويب العزل.';};
+
+/* ================= audit report ================= */
+function hash(str){let h=5381;for(let i=0;i<str.length;i++)h=((h<<5)+h+str.charCodeAt(i))>>>0;
+ return h.toString(36).toUpperCase().padStart(7,'0');}
+function buildReport(key){
+ const t=DB.trainees[key||DB.current];if(!t){alert('لا يوجد متدرب.');return;}
+ const [st]=statusOf(t);
+ const serial='MRN-'+new Date().getFullYear()+'-'+t.badge+'-'+String(t.events.length).padStart(4,'0');
+ const payload=t.name+'|'+t.badge+'|'+JSON.stringify(t.axes)+'|'+t.events.length;
+ const box=document.getElementById('repBox');
+ box.className='rep on';
+ box.innerHTML=
+ '<div class="hd"><div><div style="font-size:19px;font-weight:700">تقرير تدريب — مِران</div>'+
+ '<div style="color:#666;font-size:12px">نظام التأهيب الميداني للمشغل المبتدئ</div></div>'+
+ '<div class="code">رقم تسلسلي: '+serial+'<br>رمز تحقق: '+hash(payload)+'<br>'+new Date().toLocaleString('ar-SA')+'</div></div>'+
+ '<h3>بيانات المتدرب</h3><table>'+
+ '<tr><th style="width:26%">الاسم</th><td>'+t.name+'</td><th style="width:20%">الرقم الوظيفي</th><td>'+t.badge+'</td></tr>'+
+ '<tr><th>المنشأة</th><td>'+(t.org||'—')+'</td><th>الوحدة</th><td>'+(t.unit||'—')+'</td></tr></table>'+
+ '<h3>نتائج المحاور السلوكية</h3><table>'+
+ '<tr><th>المحور</th><th>المحاولات</th><th>السليمة</th><th>النسبة</th></tr>'+
+ AX.map(a=>{const x=t.axes[a[0]];return '<tr><td>'+a[1]+'</td><td>'+x.n+'</td><td>'+x.ok+'</td><td>'+(x.n?pct(x)+'%':'—')+'</td></tr>';}).join('')+
+ '</table>'+
+ '<h3>الجولات المنجزة</h3><table><tr><th>العزل</th><td>'+t.runs.iso+'</td><th>الهروب</th><td>'+t.runs.gas+
+ '</td><th>البلاغ</th><td>'+t.runs.rad+'</td></tr></table>'+
+ '<h3>الحالة</h3><p style="font-size:15px"><b>'+st+'</b></p>'+
+ '<h3>سجل الأحداث</h3><table><tr><th style="width:16%">الوقت</th><th>الحدث</th></tr>'+
+ t.events.slice(-40).map(e=>'<tr><td>'+new Date(e.ts).toLocaleTimeString('ar-SA',{hour12:false})+'</td><td>'+e.txt+'</td></tr>').join('')+
+ '</table>'+
+ '<p style="margin-top:18px;font-size:11.5px;color:#666;line-height:1.7">'+
+ 'رمز التحقق مجموع اختباري داخلي يكشف تعديل السجل، وليس توقيعًا رقميًا معتمدًا. '+
+ 'هذا التقرير يوثّق أداءً في بيئة محاكاة ولا يُعد شهادة تأهيل ولا بديلًا عن التدريب المعتمد أو إجراءات المنشأة.</p>'+
+ '<p style="margin-top:14px;font-size:12px">توقيع المشرف: ______________________ &nbsp;&nbsp; التاريخ: ____________</p>';
+}
+document.getElementById('genRep').onclick=()=>buildReport(null);
+
+/* ================= init ================= */
+whoRender();renderDiag();renderSup();
+if(!Store.ok)setTimeout(()=>alert('تنبيه: التخزين المحلي معطّل في هذه البيئة. البيانات ستُفقد عند التحديث. نزّل الملف أو انشره على نطاقك ليعمل الحفظ.'),600);
+</script>
+</body>
+</html>

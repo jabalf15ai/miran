@@ -33,8 +33,16 @@
 | File | Role |
 |------|------|
 | `mockups.html` | Static annotated design review (18 screens) |
-| `index.html` | Production single-file app |
+| `index.html` | Learning path — curriculum + drills + quiz (v1) |
+| `platform.html` | Ops platform — trainees, diagnostics, supervisor, authoring (v3) |
 | `DECISIONS.md` | This note |
+
+## Unified product (2026 merge)
+
+1. **Two modes, one brand:** Shared product bar (`التعلّم · المنصة · النماذج`) on learning and platform; deep cross-links from concept and trainee tabs.
+2. **No state merge:** Learning uses `miran_state_v1`; platform uses `miran_v3_db` + `miran_v3_scenarios`. Keeping keys separate avoids breaking existing local sessions and reflects different data models (anonymous drill vs named trainee registry).
+3. **Routes:** Vercel clean URLs `/`, `/learn`, `/platform`, `/mockups` all serve the same static project.
+4. **Why not one mega-file:** Learning prose + platform engines would exceed maintainable single-file size; dual HTML with shared shell is still one deployable product.
 
 ## Acceptance self-check (manual / scripted)
 
