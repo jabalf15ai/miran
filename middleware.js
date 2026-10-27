@@ -2,6 +2,7 @@
 // Fails closed: if either variable is missing, every request is refused.
 
 export const config = {
+  runtime: 'nodejs',
   matcher: '/:path*',
 };
 
